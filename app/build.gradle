@@ -113,8 +113,6 @@ dependencies {
     compile 'com.android.support:mediarouter-v7:23.3.0'
     compile 'com.android.support:palette-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
-    // Timber
-    compile 'com.jakewharton.timber:timber:3.1.0'
     // Butterknife
     compile 'com.jakewharton:butterknife:7.0.0'
     // Dagger 2
@@ -131,4 +129,14 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.5.0'
     // materialviewpager
     compile 'com.github.florent37:materialviewpager:1.2.3'
+    // progress bar
+    compile 'com.github.ybq:Android-SpinKit:1.1.0'
+    compile 'com.daimajia.slider:library:1.1.5@aar'
+    // circle image view
+    compile 'de.hdodenhof:circleimageview:2.0.0'
+    // ripple effect
+    compile 'com.balysv:material-ripple:1.0.2'
+    // icons
+    compile 'net.steamcrafted:materialiconlib:1.0.8'
+
 }

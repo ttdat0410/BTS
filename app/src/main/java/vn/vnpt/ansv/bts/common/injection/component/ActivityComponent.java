@@ -1,7 +1,7 @@
 package vn.vnpt.ansv.bts.common.injection.component;
 
 import dagger.Component;
-import vn.vnpt.ansv.bts.splash.SplashActivity;
+import vn.vnpt.ansv.bts.monitor.Monitor;
 
 /**
  * Created by ANSV on 11/7/2017.
@@ -9,5 +9,5 @@ import vn.vnpt.ansv.bts.splash.SplashActivity;
 
 @Component(dependencies = BTSComponent.class)
 public interface ActivityComponent {
-    void inject(SplashActivity o);
+    void inject(Monitor o);
 }

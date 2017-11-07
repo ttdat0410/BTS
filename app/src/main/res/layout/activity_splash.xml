@@ -14,22 +14,6 @@
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/Popup" />
 
-    <!--<LinearLayout-->
-        <!--style="@style/wrap"-->
-        <!--android:id="@+id/logo_block"-->
-        <!--android:orientation="vertical"-->
-        <!--android:layout_marginTop="100dp"-->
-        <!--android:layout_centerHorizontal="true">-->
-        <!--<ImageView-->
-            <!--style="@style/match"-->
-            <!--android:id="@+id/mm_logo"-->
-            <!--android:layout_marginTop="0dp"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:adjustViewBounds="true"-->
-            <!--android:src="@mipmap/icn_logo"/>-->
-
-    <!--</LinearLayout>-->
-
     <LinearLayout
         style="@style/match"
         android:id="@+id/background_block"
@@ -40,7 +24,7 @@
             android:id="@+id/mm">
             <ImageView
                 style="@style/match"
-                android:id="@+id/img_background"
+                android:id="@+id/mm_background"
                 android:layout_marginTop="0dp"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="centerCrop"
@@ -55,6 +39,19 @@
                 android:src="@mipmap/icn_vnpt_tech"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/spin_kit"
+                style="@style/SpinKitView.Circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                app:SpinKit_Color="@color/sl_terbium_green" />
+
         </RelativeLayout>
 
     </LinearLayout>
