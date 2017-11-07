@@ -40,7 +40,6 @@ buildscript {
     }
 }
 
-
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
@@ -130,6 +129,6 @@ dependencies {
     // Retrofit
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp:2.5.0'
-    // AltBeacon Android library
-    compile 'org.altbeacon:android-beacon-library:2.6.1@aar'
+    // materialviewpager
+    compile 'com.github.florent37:materialviewpager:1.2.3'
 }

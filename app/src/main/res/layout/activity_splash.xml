@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/match"
+    android:background="@color/white">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:theme="@style/SearchToolbar"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/Popup" />
+
+    <!--<LinearLayout-->
+        <!--style="@style/wrap"-->
+        <!--android:id="@+id/logo_block"-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_marginTop="100dp"-->
+        <!--android:layout_centerHorizontal="true">-->
+        <!--<ImageView-->
+            <!--style="@style/match"-->
+            <!--android:id="@+id/mm_logo"-->
+            <!--android:layout_marginTop="0dp"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:adjustViewBounds="true"-->
+            <!--android:src="@mipmap/icn_logo"/>-->
+
+    <!--</LinearLayout>-->
+
+    <LinearLayout
+        style="@style/match"
+        android:id="@+id/background_block"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            style="@style/match"
+            android:id="@+id/mm">
+            <ImageView
+                style="@style/match"
+                android:id="@+id/img_background"
+                android:layout_marginTop="0dp"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:src="@mipmap/icn_splash"/>
+
+            <ImageView
+                style="@style/wrap"
+                android:id="@+id/mm_logo"
+                android:layout_marginTop="0dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/icn_vnpt_tech"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

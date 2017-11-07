@@ -3,4 +3,24 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!-- Use for primary text colors -->
+    <color name="grey_dark">#212121</color>
+
+
+    <color name="sl_silicon_grey">#ff555555</color>
+
+    <color name="sl_light_grey">#ffefefef</color>
+    <color name="sl_terbium_green">#ffa1b92e</color>
+    <color name="sl_red_orange">#ffe65100</color>
+
+
+    <color name="primary_color">@color/sl_silicon_grey</color>
+    <color name="primary_color_dark">#303F9F</color>
+    <color name="accent_color">@color/sl_terbium_green</color>
+
+    <color name="transparent">#00000000</color>
 </resources>
