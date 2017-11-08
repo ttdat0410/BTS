@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">BTS</string>
+
+    <string name="title_log_in">ĐĂNG NHẬP</string>
+    <string name="title_username">Tên đăng nhập</string>
+    <string name="title_password">Mật khẩu</string>
 </resources>

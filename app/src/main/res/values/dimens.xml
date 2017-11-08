@@ -25,4 +25,7 @@
 
     <dimen name="divider_height">1dp</dimen>
 
+    <dimen name="settings_personal_info_height">60dp</dimen>
+
+
 </resources>

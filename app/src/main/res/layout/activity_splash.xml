@@ -14,6 +14,7 @@
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/Popup" />
 
+
     <ImageView
         style="@style/match"
         android:id="@+id/mm_background"
@@ -48,112 +49,134 @@
         style="@style/match"
         android:id="@+id/bottom_panel"
         android:layout_below="@id/logo_block"
-        android:layout_marginTop="@dimen/space_L"
         android:background="@color/white"
+        android:layout_marginTop="@dimen/space_XL"
         android:visibility="invisible">
 
-        <RelativeLayout
-            android:id="@+id/bluetooth_devices_view"
+
+        <ScrollView
             style="@style/match"
-            android:visibility="visible">
-
-            <android.support.v7.widget.RecyclerView
-                style="@style/match"
-                android:id="@+id/scanner_device_list"
-                android:scrollbars="vertical" />
-
-        </RelativeLayout>
-
-        <!-- devices not found (yet) -->
-        <RelativeLayout
-            style="@style/match"
-            android:id="@+id/no_network"
-            android:paddingLeft="@dimen/space_SM"
-            android:paddingRight="@dimen/space_SM"
-            android:visibility="gone">
+            android:layout_below="@id/toolbar"
+            android:fillViewport="true">
 
             <LinearLayout
-                style="@style/wrap"
-                android:layout_centerInParent="true"
-                android:orientation="vertical">
+                style="@style/block"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/space_S"
+                android:paddingRight="@dimen/space_S">
 
                 <TextView
-                    style="@style/l_silicon_grey"
-                    android:id="@+id/net_status_report"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_horizontal" />
+                    style="@style/sm_terbium_green"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/space_S"
+                    android:layout_gravity="left"
+                    android:text="@string/title_log_in"
+                    android:textAllCaps="true" />
 
-                <ProgressBar
-                    style="@style/wrap"
-                    android:id="@+id/loading_progress"
-                    android:layout_marginTop="@dimen/space_SM"
-                    android:layout_gravity="center_horizontal"
-                    android:indeterminate="true"/>
+                <!-- name -->
+                <!--<RelativeLayout
+                    android:id="@+id/name_display"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_personal_info_height"
+                    android:visibility="visible">
+
+                    <TextView
+                        style="@style/m_silicon_grey"
+                        android:id="@+id/name_display_text"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="@dimen/space_XXS"
+                        android:hint="Tên đăng nhập"
+                        android:textColorHint="@color/sl_grey" />
+
+                    <View
+                        style="@style/divider_line"
+                        android:layout_alignParentBottom="true" />
+                </RelativeLayout>-->
+
+                <!--set GONE HERE-->
+                <RelativeLayout
+                    android:id="@+id/name_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_personal_info_height"
+                    android:visibility="visible">
+
+                    <EditText
+                        style="@style/m_silicon_grey"
+                        android:layout_width="match_parent"
+                        android:id="@+id/name_edit_text"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/transparent"
+                        android:padding="0dp"
+                        android:singleLine="true"/>
+
+                    <TextView
+                        style="@style/m_silicon_grey"
+                        android:layout_above="@id/name_edit_text"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/title_username" />
+
+                    <View
+                        style="@style/divider_line"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/sl_terbium_green"/>
+
+                </RelativeLayout>
+
+                <!-- title -->
+                <!--<RelativeLayout
+                    android:id="@+id/title_display"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_personal_info_height"
+                    android:visibility="visible">
+
+                    <TextView
+                        style="@style/m_silicon_grey"
+                        android:id="@+id/title_display_text"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="@dimen/space_XXS"
+                        android:hint="Mật khẩu"
+                        android:textColorHint="@color/sl_grey" />
+
+                    <View
+                        style="@style/divider_line"
+                        android:layout_alignParentBottom="true" />
+                </RelativeLayout>-->
+
+                <!--set GONE HERE-->
+                <RelativeLayout
+                    android:id="@+id/password_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_personal_info_height"
+                    android:visibility="visible">
+
+                    <EditText
+                        style="@style/m_silicon_grey"
+                        android:id="@+id/password_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/transparent"
+                        android:padding="0dp"
+                        android:singleLine="true"
+                        android:inputType="textPassword"/>
+
+                    <TextView
+                        style="@style/m_silicon_grey"
+                        android:layout_above="@id/password_edit_text"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/title_password" />
+
+                    <View
+                        style="@style/divider_line"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/sl_terbium_green" />
+
+                </RelativeLayout>
+
             </LinearLayout>
-
-        </RelativeLayout>
+        </ScrollView>
 
     </FrameLayout>
 
 </RelativeLayout>
-
-    <!--
-    <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        style="@style/match"
-        android:background="@color/white">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_alignParentTop="true"
-            android:theme="@style/SearchToolbar"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/Popup" />
-
-        <LinearLayout
-            style="@style/match"
-            android:id="@+id/background_block"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                style="@style/match"
-                android:id="@+id/mm">
-                <ImageView
-                    style="@style/match"
-                    android:id="@+id/mm_background"
-                    android:layout_marginTop="0dp"
-                    android:layout_gravity="center_horizontal"
-                    android:scaleType="centerCrop"
-                    android:adjustViewBounds="true"
-                    android:src="@mipmap/icn_splash"/>
-
-                <ImageView
-                    style="@style/wrap"
-                    android:id="@+id/mm_logo"
-                    android:layout_marginTop="0dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@mipmap/icn_vnpt_tech"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true" />
-
-                <com.github.ybq.android.spinkit.SpinKitView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/spin_kit"
-                    style="@style/SpinKitView.Circle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    app:SpinKit_Color="@color/sl_terbium_green" />
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-    </RelativeLayout>-->

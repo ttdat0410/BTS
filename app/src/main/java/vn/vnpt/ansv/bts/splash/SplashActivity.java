@@ -4,21 +4,16 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -26,7 +21,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.common.ui.BTSSplashActivity;
-import vn.vnpt.ansv.bts.monitor.MonitorContainer;
 
 /**
  * Created by ANSV on 11/7/2017.
@@ -48,20 +42,20 @@ public class SplashActivity extends BTSSplashActivity {
     @Bind(R.id.bottom_panel)
     FrameLayout bottomPanel;
 
-    @Bind(R.id.scanner_device_list)
-    RecyclerView scannerRecyclerView;
+//    @Bind(R.id.scanner_device_list)
+//    RecyclerView scannerRecyclerView;
 
-    @Bind(R.id.bluetooth_devices_view)
-    View bluetoothDevicesView;
+//    @Bind(R.id.bluetooth_devices_view)
+//    View bluetoothDevicesView;
 
-    @Bind(R.id.no_network)
-    View noNetwork;
-
-    @Bind(R.id.net_status_report)
-    TextView netStatusReport;
-
-    @Bind(R.id.loading_progress)
-    ProgressBar loadingProgress;
+//    @Bind(R.id.no_network)
+//    View noNetwork;
+//
+//    @Bind(R.id.net_status_report)
+//    TextView netStatusReport;
+//
+//    @Bind(R.id.loading_progress)
+//    ProgressBar loadingProgress;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,9 +101,9 @@ public class SplashActivity extends BTSSplashActivity {
             public void run() {
 //                startActivity(new Intent(getApplicationContext(), MonitorContainer.class));
                 animateItems();
-                bluetoothDevicesView.setVisibility(View.GONE);
-                noNetwork.setVisibility(View.VISIBLE);
-                netStatusReport.setText("S...");
+//                bluetoothDevicesView.setVisibility(View.VISIBLE);
+//                noNetwork.setVisibility(View.GONE);
+//                netStatusReport.setText("S...");
                 configureProgressIndicator();
             }
         }, timer);
@@ -135,10 +129,10 @@ public class SplashActivity extends BTSSplashActivity {
         } else {
             color = getResources().getColor(R.color.sl_terbium_green, null);
         }
-        if (loadingProgress.getIndeterminateDrawable() != null) {
-            loadingProgress.getIndeterminateDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        } else {
-        }
+//        if (loadingProgress.getIndeterminateDrawable() != null) {
+//            loadingProgress.getIndeterminateDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+//        } else {
+//        }
     }
 
     private void animateItems() {

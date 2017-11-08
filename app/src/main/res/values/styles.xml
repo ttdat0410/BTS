@@ -49,4 +49,19 @@
         <item name="android:background">@color/divider_line</item>
     </style>
 
+    <style name="m_silicon_grey" parent="silicon_gray_text">
+        <item name="android:textSize">@dimen/text_size_S</item>
+    </style>
+
+    <style name="s_terbium_green" parent="terbium_green_text">
+        <item name="android:textSize">@dimen/text_size_S</item>
+    </style>
+    <style name="terbium_green_text" parent="wrap">
+        <item name="android:textColor">@color/terbium_green</item>
+    </style>
+
+    <style name="sm_terbium_green" parent="terbium_green_text">
+        <item name="android:textSize">@dimen/text_size_L</item>
+    </style>
+
 </resources>
