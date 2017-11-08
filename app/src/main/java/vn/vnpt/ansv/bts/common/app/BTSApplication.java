@@ -5,7 +5,6 @@ import android.app.Application;
 import javax.inject.Inject;
 
 import vn.vnpt.ansv.bts.BuildConfig;
-import vn.vnpt.ansv.bts.api.APIManager;
 import vn.vnpt.ansv.bts.common.injection.component.BTSComponent;
 import vn.vnpt.ansv.bts.common.injection.component.DaggerBTSComponent;
 import vn.vnpt.ansv.bts.common.injection.module.BTSModule;

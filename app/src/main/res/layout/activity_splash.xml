@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/match"
-    android:background="@color/white">
+    android:background="@color/sl_terbium_green">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -14,46 +14,146 @@
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/Popup" />
 
-    <LinearLayout
+    <ImageView
         style="@style/match"
-        android:id="@+id/background_block"
+        android:id="@+id/mm_background"
+        android:layout_marginTop="0dp"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:src="@mipmap/icn_splash"/>
+
+    <LinearLayout
+        style="@style/block"
+        android:id="@+id/logo_block"
+        android:layout_below="@id/toolbar"
         android:orientation="vertical">
 
+        <ImageView
+            style="@style/wrap"
+            android:id="@+id/mm_logo"
+            android:layout_gravity="center_horizontal"
+            android:src="@mipmap/icn_logo" />
+    </LinearLayout>
+
+    <ImageView
+        style="@style/wrap"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/space_S"
+        android:src="@mipmap/icn_logo"/>
+
+    <!-- Bottom panel -->
+    <FrameLayout
+        style="@style/match"
+        android:id="@+id/bottom_panel"
+        android:layout_below="@id/logo_block"
+        android:layout_marginTop="@dimen/space_L"
+        android:background="@color/white"
+        android:visibility="invisible">
+
         <RelativeLayout
+            android:id="@+id/bluetooth_devices_view"
             style="@style/match"
-            android:id="@+id/mm">
-            <ImageView
+            android:visibility="visible">
+
+            <android.support.v7.widget.RecyclerView
                 style="@style/match"
-                android:id="@+id/mm_background"
-                android:layout_marginTop="0dp"
-                android:layout_gravity="center_horizontal"
-                android:scaleType="centerCrop"
-                android:adjustViewBounds="true"
-                android:src="@mipmap/icn_splash"/>
-
-            <ImageView
-                style="@style/wrap"
-                android:id="@+id/mm_logo"
-                android:layout_marginTop="0dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@mipmap/icn_vnpt_tech"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
-
-            <com.github.ybq.android.spinkit.SpinKitView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/spin_kit"
-                style="@style/SpinKitView.Circle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                app:SpinKit_Color="@color/sl_terbium_green" />
+                android:id="@+id/scanner_device_list"
+                android:scrollbars="vertical" />
 
         </RelativeLayout>
 
-    </LinearLayout>
+        <!-- devices not found (yet) -->
+        <RelativeLayout
+            style="@style/match"
+            android:id="@+id/no_network"
+            android:paddingLeft="@dimen/space_SM"
+            android:paddingRight="@dimen/space_SM"
+            android:visibility="gone">
+
+            <LinearLayout
+                style="@style/wrap"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/l_silicon_grey"
+                    android:id="@+id/net_status_report"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal" />
+
+                <ProgressBar
+                    style="@style/wrap"
+                    android:id="@+id/loading_progress"
+                    android:layout_marginTop="@dimen/space_SM"
+                    android:layout_gravity="center_horizontal"
+                    android:indeterminate="true"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </FrameLayout>
 
 </RelativeLayout>
+
+    <!--
+    <?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        style="@style/match"
+        android:background="@color/white">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentTop="true"
+            android:theme="@style/SearchToolbar"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/Popup" />
+
+        <LinearLayout
+            style="@style/match"
+            android:id="@+id/background_block"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                style="@style/match"
+                android:id="@+id/mm">
+                <ImageView
+                    style="@style/match"
+                    android:id="@+id/mm_background"
+                    android:layout_marginTop="0dp"
+                    android:layout_gravity="center_horizontal"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    android:src="@mipmap/icn_splash"/>
+
+                <ImageView
+                    style="@style/wrap"
+                    android:id="@+id/mm_logo"
+                    android:layout_marginTop="0dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@mipmap/icn_vnpt_tech"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
+
+                <com.github.ybq.android.spinkit.SpinKitView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/spin_kit"
+                    style="@style/SpinKitView.Circle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    app:SpinKit_Color="@color/sl_terbium_green" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>-->

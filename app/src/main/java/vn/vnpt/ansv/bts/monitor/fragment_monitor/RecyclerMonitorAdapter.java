@@ -26,8 +26,6 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
         this.dataSet = dataSet;
     }
 
-    // RecyclerView.Adapter
-
     @Override
     public int getItemCount() {
         if (dataSet == null) {
@@ -48,7 +46,7 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
     public void onBindViewHolder(DeviceHolder holder, int position) {
 
         final Object device = dataSet.get(position);
-        holder.deviceName.setText("FF");
+        holder.deviceName.setText("Nhiệt độ");
         holder.deviceAddress.setText("AA");
 
         holder.rootView.setOnClickListener(new View.OnClickListener() {
@@ -84,8 +82,8 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
         @Bind(R.id.device_address)
         TextView deviceAddress;
 
-        @Bind(R.id.signal_strength)
-        Button signalStrengthIndicator;
+//        @Bind(R.id.signal_strength)
+//        Button signalStrengthIndicator;
 
         View rootView;
 

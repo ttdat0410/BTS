@@ -35,7 +35,7 @@
     <style name="l_silicon_grey" parent="silicon_gray_text">
         <item name="android:textSize">@dimen/text_size_L</item>
     </style>
-    <style name="silicon_gray_text" parent="wrap">
+    <style name="silicon_gray_text" parent="block">
         <item name="android:textColor">@color/sl_silicon_grey</item>
     </style>
 
