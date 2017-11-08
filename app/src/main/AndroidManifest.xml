@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".monitor.Monitor"/>
+        <activity android:name=".monitor.MonitorContainer"/>
         <activity android:name=".splash.DD"/>
     </application>
 

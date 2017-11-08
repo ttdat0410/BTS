@@ -15,12 +15,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.common.ui.BTSActivity;
+import vn.vnpt.ansv.bts.monitor.fragment_monitor.RecyclerMonitorView;
 
 /**
- * Created by ANSV on 11/7/2017.
+ * Created by ANSV on 11/8/2017.
  */
 
-public class Monitor extends BTSActivity {
+public class MonitorContainer extends BTSActivity {
 
     @Bind(R.id.materialViewPager)
     MaterialViewPager mViewPager;
@@ -42,9 +43,9 @@ public class Monitor extends BTSActivity {
             public Fragment getItem(int position) {
                 switch (position % 4) {
                     case 0:
-                        return RecyclerViewFragment.newInstance();
+                        return RecyclerMonitorView.newInstance();
                     case 1:
-                        return RecyclerViewFragment.newInstance();
+                        return RecyclerMonitorView.newInstance();
                     default:
                         return null;
                 }
@@ -87,8 +88,6 @@ public class Monitor extends BTSActivity {
                                 R.color.red,
                                 "http://www.tothemobile.com/wp-content/uploads/2014/07/original.jpg");
                 }
-
-                //execute others actions if needed (ex : modify your header logo)
 
                 return null;
             }

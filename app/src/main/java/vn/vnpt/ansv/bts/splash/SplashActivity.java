@@ -10,7 +10,7 @@ import android.support.v7.widget.Toolbar;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
-import vn.vnpt.ansv.bts.monitor.Monitor;
+import vn.vnpt.ansv.bts.monitor.MonitorContainer;
 
 /**
  * Created by ANSV on 11/7/2017.
@@ -41,7 +41,7 @@ public class SplashActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(getApplicationContext(), Monitor.class));
+                startActivity(new Intent(getApplicationContext(), MonitorContainer.class));
             }
         }, timer);
     }

@@ -14,9 +14,9 @@ import vn.vnpt.ansv.bts.common.injection.qualifier.ForApplication;
 
 @Module
 public class BTSModule {
-    private Context context;
-    private String restApiIp;
-    private String restApiPort;
+    private final Context context;
+    private final String restApiIp;
+    private final String restApiPort;
 
     public BTSModule(Context context, String restApiIp, String restApiPort) {
         this.context = context;

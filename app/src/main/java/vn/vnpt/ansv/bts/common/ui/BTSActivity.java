@@ -16,7 +16,6 @@ import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.common.injection.component.ActivityComponent;
 import vn.vnpt.ansv.bts.common.injection.component.DaggerActivityComponent;
-import vn.vnpt.ansv.bts.monitor.RecyclerViewFragment;
 
 /**
  * Created by ANSV on 11/7/2017.

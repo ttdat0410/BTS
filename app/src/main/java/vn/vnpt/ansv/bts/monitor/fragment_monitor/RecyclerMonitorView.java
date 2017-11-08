@@ -1,4 +1,4 @@
-package vn.vnpt.ansv.bts.monitor;
+package vn.vnpt.ansv.bts.monitor.fragment_monitor;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,20 +17,20 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
-
 /**
  * Created by ANSV on 11/7/2017.
  */
 
-public class RecyclerViewFragment extends Fragment {
+public class RecyclerMonitorView extends Fragment {
     private static final boolean GRID_LAYOUT = false;
     private static final int ITEM_COUNT = 7;
+    private RecyclerMonitorAdapter recyclerMonitorAdapter;
 
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
-    public static RecyclerViewFragment newInstance() {
-        return new RecyclerViewFragment();
+    public static RecyclerMonitorView newInstance() {
+        return new RecyclerMonitorView();
     }
 
     @Override
@@ -49,20 +49,38 @@ public class RecyclerViewFragment extends Fragment {
             items.add(new Object());
         }
 
-
-        //setup materialviewpager
-
         if (GRID_LAYOUT) {
             mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         } else {
             mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-
 //            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
         mRecyclerView.setHasFixedSize(true);
-
-        //Use this now
-        mRecyclerView.addItemDecoration(new MaterialViewPagerHeaderDecorator());
-        mRecyclerView.setAdapter(new TestRecyclerViewAdapter(items));
+        setupRecyclerMonitorAdapter(items);
     }
+
+    /**
+     * setupScannerAdapter
+     *
+     * Sets up ScannerAdapter for the recycler view.
+     */
+    private void setupRecyclerMonitorAdapter(List<Object> items) {
+        mRecyclerView.addItemDecoration(new MaterialViewPagerHeaderDecorator());
+        List<Object> devices = new ArrayList<>();
+        recyclerMonitorAdapter = new RecyclerMonitorAdapter(items);
+        recyclerMonitorAdapter.updateDataSet(items);
+//        scannerAdapter.setListener(listener);
+        mRecyclerView.setAdapter(recyclerMonitorAdapter);
+
+    }
+
+//    private RecyclerMonitorAdapter.OnDeviceItemClickListener listener = new RecyclerMonitorAdapter.OnDeviceItemClickListener() {
+//        @Override
+//        public void onDeviceItemClick(View view, Objects device) {
+//            Intent intent = new Intent(ScannerActivity.this, DemosSelectionActivity.class);
+//            intent.putExtra(ThunderBoardConstants.EXTRA_DEVICE_NAME, device.getName());
+//            intent.putExtra(ThunderBoardConstants.EXTRA_DEVICE_ADDRESS, device.getAddress());
+//            startActivity(intent);
+//        }
+//    };
 }

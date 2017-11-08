@@ -32,4 +32,21 @@
         <item name="android:textCursorDrawable">@drawable/cursor</item>
     </style>
 
+    <style name="l_silicon_grey" parent="silicon_gray_text">
+        <item name="android:textSize">@dimen/text_size_L</item>
+    </style>
+    <style name="silicon_gray_text" parent="wrap">
+        <item name="android:textColor">@color/sl_silicon_grey</item>
+    </style>
+
+    <style name="s_silicon_grey" parent="silicon_gray_text">
+        <item name="android:textSize">@dimen/text_size_S</item>
+    </style>
+
+    <style name="divider_line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/divider_height</item>
+        <item name="android:background">@color/divider_line</item>
+    </style>
+
 </resources>

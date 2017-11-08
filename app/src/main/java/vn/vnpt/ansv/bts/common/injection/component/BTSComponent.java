@@ -13,7 +13,6 @@ import vn.vnpt.ansv.bts.common.injection.module.BTSModule;
 @Singleton
 @Component(modules = {BTSModule.class})
 public interface BTSComponent {
-
-    APIManager provideAPIManager();
+//    APIManager provideAPIManager();
     void inject(BTSApplication o);
 }

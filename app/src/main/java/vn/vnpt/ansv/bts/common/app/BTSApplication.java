@@ -2,7 +2,10 @@ package vn.vnpt.ansv.bts.common.app;
 
 import android.app.Application;
 
+import javax.inject.Inject;
+
 import vn.vnpt.ansv.bts.BuildConfig;
+import vn.vnpt.ansv.bts.api.APIManager;
 import vn.vnpt.ansv.bts.common.injection.component.BTSComponent;
 import vn.vnpt.ansv.bts.common.injection.component.DaggerBTSComponent;
 import vn.vnpt.ansv.bts.common.injection.module.BTSModule;
@@ -15,6 +18,9 @@ public class BTSApplication extends Application {
     private static final String TAG = BTSApplication.class.getSimpleName();
 
     private BTSComponent component;
+
+//    @Inject
+//    APIManager apiManager;
 
     @Override
     public void onCreate() {
