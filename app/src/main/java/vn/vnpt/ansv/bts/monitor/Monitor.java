@@ -38,21 +38,17 @@ public class Monitor extends BTSActivity {
         }
 
         mViewPager.getViewPager().setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
-
             @Override
             public Fragment getItem(int position) {
                 switch (position % 4) {
-                    //case 0:
-                    //    return RecyclerViewFragment.newInstance();
-                    //case 1:
-                    //    return RecyclerViewFragment.newInstance();
-                    //case 2:
-                    //    return WebViewFragment.newInstance();
-                    default:
+                    case 0:
                         return RecyclerViewFragment.newInstance();
+                    case 1:
+                        return RecyclerViewFragment.newInstance();
+                    default:
+                        return null;
                 }
             }
-
             @Override
             public int getCount() {
                 return 2;
@@ -65,10 +61,6 @@ public class Monitor extends BTSActivity {
                         return "Tầng trệt";
                     case 1:
                         return "Tầng 1";
-                    case 2:
-                        return "Tầng 2";
-                    case 3:
-                        return "Tầng 3";
                 }
                 return "";
             }
