@@ -57,6 +57,7 @@ android {
     }
 
     defaultConfig {
+        useLibrary 'org.apache.http.legacy'
         applicationId 'vn.vnpt.ansv.bts'
         minSdkVersion 19
         targetSdkVersion 23
@@ -127,16 +128,20 @@ dependencies {
     // Retrofit
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile 'com.android.volley:volley:1.0.0'
     // materialviewpager
     compile 'com.github.florent37:materialviewpager:1.2.3'
+    compile 'com.github.kittinunf.fuel:fuel-android:1.11.0' //for Android
+
     // progress bar
-    compile 'com.github.ybq:Android-SpinKit:1.1.0'
-    compile 'com.daimajia.slider:library:1.1.5@aar'
+//    compile 'com.github.ybq:Android-SpinKit:1.1.0'
+//    compile 'com.daimajia.slider:library:1.1.5@aar'
     // circle image view
-    compile 'de.hdodenhof:circleimageview:2.0.0'
+//    compile 'de.hdodenhof:circleimageview:2.0.0'
     // ripple effect
-    compile 'com.balysv:material-ripple:1.0.2'
+//    compile 'com.balysv:material-ripple:1.0.2'
     // icons
-    compile 'net.steamcrafted:materialiconlib:1.0.8'
+//    compile 'net.steamcrafted:materialiconlib:1.0.8'
+
 
 }

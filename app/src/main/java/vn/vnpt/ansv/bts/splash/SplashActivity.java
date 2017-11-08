@@ -4,23 +4,48 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.github.kittinunf.fuel.Fuel;
+import com.github.kittinunf.fuel.core.FuelError;
+import com.squareup.okhttp.OkHttpClient;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import kotlin.Pair;
 import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.common.ui.BTSSplashActivity;
+import vn.vnpt.ansv.bts.monitor.MonitorContainer;
+import vn.vnpt.ansv.bts.utils.Utils;
 
 /**
  * Created by ANSV on 11/7/2017.
@@ -28,10 +53,14 @@ import vn.vnpt.ansv.bts.common.ui.BTSSplashActivity;
 
 public class SplashActivity extends BTSSplashActivity {
 
+    private static final String TAG = SplashActivity.class.getSimpleName();
+
     private static final int TIMER = 2000;
     private int animationDuration;
     private final LinearInterpolator linearInterpolator = new LinearInterpolator();
 
+    @Inject
+    SplashPresenter presenter;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -42,20 +71,31 @@ public class SplashActivity extends BTSSplashActivity {
     @Bind(R.id.bottom_panel)
     FrameLayout bottomPanel;
 
-//    @Bind(R.id.scanner_device_list)
-//    RecyclerView scannerRecyclerView;
+    @Bind(R.id.name_edit_text)
+    EditText nameEditText;
 
-//    @Bind(R.id.bluetooth_devices_view)
-//    View bluetoothDevicesView;
+    @Bind(R.id.password_edit_text)
+    EditText passwordEditText;
 
-//    @Bind(R.id.no_network)
-//    View noNetwork;
-//
-//    @Bind(R.id.net_status_report)
-//    TextView netStatusReport;
-//
-//    @Bind(R.id.loading_progress)
-//    ProgressBar loadingProgress;
+    @Bind(R.id.loginButton)
+    Button loginButton;
+
+    private SharedPreferences SP;
+
+    private String username = null;
+    private String password = null;
+    private String PREFS_NAME = "GSTBTS_login";
+
+    public String APIkey,userID,status;
+
+    private String response;
+    private OkHttpClient client;
+
+    private final List<Pair<String, String>> params = new ArrayList<Pair<String, String>>() {{
+        add(new Pair<String, String>("foo1", "bar1"));
+        add(new Pair<String, String>("foo2", "bar2"));
+    }};
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,12 +103,126 @@ public class SplashActivity extends BTSSplashActivity {
         setContentView(R.layout.activity_splash);
         component().inject(this);
         ButterKnife.bind(this);
+        setupNetwork();
         initToolbar();
         animationDuration = 300;
         initializeItems();
         tryToShowSplashImageView(TIMER);
+        setupSharePreference();
+        loginButton.setOnClickListener(onCustomClick);
+
     }
 
+    private View.OnClickListener onCustomClick = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            switch (v.getId()) {
+
+                case R.id.loginButton:
+                    login();
+
+                    break;
+            }
+        }
+    };
+
+    private void setupSharePreference() {
+        SP = getSharedPreferences(PREFS_NAME, 0);
+        username = SP.getString("username", "");
+        password = SP.getString("password", "");
+        nameEditText.setText(username);
+        passwordEditText.setText(password);
+    }
+
+    private void setupNetwork() {
+        if(isNetworkAvailable(getApplicationContext()) == false){
+            Intent enableBtIntent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
+            this.startActivityForResult(enableBtIntent, 1);
+        }
+    }
+    private boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null&& activeNetworkInfo.isConnected();
+    }
+
+    public boolean validate() {
+        boolean valid = true;
+        username = nameEditText.getText().toString();
+        password = passwordEditText.getText().toString();
+
+        if (username.isEmpty()){
+            valid = false;
+
+        } else {
+
+        }
+        if (password.isEmpty() || password.length() < 4 || password.length() > 20) {
+            valid = false;
+
+        } else {
+
+        }
+        return valid;
+    }
+
+    public void onLoginFailed() {
+
+        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        loginButton.setEnabled(true);
+    }
+    private ProgressDialog dialog;
+    private void loginWaiting(){
+        dialog = new ProgressDialog(SplashActivity.this);
+        dialog.setCancelable(false);
+        dialog.setMax(100);
+        dialog.setMessage("Đang xác thực...");
+        dialog.setTitle("Đăng nhập");
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.show();
+    }
+
+    public void rememberUser(boolean remember, String username, String password) {
+
+        SharedPreferences.Editor editor = SP.edit();
+        editor.putString("username", username);
+        editor.putString("password", password);
+        editor.putBoolean("remember", remember);
+        editor.commit();
+    }
+
+    private void login(){
+        if (!validate()) {
+
+            onLoginFailed();
+            return;
+        }
+        loginButton.setEnabled(true);
+        String url = null;
+        try {
+            url = getString(R.string.url)+"apikey/login?username="+username+"&password="+ Utils.SHA1(password);
+            Fuel.get(url, params).responseString(new com.github.kittinunf.fuel.core.Handler<String>() {
+                @Override
+                public void success(@NotNull com.github.kittinunf.fuel.core.Request request, @NotNull com.github.kittinunf.fuel.core.Response response, String s) {
+                    startActivity(new Intent(getApplicationContext(), MonitorContainer.class));
+                }
+
+                @Override
+                public void failure(@NotNull com.github.kittinunf.fuel.core.Request request, @NotNull com.github.kittinunf.fuel.core.Response response, @NotNull FuelError fuelError) {
+                    Log.i(TAG + " ERR", response + " " + fuelError);
+
+                }
+            });
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //##############################################################################################
     /**
      * initToolbar
      *
@@ -99,11 +253,7 @@ public class SplashActivity extends BTSSplashActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-//                startActivity(new Intent(getApplicationContext(), MonitorContainer.class));
                 animateItems();
-//                bluetoothDevicesView.setVisibility(View.VISIBLE);
-//                noNetwork.setVisibility(View.GONE);
-//                netStatusReport.setText("S...");
                 configureProgressIndicator();
             }
         }, timer);

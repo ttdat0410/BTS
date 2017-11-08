@@ -4,4 +4,10 @@
     <string name="title_log_in">ĐĂNG NHẬP</string>
     <string name="title_username">Tên đăng nhập</string>
     <string name="title_password">Mật khẩu</string>
+
+
+    <string name="url">http://10.4.1.204:8081/BTSRestWebService/</string>
+    <string name="url_test">jh</string>
+
+
 </resources>

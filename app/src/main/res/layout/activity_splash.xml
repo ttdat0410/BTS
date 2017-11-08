@@ -14,7 +14,6 @@
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/Popup" />
 
-
     <ImageView
         style="@style/match"
         android:id="@+id/mm_background"
@@ -37,12 +36,12 @@
             android:src="@mipmap/icn_logo" />
     </LinearLayout>
 
-    <ImageView
+    <!--<ImageView
         style="@style/wrap"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/space_S"
-        android:src="@mipmap/icn_logo"/>
+        android:src="@mipmap/icn_logo"/>-->
 
     <!-- Bottom panel -->
     <FrameLayout
@@ -101,7 +100,7 @@
                     android:visibility="visible">
 
                     <EditText
-                        style="@style/m_silicon_grey"
+                        style="@style/l_silicon_grey"
                         android:layout_width="match_parent"
                         android:id="@+id/name_edit_text"
                         android:layout_alignParentBottom="true"
@@ -151,7 +150,7 @@
                     android:visibility="visible">
 
                     <EditText
-                        style="@style/m_silicon_grey"
+                        style="@style/l_silicon_grey"
                         android:id="@+id/password_edit_text"
                         android:layout_width="match_parent"
                         android:layout_alignParentBottom="true"
@@ -168,15 +167,22 @@
                         android:text="@string/title_password" />
 
                     <View
+                        android:id="@+id/v"
                         style="@style/divider_line"
                         android:layout_alignParentBottom="true"
                         android:background="@color/sl_terbium_green" />
-
                 </RelativeLayout>
 
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/loginButton"
+                    style="@style/m_silicon_grey"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/space_S"
+                    android:layout_gravity="center"
+                    android:background="@color/sl_terbium_green"
+                    android:text="@string/title_log_in"
+                    android:textAllCaps="true" />
             </LinearLayout>
         </ScrollView>
-
     </FrameLayout>
-
 </RelativeLayout>
