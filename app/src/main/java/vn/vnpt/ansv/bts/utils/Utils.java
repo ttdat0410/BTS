@@ -16,6 +16,8 @@ import java.security.NoSuchAlgorithmException;
 
 public class Utils {
 
+    public static final String BASE_URL = "http://10.4.1.204:8081/BTSRestWebService/";
+
     public static SuperToast.Animations TOAST_ANIMATION = SuperToast.Animations.FLYIN;
 
     public static String convertToHex(byte[] data) {

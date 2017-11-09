@@ -5,8 +5,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,41 +16,31 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.github.johnpersano.supertoasts.SuperToast;
-import com.github.kittinunf.fuel.Fuel;
-import com.github.kittinunf.fuel.core.FuelError;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import kotlin.Pair;
 import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
-import vn.vnpt.ansv.bts.ui.monitor.MonitorContainer;
 import vn.vnpt.ansv.bts.utils.BTSToast;
-import vn.vnpt.ansv.bts.utils.Utils;
+import vn.vnpt.ansv.bts.utils.EStatus;
 
 /**
  * Created by ANSV on 11/9/2017.
  */
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity implements SplashView{
 
     private static final String TAG = SplashActivity.class.getSimpleName();
 
@@ -58,37 +50,25 @@ public class SplashActivity extends AppCompatActivity {
 
     @Inject
     SplashPresenter presenter;
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-
     @BindView(R.id.mm_logo)
     ImageView mmLogo;
-
     @BindView(R.id.bottom_panel)
     FrameLayout bottomPanel;
-
     @BindView(R.id.name_edit_text)
     EditText nameEditText;
-
     @BindView(R.id.password_edit_text)
     EditText passwordEditText;
-
     @BindView(R.id.loginButton)
     Button loginButton;
 
     private SharedPreferences SP;
-
     private String username = null;
     private String password = null;
     private String PREFS_NAME = "GSTBTS_login";
 
     public String APIkey,userID,status;
-
-    private final List<Pair<String, String>> params = new ArrayList<Pair<String, String>>() {{
-        add(new Pair<String, String>("foo1", "bar1"));
-        add(new Pair<String, String>("foo2", "bar2"));
-    }};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,24 +76,33 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         ((BTSApplication) getApplication()).getAppComponent().inject(this);
         ButterKnife.bind(this);
-        checkNetwork();
+        presenter.setView(this);
+        if (!presenter.checkNetwork(this)) {
+            Intent enableBtIntent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
+            this.startActivityForResult(enableBtIntent, 1);
+        }
         initToolbar();
         animationDuration = 300;
         initializeItems();
-        tryToShowSplashImageView(TIMER);
         setupSharePreference();
-        loginButton.setOnClickListener(onCustomClick);
-
+        loginButton.setOnClickListener(onSplashClick);
     }
 
-    private View.OnClickListener onCustomClick = new View.OnClickListener() {
+    private View.OnClickListener onSplashClick = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-
                 case R.id.loginButton:
-                    login();
+                    loginButton.setEnabled(false);
+                    presenter.getUser(nameEditText.getText().toString(),
+                            passwordEditText.getText().toString(), new SplashPresenterImpl.Callback() {
+                                @Override
+                                public void callback(EStatus eStatus) {
+                                    updateStatusView(eStatus);
+                                    loginButton.setEnabled(true);
+                                }
+                            });
                     break;
             }
         }
@@ -127,49 +116,6 @@ public class SplashActivity extends AppCompatActivity {
         passwordEditText.setText(password);
     }
 
-    private void checkNetwork() {
-        if(!presenter.isNetwork(this)){
-            Intent enableBtIntent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
-            this.startActivityForResult(enableBtIntent, 1);
-        }
-    }
-
-    public boolean validate() {
-        boolean valid = true;
-        username = nameEditText.getText().toString().trim();
-        password = passwordEditText.getText().toString().trim();
-
-        if (username.isEmpty()){
-            valid = false;
-
-
-        } else {
-
-        }
-        if (password.isEmpty() || password.length() < 4 || password.length() > 20) {
-            valid = false;
-
-        } else {
-
-        }
-        return valid;
-    }
-
-    public void onLoginFailed() {
-        showToast("Đăng nhập thất bại.", SuperToast.Background.RED);
-        loginButton.setEnabled(true);
-    }
-    private ProgressDialog dialog;
-    private void loginWaiting(){
-        dialog = new ProgressDialog(SplashActivity.this);
-        dialog.setCancelable(false);
-        dialog.setMax(100);
-        dialog.setMessage("Đang xác thực...");
-        dialog.setTitle("Đăng nhập");
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.show();
-    }
-
     public void rememberUser(boolean remember, String username, String password) {
 
         SharedPreferences.Editor editor = SP.edit();
@@ -179,33 +125,88 @@ public class SplashActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    private void login(){
-        if (!validate()) {
-
-            onLoginFailed();
-            return;
+    private void updateStatusView(EStatus eStatus) {
+        switch (eStatus) {
+            case NETWORK_FAILURE:
+                showToast(getResources().getString(R.string.verify_network_lost), SuperToast.Background.RED);
+                break;
+            case USERNAME_IS_EMPTY:
+                showToast(getResources().getString(R.string.error_username_is_empty), SuperToast.Background.RED);
+                nameEditText.requestFocus();
+                break;
+            case PASSWORD_IS_EMPTY:
+                showToast(getResources().getString(R.string.error_password_is_empty), SuperToast.Background.RED);
+                passwordEditText.requestFocus();
+                break;
+            case USERNAME_INCORRECT:
+                showToast(getResources().getString(R.string.error_username_incorrect), SuperToast.Background.RED);
+                nameEditText.requestFocus();
+                break;
+            case PASSWORD_INCORRECT:
+                showToast(getResources().getString(R.string.error_password_incorrect), SuperToast.Background.RED);
+                passwordEditText.requestFocus();
+                break;
+            case UESRNAME_UNMATCHED_WITH_FORMAT:
+                showToast(getResources().getString(R.string.error_username_unmatched_with_format), SuperToast.Background.RED);
+                nameEditText.requestFocus();
+                break;
+            case PASSWORD_UNMATCHED_WITH_FORMAT:
+                showToast(getResources().getString(R.string.error_password_unmatched_with_format), SuperToast.Background.RED);
+                passwordEditText.requestFocus();
+                break;
+            case CHECKING_ACCOUNT:
+                showToast(getResources().getString(R.string.verify_checking_account), SuperToast.Background.GREEN);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
+            case LOGIN:
+                showToast(getResources().getString(R.string.verify_login), SuperToast.Background.GREEN);
+                break;
+            case LOGIN_SUCCESS:
+                showToast(getResources().getString(R.string.verify_login_success), SuperToast.Background.GREEN);
+                break;
+            case LOGIN_FAILURE:
+                showToast(getResources().getString(R.string.verify_login_failure), SuperToast.Background.RED);
+                break;
+            default:
+                break;
         }
-        loginButton.setEnabled(true);
-        String url = null;
-        try {
-            url = getString(R.string.url)+"apikey/login?username="+username+"&password="+ Utils.SHA1(password);
-            Fuel.get(url, params).responseString(new com.github.kittinunf.fuel.core.Handler<String>() {
-                @Override
-                public void success(@NotNull com.github.kittinunf.fuel.core.Request request, @NotNull com.github.kittinunf.fuel.core.Response response, String s) {
-                    startActivity(new Intent(getApplicationContext(), MonitorContainer.class));
-                }
+    }
 
-                @Override
-                public void failure(@NotNull com.github.kittinunf.fuel.core.Request request, @NotNull com.github.kittinunf.fuel.core.Response response, @NotNull FuelError fuelError) {
-                    Log.i(TAG + " ERR", response + " " + fuelError);
+    private ProgressDialog dialog;
+    @Override
+    public void showLoading() {
+        dialog = new ProgressDialog(SplashActivity.this);
+        dialog.setCancelable(false);
+        dialog.setMax(100);
+        dialog.setMessage(getResources().getString(R.string.verify_login));
+        dialog.setTitle("Đăng nhập");
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.show();
+    }
 
+    @Override
+    public void hideLoading() {
+        if (dialog.isShowing()) {
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.hide();
                 }
-            });
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            }, 500);
         }
+    }
+
+    @Override
+    public void showBottomView() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                animateItems();
+                configureProgressIndicator();
+            }
+        }, TIMER);
     }
 
     //##############################################################################################
@@ -226,23 +227,6 @@ public class SplashActivity extends AppCompatActivity {
 //        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
 //        params.setMargins(0, getStatusBarHeight(), 0, 0);
 //        toolbar.setLayoutParams(params);
-    }
-
-    /**
-     * tryToShowSplashImageView
-     *
-     * Hàm hiên thị splash khi mới mở app
-     * @param timer số giây để bắt đầu ẩn splash và bắt đầu quét mã
-     * */
-    private void tryToShowSplashImageView(int timer) {
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                animateItems();
-                configureProgressIndicator();
-            }
-        }, timer);
     }
 
     private void initializeItems() {

@@ -7,6 +7,7 @@ import android.content.Context;
  */
 
 public interface SplashPresenter {
-    boolean isNetwork(Context context);
-    void login();
+    void setView(SplashView splashView);
+    boolean checkNetwork(Context context);
+    void getUser(String user, String pass, SplashPresenterImpl.Callback callback);
 }
