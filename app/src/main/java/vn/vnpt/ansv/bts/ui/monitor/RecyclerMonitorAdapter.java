@@ -1,20 +1,18 @@
-package vn.vnpt.ansv.bts.monitor.fragment_monitor;
+package vn.vnpt.ansv.bts.ui.monitor;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
-
 /**
- * Created by ANSV on 11/8/2017.
+ * Created by ANSV on 11/9/2017.
  */
 
 public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitorAdapter.DeviceHolder> {
@@ -76,10 +74,10 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
 
     public static class DeviceHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.device_name)
+        @BindView(R.id.device_name)
         TextView deviceName;
 
-        @Bind(R.id.device_address)
+        @BindView(R.id.device_address)
         TextView deviceAddress;
 
 //        @Bind(R.id.signal_strength)
@@ -94,4 +92,3 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
         }
     }
 }
-

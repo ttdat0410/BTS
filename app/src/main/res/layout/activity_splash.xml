@@ -100,7 +100,7 @@
                     android:visibility="visible">
 
                     <EditText
-                        style="@style/l_silicon_grey"
+                        style="@style/m_silicon_grey"
                         android:layout_width="match_parent"
                         android:id="@+id/name_edit_text"
                         android:layout_alignParentBottom="true"
@@ -150,7 +150,7 @@
                     android:visibility="visible">
 
                     <EditText
-                        style="@style/l_silicon_grey"
+                        style="@style/m_silicon_grey"
                         android:id="@+id/password_edit_text"
                         android:layout_width="match_parent"
                         android:layout_alignParentBottom="true"

@@ -1,4 +1,4 @@
-package vn.vnpt.ansv.bts.splash;
+package vn.vnpt.ansv.bts.ui.splash;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -21,7 +21,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.kittinunf.fuel.Fuel;
@@ -36,17 +35,17 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import kotlin.Pair;
 import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
-import vn.vnpt.ansv.bts.monitor.MonitorContainer;
+import vn.vnpt.ansv.bts.ui.monitor.MonitorContainer;
 import vn.vnpt.ansv.bts.utils.BTSToast;
 import vn.vnpt.ansv.bts.utils.Utils;
 
 /**
- * Created by ANSV on 11/7/2017.
+ * Created by ANSV on 11/9/2017.
  */
 
 public class SplashActivity extends AppCompatActivity {
@@ -60,22 +59,22 @@ public class SplashActivity extends AppCompatActivity {
     @Inject
     SplashPresenter presenter;
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.mm_logo)
+    @BindView(R.id.mm_logo)
     ImageView mmLogo;
 
-    @Bind(R.id.bottom_panel)
+    @BindView(R.id.bottom_panel)
     FrameLayout bottomPanel;
 
-    @Bind(R.id.name_edit_text)
+    @BindView(R.id.name_edit_text)
     EditText nameEditText;
 
-    @Bind(R.id.password_edit_text)
+    @BindView(R.id.password_edit_text)
     EditText passwordEditText;
 
-    @Bind(R.id.loginButton)
+    @BindView(R.id.loginButton)
     Button loginButton;
 
     private SharedPreferences SP;

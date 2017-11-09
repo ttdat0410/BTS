@@ -1,4 +1,4 @@
-package vn.vnpt.ansv.bts.monitor.fragment_monitor;
+package vn.vnpt.ansv.bts.ui.monitor;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,11 +14,12 @@ import com.github.florent37.materialviewpager.header.MaterialViewPagerHeaderDeco
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
+
 /**
- * Created by ANSV on 11/7/2017.
+ * Created by ANSV on 11/9/2017.
  */
 
 public class RecyclerMonitorView extends Fragment {
@@ -26,7 +27,7 @@ public class RecyclerMonitorView extends Fragment {
     private static final int ITEM_COUNT = 7;
     private RecyclerMonitorAdapter recyclerMonitorAdapter;
 
-    @Bind(R.id.recyclerView)
+    @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
     public static RecyclerMonitorView newInstance() {

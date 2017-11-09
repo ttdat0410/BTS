@@ -6,8 +6,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import vn.vnpt.ansv.bts.splash.SplashPresenter;
-import vn.vnpt.ansv.bts.splash.SplashPresenterImpl;
+import vn.vnpt.ansv.bts.ui.splash.SplashPresenter;
+import vn.vnpt.ansv.bts.ui.splash.SplashPresenterImpl;
 
 /**
  * Created by ANSV on 11/9/2017.

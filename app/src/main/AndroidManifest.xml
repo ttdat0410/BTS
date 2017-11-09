@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:largeHeap="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".splash.SplashActivity">
+        <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,8 +30,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".monitor.MonitorContainer"/>
-        <activity android:name=".splash.DD"/>
+        <activity android:name=".ui.monitor.MonitorContainer"/>
     </application>
 
 </manifest>

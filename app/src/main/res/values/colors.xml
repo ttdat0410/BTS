@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="primary_color">@color/sl_silicon_grey</color>
+    <color name="primary_color_semi_transparent">#993F51B5</color>
+    <color name="primary_color_dark">#303F9F</color>
+    <color name="primary_color_light">#C5CAE9</color>
+    <color name="accent_color">@color/sl_terbium_green</color>
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
@@ -21,11 +23,6 @@
 
     <color name="sl_terbium_green">#ffa1b92e</color>
     <color name="sl_red_orange">#ffe65100</color>
-
-
-    <color name="primary_color">@color/sl_silicon_grey</color>
-    <color name="primary_color_dark">#303F9F</color>
-    <color name="accent_color">@color/sl_terbium_green</color>
 
     <color name="transparent">#00000000</color>
     <color name="red">#ffd91e2a</color>

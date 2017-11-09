@@ -115,22 +115,38 @@ dependencies {
     compile 'com.android.support:palette-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
     // Butterknife
-    compile 'com.jakewharton:butterknife:7.0.0'
-    // Dagger 2
-    compile 'com.google.dagger:dagger:2.0.1'
-    apt 'com.google.dagger:dagger-compiler:2.0.1'
-    provided 'org.glassfish:javax.annotation:10.0-b28'
+//    compile 'com.jakewharton:butterknife:7.0.0'
+    // Retrofit
+    compile "com.squareup.retrofit2:retrofit:2.1.0"
+    compile "com.squareup.retrofit2:converter-gson:2.1.0"
+
+    // Butterknife
+    compile "com.jakewharton:butterknife:8.0.1"
+    apt "com.jakewharton:butterknife-compiler:8.0.1"
+
+    // Lightweight Stream
+    compile 'com.annimon:stream:1.1.2'
+
+    // Dependency Injection
+    apt "com.google.dagger:dagger-compiler:2.2"
+    compile "com.google.dagger:dagger:2.2"
+    provided 'javax.annotation:jsr250-api:1.0'
+//    // Dagger 2
+//    compile 'com.google.dagger:dagger:2.0.1'
+//    apt 'com.google.dagger:dagger-compiler:2.0.1'
+//    provided 'org.glassfish:javax.annotation:10.0-b28'
     // RxJava, RxAndroid
     compile 'io.reactivex:rxjava:1.1.3'
     compile 'io.reactivex:rxandroid:1.1.0'
     // Gson
     compile 'com.google.code.gson:gson:2.4'
-    // Retrofit
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'com.squareup.okhttp:okhttp:2.5.0'
-    compile 'com.android.volley:volley:1.0.0'
+//    // Retrofit
+//    compile 'com.squareup.retrofit:retrofit:1.9.0'
+//    compile 'com.squareup.okhttp:okhttp:2.5.0'
+//    compile 'com.android.volley:volley:1.0.0'
     // materialviewpager
     compile 'com.github.florent37:materialviewpager:1.2.3'
+    // FUEL
     compile 'com.github.kittinunf.fuel:fuel-android:1.11.0' //for Android
 
     // toasts

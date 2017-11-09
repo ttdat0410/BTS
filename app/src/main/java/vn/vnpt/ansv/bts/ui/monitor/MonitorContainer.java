@@ -1,4 +1,4 @@
-package vn.vnpt.ansv.bts.monitor;
+package vn.vnpt.ansv.bts.ui.monitor;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,19 +11,18 @@ import android.widget.Toast;
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.github.florent37.materialviewpager.header.HeaderDesign;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
-import vn.vnpt.ansv.bts.common.ui.BTSActivity;
-import vn.vnpt.ansv.bts.monitor.fragment_monitor.RecyclerMonitorView;
+import vn.vnpt.ansv.bts.ui.BTSActivity;
 
 /**
- * Created by ANSV on 11/8/2017.
+ * Created by ANSV on 11/9/2017.
  */
 
 public class MonitorContainer extends BTSActivity {
 
-    @Bind(R.id.materialViewPager)
+    @BindView(R.id.materialViewPager)
     MaterialViewPager mViewPager;
 
     @Override

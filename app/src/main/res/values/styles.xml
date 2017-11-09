@@ -36,7 +36,7 @@
         <item name="android:textSize">@dimen/text_size_S</item>
     </style>
 
-    <style name="s_silicon_grey_version" parent="silicon_gray_text">
+    <style name="xs_silicon_grey_version" parent="silicon_gray_text">
         <item name="android:textSize">@dimen/text_size_XS</item>
     </style>
 
@@ -45,7 +45,7 @@
     </style>
 
     <style name="m_silicon_grey" parent="silicon_gray_text">
-        <item name="android:textSize">@dimen/text_size_S</item>
+        <item name="android:textSize">@dimen/text_size_M</item>
     </style>
 
     <style name="sm_terbium_green" parent="terbium_green_text">

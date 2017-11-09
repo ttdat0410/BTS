@@ -1,4 +1,4 @@
-package vn.vnpt.ansv.bts.splash;
+package vn.vnpt.ansv.bts.ui.splash;
 
 import android.content.Context;
 
@@ -10,6 +10,7 @@ import vn.vnpt.ansv.bts.utils.Utils;
 /**
  * Created by ANSV on 11/9/2017.
  */
+
 @ActivityScope
 public class SplashPresenterImpl implements SplashPresenter {
 
@@ -19,7 +20,6 @@ public class SplashPresenterImpl implements SplashPresenter {
     public SplashPresenterImpl(Context context) {
 
     }
-
 
     @Override
     public boolean isNetwork(Context context) {
