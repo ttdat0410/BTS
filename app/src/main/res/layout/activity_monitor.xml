@@ -21,8 +21,8 @@
         app:viewpager_hideLogoWithFade="false"
         app:viewpager_hideToolbarAndTitle="true"
         app:viewpager_enableToolbarElevation="true"
-        app:viewpager_parallaxHeaderFactor="0.5"
-        app:viewpager_headerAdditionalHeight="10dp"
+        app:viewpager_parallaxHeaderFactor="0"
+        app:viewpager_headerAdditionalHeight="0dp"
         app:viewpager_displayToolbarWhenSwipe="true"
         app:viewpager_transparentToolbar="false"
         app:viewpager_animatedHeaderImage="true" />
