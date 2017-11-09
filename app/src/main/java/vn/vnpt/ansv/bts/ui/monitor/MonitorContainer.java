@@ -1,19 +1,26 @@
 package vn.vnpt.ansv.bts.ui.monitor;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.github.florent37.materialviewpager.header.HeaderDesign;
 
+import java.io.Serializable;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
+import vn.vnpt.ansv.bts.objects.MinStationFullObj;
 import vn.vnpt.ansv.bts.ui.BTSActivity;
 
 /**
@@ -25,6 +32,11 @@ public class MonitorContainer extends BTSActivity {
     @BindView(R.id.materialViewPager)
     MaterialViewPager mViewPager;
 
+    public static void launch(Context context, List<MinStationFullObj> listStation) {
+        Intent intent = new Intent(context, MonitorContainer.class);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,22 +47,21 @@ public class MonitorContainer extends BTSActivity {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
-
         mViewPager.getViewPager().setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                switch (position % 4) {
+                switch (position % 12) {
                     case 0:
                         return RecyclerMonitorView.newInstance();
                     case 1:
                         return RecyclerMonitorView.newInstance();
                     default:
-                        return null;
+                        return RecyclerMonitorView.newInstance();
                 }
             }
             @Override
             public int getCount() {
-                return 2;
+                return 12;
             }
 
             @Override
@@ -89,7 +100,9 @@ public class MonitorContainer extends BTSActivity {
                                 "http://www.tothemobile.com/wp-content/uploads/2014/07/original.jpg");
                 }
 
-                return null;
+                return HeaderDesign.fromColorResAndUrl(
+                        R.color.sl_terbium_green,
+                        "http://buudienhospital.vn/wp-content/uploads/2017/04/3-1237x386.jpg");
             }
         });
 

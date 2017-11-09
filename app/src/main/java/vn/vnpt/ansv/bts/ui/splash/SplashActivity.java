@@ -23,6 +23,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.github.johnpersano.supertoasts.SuperToast;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +38,7 @@ import vn.vnpt.ansv.bts.objects.MinStationFullObj;
 import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
 import vn.vnpt.ansv.bts.ui.monitor.MonitorContainer;
+import vn.vnpt.ansv.bts.utils.BTSConstants;
 import vn.vnpt.ansv.bts.utils.BTSToast;
 import vn.vnpt.ansv.bts.utils.EStatus;
 
@@ -235,12 +238,12 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
     }
 
     @Override
-    public void launchMonitor(List<MinStationFullObj> listStation) {
+    public void launchMonitor(final List<MinStationFullObj> listStation) {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(getApplicationContext(), MonitorContainer.class));
+                MonitorContainer.launch(SplashActivity.this, listStation);
             }
         }, 500);
     }
