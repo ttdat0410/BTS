@@ -8,9 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -33,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
+import vn.vnpt.ansv.bts.ui.PreferenceManager;
 import vn.vnpt.ansv.bts.utils.BTSToast;
 import vn.vnpt.ansv.bts.utils.EStatus;
 
@@ -47,6 +46,9 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
     private static final int TIMER = 2000;
     private int animationDuration;
     private final LinearInterpolator linearInterpolator = new LinearInterpolator();
+
+    @Inject
+    PreferenceManager prefsManager;
 
     @Inject
     SplashPresenter presenter;
@@ -95,8 +97,8 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
             switch (v.getId()) {
                 case R.id.loginButton:
                     loginButton.setEnabled(false);
-                    presenter.getUser(nameEditText.getText().toString(),
-                            passwordEditText.getText().toString(), new SplashPresenterImpl.Callback() {
+                    presenter.getUser(nameEditText.getText().toString().trim(),
+                            passwordEditText.getText().toString().trim(), new SplashPresenterImpl.Callback() {
                                 @Override
                                 public void callback(EStatus eStatus) {
                                     updateStatusView(eStatus);
@@ -116,12 +118,11 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
         passwordEditText.setText(password);
     }
 
-    public void rememberUser(boolean remember, String username, String password) {
+    public void saveAccount(String username, String password) {
 
         SharedPreferences.Editor editor = SP.edit();
         editor.putString("username", username);
         editor.putString("password", password);
-        editor.putBoolean("remember", remember);
         editor.commit();
     }
 
@@ -155,14 +156,15 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
                 passwordEditText.requestFocus();
                 break;
             case CHECKING_ACCOUNT:
-                showToast(getResources().getString(R.string.verify_checking_account), SuperToast.Background.GREEN);
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
+                showToast(getResources().getString(R.string.verify_checking_account), SuperToast.Background.WHITE);
+                hideKeyboard(passwordEditText);
             case LOGIN:
-                showToast(getResources().getString(R.string.verify_login), SuperToast.Background.GREEN);
                 break;
             case LOGIN_SUCCESS:
                 showToast(getResources().getString(R.string.verify_login_success), SuperToast.Background.GREEN);
+                saveAccount(nameEditText.getText().toString(), passwordEditText.getText().toString());
+                hideKeyboard(passwordEditText);
+                presenter.getStations();
                 break;
             case LOGIN_FAILURE:
                 showToast(getResources().getString(R.string.verify_login_failure), SuperToast.Background.RED);
@@ -170,6 +172,11 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
             default:
                 break;
         }
+    }
+
+    private void hideKeyboard(EditText fromView) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(fromView.getWindowToken(), 0);
     }
 
     private ProgressDialog dialog;
@@ -204,7 +211,6 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
             @Override
             public void run() {
                 animateItems();
-                configureProgressIndicator();
             }
         }, TIMER);
     }
@@ -233,26 +239,6 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
         bottomPanel.setVisibility(View.INVISIBLE);
         toolbar.setVisibility(View.INVISIBLE);
         mmLogo.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * configureProgressIndicator
-     *
-     * Sets the color of the indeterminate progress indicator to be blue,
-     * as defined in res/values/color.xml
-     *
-     */
-    private void configureProgressIndicator() {
-        int color;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            color = getResources().getColor(R.color.sl_terbium_green);
-        } else {
-            color = getResources().getColor(R.color.sl_terbium_green, null);
-        }
-//        if (loadingProgress.getIndeterminateDrawable() != null) {
-//            loadingProgress.getIndeterminateDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-//        } else {
-//        }
     }
 
     private void animateItems() {

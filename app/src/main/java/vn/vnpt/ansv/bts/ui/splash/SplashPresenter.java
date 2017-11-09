@@ -10,4 +10,5 @@ public interface SplashPresenter {
     void setView(SplashView splashView);
     boolean checkNetwork(Context context);
     void getUser(String user, String pass, SplashPresenterImpl.Callback callback);
+    void getStations();
 }

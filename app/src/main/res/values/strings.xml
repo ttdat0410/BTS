@@ -29,7 +29,7 @@
     <string name="verify_login">Đang xác thực</string>
     <string name="verify_login_success">Đăng nhập thành công</string>
     <string name="verify_login_failure">Đăng nhập thất bại!</string>
-    <string name="verify_network_lost">Mất kết nối mạng!</string>
+    <string name="verify_network_lost">Mất kết nối server!</string>
 
     <string name="dialog_verify_login">Đang xác thực</string>
 
