@@ -49,7 +49,7 @@ public class SplashPresenterImpl implements SplashPresenter {
         void callback(EStatus eStatus, String apiKey, String userId);
     }
     public interface GetStationCallback {
-        void callback(EStatus eStatus, List<MinStationFullObj> listStation);
+        void callback(EStatus eStatus);
     }
     private SplashView splashView;
     private Context context;
@@ -134,10 +134,10 @@ public class SplashPresenterImpl implements SplashPresenter {
         final String apiKey = preferences.apiKey;
 
         if (apiKey.trim().length() < 1) {
-            callback.callback(EStatus.APIKEY_INVAILABLE, null);
+            callback.callback(EStatus.APIKEY_INVAILABLE);
 
         } else if (userId.trim().length() < 1) {
-            callback.callback(EStatus.USERID_INVAILABLE, null);
+            callback.callback(EStatus.USERID_INVAILABLE);
 
         } else {
             String url = Utils.BASE_URL + "monitor/sensor/" + userId;
@@ -154,7 +154,8 @@ public class SplashPresenterImpl implements SplashPresenter {
                                 Gson gson = new GsonBuilder().create();
                                 MinStationFullListObj minStationFullListObj = gson.fromJson(tram.toString(), MinStationFullListObj.class);
                                 List<MinStationFullObj> listStation = minStationFullListObj.getList();
-                                callback.callback(EStatus.GET_STATIONS_SUCCESS, listStation);
+                                callback.callback(EStatus.GET_STATIONS_SUCCESS);
+                                splashView.launchMonitor(listStation);
                                 splashView.hideLoading();
                                 /*CardviewObject itemCardView;
                                 Log.i("0x00", "COUNT: " + listTram.size());
@@ -200,7 +201,7 @@ public class SplashPresenterImpl implements SplashPresenter {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    callback.callback(EStatus.NETWORK_FAILURE, null);
+                    callback.callback(EStatus.NETWORK_FAILURE);
                     splashView.hideLoading();
                 }
             }) {

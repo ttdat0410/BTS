@@ -189,18 +189,11 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
     private void tryToGetStations() {
         presenter.getStations(new SplashPresenterImpl.GetStationCallback() {
             @Override
-            public void callback(EStatus eStatus, List<MinStationFullObj> listStation) {
+            public void callback(EStatus eStatus) {
                 updateStatusView(eStatus, "", "");
-                if (eStatus == EStatus.GET_STATIONS_SUCCESS) {
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            startActivity(new Intent(getApplicationContext(), MonitorContainer.class));
-                        }
-                    }, 500);
+                if (dialog.isShowing()) {
+                    hideLoading();
                 }
-                Log.i("0x00", listStation.size() + " ");
             }
         });
     }
@@ -242,9 +235,14 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
     }
 
     @Override
-    public void launchMonitor() {
-//        BTSPreferences prefs = prefsManager.getPreferences();
-//        Log.i("0x00", prefs.userName + " | " + prefs.password + " | " + prefs.apiKey + " | " + prefs.userId);
+    public void launchMonitor(List<MinStationFullObj> listStation) {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(getApplicationContext(), MonitorContainer.class));
+            }
+        }, 500);
     }
 
     private void initializeItems() {
