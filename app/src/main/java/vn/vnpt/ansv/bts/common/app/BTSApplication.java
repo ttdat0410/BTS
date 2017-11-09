@@ -2,35 +2,28 @@ package vn.vnpt.ansv.bts.common.app;
 
 import android.app.Application;
 
-import javax.inject.Inject;
-
-import vn.vnpt.ansv.bts.BuildConfig;
-import vn.vnpt.ansv.bts.common.injection.component.BTSComponent;
-import vn.vnpt.ansv.bts.common.injection.component.DaggerBTSComponent;
-import vn.vnpt.ansv.bts.common.injection.module.BTSModule;
+import vn.vnpt.ansv.bts.common.injection.component.AppComponent;
+import vn.vnpt.ansv.bts.common.injection.component.DaggerAppComponent;
+import vn.vnpt.ansv.bts.common.injection.module.AppModule;
 
 /**
  * Created by ANSV on 11/7/2017.
  */
 
 public class BTSApplication extends Application {
-    private static final String TAG = BTSApplication.class.getSimpleName();
 
-    private BTSComponent component;
-
-//    @Inject
-//    APIManager apiManager;
+    private AppComponent appComponent;
+    public  AppComponent getAppComponent() {
+        return appComponent;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        component().inject(this);
+        appComponent = initDagger(this);
     }
 
-    public BTSComponent component() {
-        if (component == null) {
-            component = DaggerBTSComponent.builder().bTSModule(new BTSModule(this, BuildConfig.REST_API_IP, BuildConfig.REST_API_PORT)).build();
-        }
-        return component;
+    protected AppComponent initDagger(BTSApplication application) {
+        return DaggerAppComponent.builder().appModule(new AppModule(application)).build();
     }
 }

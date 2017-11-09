@@ -31,7 +31,6 @@ public class MonitorContainer extends BTSActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monitor);
         setTitle("");
-        component().inject(this);
         ButterKnife.bind(this);
         final Toolbar toolbar = mViewPager.getToolbar();
         if (toolbar != null) {

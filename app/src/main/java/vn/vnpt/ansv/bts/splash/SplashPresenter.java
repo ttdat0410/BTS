@@ -1,18 +1,12 @@
 package vn.vnpt.ansv.bts.splash;
 
-import javax.inject.Inject;
+import android.content.Context;
 
-import vn.vnpt.ansv.bts.common.injection.scope.ActivityScope;
 
 /**
  * Created by ANSV on 11/8/2017.
  */
-@ActivityScope
-public class SplashPresenter {
-
-    @Inject
-    public SplashPresenter() {
-
-    }
-
+public interface SplashPresenter {
+    boolean isNetwork(Context context);
+    void login();
 }

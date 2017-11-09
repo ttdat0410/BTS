@@ -14,8 +14,6 @@ import android.view.MenuItem;
 import vn.vnpt.ansv.bts.BuildConfig;
 import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
-import vn.vnpt.ansv.bts.common.injection.component.ActivityComponent;
-import vn.vnpt.ansv.bts.common.injection.component.DaggerActivityComponent;
 
 /**
  * Created by ANSV on 11/7/2017.
@@ -23,6 +21,12 @@ import vn.vnpt.ansv.bts.common.injection.component.DaggerActivityComponent;
 
 public class BTSActivity extends AppCompatActivity {
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+}
+    /*
     private static final String TAG = BTSActivity.class.getSimpleName();
     protected ActivityComponent component;
     private DrawerLayout mDrawer;

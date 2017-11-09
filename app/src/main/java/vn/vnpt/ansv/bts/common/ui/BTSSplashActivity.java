@@ -19,15 +19,13 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
-import vn.vnpt.ansv.bts.common.injection.component.ActivityComponent;
-import vn.vnpt.ansv.bts.common.injection.component.DaggerActivityComponent;
 
 /**
  * Created by ANSV on 11/8/2017.
  */
 
 public class BTSSplashActivity extends AppCompatActivity {
-
+/*
     protected int bluetoothState = BluetoothAdapter.STATE_OFF;
     protected ActivityComponent component;
 
@@ -116,7 +114,7 @@ public class BTSSplashActivity extends AppCompatActivity {
         }
         return result;
     }
-
+*/
 }
 
 

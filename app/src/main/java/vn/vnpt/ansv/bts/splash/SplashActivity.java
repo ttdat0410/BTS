@@ -5,16 +5,14 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -24,11 +22,10 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
+import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.kittinunf.fuel.Fuel;
 import com.github.kittinunf.fuel.core.FuelError;
-import com.squareup.okhttp.OkHttpClient;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -43,15 +40,16 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import kotlin.Pair;
 import vn.vnpt.ansv.bts.R;
-import vn.vnpt.ansv.bts.common.ui.BTSSplashActivity;
+import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.monitor.MonitorContainer;
+import vn.vnpt.ansv.bts.utils.BTSToast;
 import vn.vnpt.ansv.bts.utils.Utils;
 
 /**
  * Created by ANSV on 11/7/2017.
  */
 
-public class SplashActivity extends BTSSplashActivity {
+public class SplashActivity extends AppCompatActivity {
 
     private static final String TAG = SplashActivity.class.getSimpleName();
 
@@ -88,22 +86,18 @@ public class SplashActivity extends BTSSplashActivity {
 
     public String APIkey,userID,status;
 
-    private String response;
-    private OkHttpClient client;
-
     private final List<Pair<String, String>> params = new ArrayList<Pair<String, String>>() {{
         add(new Pair<String, String>("foo1", "bar1"));
         add(new Pair<String, String>("foo2", "bar2"));
     }};
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        component().inject(this);
+        ((BTSApplication) getApplication()).getAppComponent().inject(this);
         ButterKnife.bind(this);
-        setupNetwork();
+        checkNetwork();
         initToolbar();
         animationDuration = 300;
         initializeItems();
@@ -117,12 +111,10 @@ public class SplashActivity extends BTSSplashActivity {
 
         @Override
         public void onClick(View v) {
-
             switch (v.getId()) {
 
                 case R.id.loginButton:
                     login();
-
                     break;
             }
         }
@@ -136,25 +128,21 @@ public class SplashActivity extends BTSSplashActivity {
         passwordEditText.setText(password);
     }
 
-    private void setupNetwork() {
-        if(isNetworkAvailable(getApplicationContext()) == false){
+    private void checkNetwork() {
+        if(!presenter.isNetwork(this)){
             Intent enableBtIntent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
             this.startActivityForResult(enableBtIntent, 1);
         }
     }
-    private boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null&& activeNetworkInfo.isConnected();
-    }
 
     public boolean validate() {
         boolean valid = true;
-        username = nameEditText.getText().toString();
-        password = passwordEditText.getText().toString();
+        username = nameEditText.getText().toString().trim();
+        password = passwordEditText.getText().toString().trim();
 
         if (username.isEmpty()){
             valid = false;
+
 
         } else {
 
@@ -169,8 +157,7 @@ public class SplashActivity extends BTSSplashActivity {
     }
 
     public void onLoginFailed() {
-
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        showToast("Đăng nhập thất bại.", SuperToast.Background.RED);
         loginButton.setEnabled(true);
     }
     private ProgressDialog dialog;
@@ -232,14 +219,14 @@ public class SplashActivity extends BTSSplashActivity {
      *
      */
     private void initToolbar() {
-        toolbar.setBackgroundColor(getResourceColor(R.color.transparent));
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
-        params.setMargins(0, getStatusBarHeight(), 0, 0);
-        toolbar.setLayoutParams(params);
+//        toolbar.setBackgroundColor(getResourceColor(R.color.transparent));
+//
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//
+//        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
+//        params.setMargins(0, getStatusBarHeight(), 0, 0);
+//        toolbar.setLayoutParams(params);
     }
 
     /**
@@ -325,6 +312,10 @@ public class SplashActivity extends BTSSplashActivity {
         bottomPanelAnimator.setDuration(animationDuration);
         bottomPanelAnimator.setInterpolator(linearInterpolator);
         return bottomPanelAnimator;
+    }
+
+    private void showToast(String content, int color) {
+        new BTSToast(this).showToast(content, color);
     }
 
 }
