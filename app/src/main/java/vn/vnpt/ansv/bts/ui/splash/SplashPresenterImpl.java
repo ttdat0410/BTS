@@ -2,24 +2,37 @@ package vn.vnpt.ansv.bts.ui.splash;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.common.injection.scope.ActivityScope;
+import vn.vnpt.ansv.bts.objects.CardviewObject;
+import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
+import vn.vnpt.ansv.bts.objects.MinStationFullListObj;
+import vn.vnpt.ansv.bts.objects.MinStationFullObj;
+import vn.vnpt.ansv.bts.objects.SensorDataObj;
+import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
 import vn.vnpt.ansv.bts.utils.EStatus;
 import vn.vnpt.ansv.bts.utils.StatusServer;
@@ -33,7 +46,10 @@ import vn.vnpt.ansv.bts.utils.Utils;
 public class SplashPresenterImpl implements SplashPresenter {
 
     public interface Callback {
-        void callback(EStatus eStatus);
+        void callback(EStatus eStatus, String apiKey, String userId);
+    }
+    public interface GetStationCallback {
+        void callback(EStatus eStatus, List<MinStationFullObj> listStation);
     }
     private SplashView splashView;
     private Context context;
@@ -62,10 +78,10 @@ public class SplashPresenterImpl implements SplashPresenter {
     @Override
     public void getUser(String user, String pass, final Callback callback) {
         if (user.trim().isEmpty()) {
-            callback.callback(EStatus.USERNAME_IS_EMPTY);
+            callback.callback(EStatus.USERNAME_IS_EMPTY, "", "");
 
         } else if (pass.trim().isEmpty()) {
-            callback.callback(EStatus.PASSWORD_IS_EMPTY);
+            callback.callback(EStatus.PASSWORD_IS_EMPTY, "", "");
 
         } else {
             splashView.showLoading();
@@ -77,16 +93,18 @@ public class SplashPresenterImpl implements SplashPresenter {
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                splashView.hideLoading();
                                 JSONObject obj = null;
                                 try {
                                     obj = new JSONObject(response);
                                     int statusServerCode = obj.getJSONObject("status").getInt("statusCode");
                                     if (statusServerCode == StatusServer.Success.getValue()) {
-                                        callback.callback(EStatus.LOGIN_SUCCESS);
+                                        String apiKey = obj.getJSONObject("data").getString("apiKey");
+                                        String userId = obj.getJSONObject("data").getString("userId");
+                                        callback.callback(EStatus.LOGIN_SUCCESS, apiKey, userId);
 
                                     } else if (statusServerCode == StatusServer.UsernameOrPasswordIsIncorrect.getValue()) {
-                                        callback.callback(EStatus.USERNAME_INCORRECT);
+                                        callback.callback(EStatus.USERNAME_INCORRECT, "", "");
+                                        splashView.hideLoading();
                                     }
 
                                 } catch (JSONException e) {
@@ -96,7 +114,7 @@ public class SplashPresenterImpl implements SplashPresenter {
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.callback(EStatus.NETWORK_FAILURE);
+                        callback.callback(EStatus.NETWORK_FAILURE, "", "");
                         splashView.hideLoading();
                     }
                 });
@@ -109,9 +127,92 @@ public class SplashPresenterImpl implements SplashPresenter {
             }
         }
     }
-
     @Override
-    public void getStations() {
+    public void getStations(final GetStationCallback callback) {
+        BTSPreferences preferences = preferenceManager.getPreferences();
+        String userId = preferences.userId;
+        final String apiKey = preferences.apiKey;
 
+        if (apiKey.trim().length() < 1) {
+            callback.callback(EStatus.APIKEY_INVAILABLE, null);
+
+        } else if (userId.trim().length() < 1) {
+            callback.callback(EStatus.USERID_INVAILABLE, null);
+
+        } else {
+            String url = Utils.BASE_URL + "monitor/sensor/" + userId;
+            RequestQueue queue = Volley.newRequestQueue(context);
+            final StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Integer id;
+                            String tenTram;
+                            try {
+                                JSONObject object = new JSONObject(response);
+                                JSONObject tram = object.getJSONObject("data");
+                                Gson gson = new GsonBuilder().create();
+                                MinStationFullListObj minStationFullListObj = gson.fromJson(tram.toString(), MinStationFullListObj.class);
+                                List<MinStationFullObj> listStation = minStationFullListObj.getList();
+                                callback.callback(EStatus.GET_STATIONS_SUCCESS, listStation);
+                                splashView.hideLoading();
+                                /*CardviewObject itemCardView;
+                                Log.i("0x00", "COUNT: " + listTram.size());
+                                for (int i = 0; i < listTram.size(); i++) {
+
+                                    id = listTram.get(i).getStationInfo().getStationId();
+                                    tenTram = listTram.get(i).getStationInfo().getStationName();
+                                    List<MinSensorFullObj> listSensorObj = listTram.get(i).getStationData().getSensorList().getList();
+                                    itemCardView = new CardviewObject();
+                                    itemCardView.setId(id);
+                                    itemCardView.setTenTram(tenTram);
+                                    for (int z = 0; z < listSensorObj.size(); z++) {
+                                        Integer sensorId = listSensorObj.get(z).getSensorInfo().getSensorTypeId();
+                                        List<SensorDataObj> sensorData = listSensorObj.get(z).getSensorData().getList();                                     String sensorValue = String.valueOf(sensorData.get(0).getValue());
+                                        switch (sensorId) {
+                                            case 6:
+                                                itemCardView.setNhietdo(sensorValue);
+                                                break;
+                                            case 7:
+                                                itemCardView.setDoam(sensorValue);
+                                                break;
+                                            case 20:
+                                                itemCardView.setCua(sensorValue);
+                                                break;
+                                            case 21:
+                                                itemCardView.setKhoi(sensorValue);
+                                                break;
+                                            case 22:
+                                                itemCardView.setBaochay(sensorValue);
+                                                break;
+                                            case 23:
+                                                itemCardView.setMucnuoc(sensorValue);
+                                                break;
+                                        }
+                                    }
+//                                listItem.add(itemCardView);
+//                                adapter.notifyDataSetChanged();
+                                }*/
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    callback.callback(EStatus.NETWORK_FAILURE, null);
+                    splashView.hideLoading();
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("API_KEY", apiKey);
+                    return headers;
+                }
+            };
+            queue.add(stringRequest);
+
+        }
     }
 }

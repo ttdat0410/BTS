@@ -20,7 +20,7 @@ public class BTSToast {
         SuperToast.cancelAllSuperToasts();
         SuperToast superToast = new SuperToast(context);
         superToast.setAnimations(Utils.TOAST_ANIMATION);
-        superToast.setDuration(SuperToast.Duration.VERY_SHORT);
+        superToast.setDuration(1000);
         superToast.setTextColor(Color.parseColor("#ffffff"));
         superToast.setTextSize(SuperToast.TextSize.SMALL);
         superToast.setText(text);

@@ -24,12 +24,16 @@
     <string name="error_password_incorrect">Mật khẩu không đúng</string>
     <string name="error_username_unmatched_with_format">Tên đăng nhập không đúng định dạng</string>
     <string name="error_password_unmatched_with_format">Mật khẩu không đúng định dạng</string>
+    <string name="error_api_key_invailable">Api key không khả dụng.</string>
+    <string name="error_user_id_invailable">User id không khả dụng.</string>
 
     <string name="verify_checking_account">Đang kiểm tra tài khoản</string>
     <string name="verify_login">Đang xác thực</string>
     <string name="verify_login_success">Đăng nhập thành công</string>
     <string name="verify_login_failure">Đăng nhập thất bại!</string>
     <string name="verify_network_lost">Mất kết nối server!</string>
+    <string name="verify_get_stations_success">Lấy danh sách trạm thành công.</string>
+    <string name="verify_get_stations_failure">Lấy danh sách trạm thất bại.</string>
 
     <string name="dialog_verify_login">Đang xác thực</string>
 

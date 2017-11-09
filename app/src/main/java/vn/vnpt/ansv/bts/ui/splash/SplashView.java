@@ -8,4 +8,5 @@ public interface SplashView {
     void showLoading();
     void hideLoading();
     void showBottomView();
+    void launchMonitor();
 }

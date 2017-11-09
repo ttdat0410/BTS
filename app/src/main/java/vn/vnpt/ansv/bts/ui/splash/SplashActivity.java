@@ -7,13 +7,13 @@ import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
@@ -24,6 +24,7 @@ import android.widget.ImageView;
 
 import com.github.johnpersano.supertoasts.SuperToast;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -31,7 +32,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
+import vn.vnpt.ansv.bts.objects.MinStationFullObj;
+import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
+import vn.vnpt.ansv.bts.ui.monitor.MonitorContainer;
 import vn.vnpt.ansv.bts.utils.BTSToast;
 import vn.vnpt.ansv.bts.utils.EStatus;
 
@@ -42,16 +46,15 @@ import vn.vnpt.ansv.bts.utils.EStatus;
 public class SplashActivity extends AppCompatActivity implements SplashView{
 
     private static final String TAG = SplashActivity.class.getSimpleName();
-
     private static final int TIMER = 2000;
     private int animationDuration;
     private final LinearInterpolator linearInterpolator = new LinearInterpolator();
 
     @Inject
     PreferenceManager prefsManager;
-
     @Inject
     SplashPresenter presenter;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.mm_logo)
@@ -65,13 +68,6 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
     @BindView(R.id.loginButton)
     Button loginButton;
 
-    private SharedPreferences SP;
-    private String username = null;
-    private String password = null;
-    private String PREFS_NAME = "GSTBTS_login";
-
-    public String APIkey,userID,status;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +79,6 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
             Intent enableBtIntent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
             this.startActivityForResult(enableBtIntent, 1);
         }
-        initToolbar();
         animationDuration = 300;
         initializeItems();
         setupSharePreference();
@@ -100,8 +95,8 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
                     presenter.getUser(nameEditText.getText().toString().trim(),
                             passwordEditText.getText().toString().trim(), new SplashPresenterImpl.Callback() {
                                 @Override
-                                public void callback(EStatus eStatus) {
-                                    updateStatusView(eStatus);
+                                public void callback(EStatus eStatus, String apiKey, String userId) {
+                                    updateStatusView(eStatus, apiKey, userId);
                                     loginButton.setEnabled(true);
                                 }
                             });
@@ -111,22 +106,22 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
     };
 
     private void setupSharePreference() {
-        SP = getSharedPreferences(PREFS_NAME, 0);
-        username = SP.getString("username", "");
-        password = SP.getString("password", "");
-        nameEditText.setText(username);
-        passwordEditText.setText(password);
+        BTSPreferences prefs = prefsManager.getPreferences();
+        nameEditText.setText(prefs.userName);
+        passwordEditText.setText(prefs.password);
     }
 
-    public void saveAccount(String username, String password) {
+    public void saveAccount(String username, String password, String apiKey, String userId) {
 
-        SharedPreferences.Editor editor = SP.edit();
-        editor.putString("username", username);
-        editor.putString("password", password);
-        editor.commit();
+        BTSPreferences prefs = prefsManager.getPreferences();
+        prefs.userName = username;
+        prefs.password = password;
+        prefs.apiKey = apiKey;
+        prefs.userId = userId;
+        prefsManager.setPreferences(prefs);
     }
 
-    private void updateStatusView(EStatus eStatus) {
+    private void updateStatusView(EStatus eStatus, String apiKey, String userId) {
         switch (eStatus) {
             case NETWORK_FAILURE:
                 showToast(getResources().getString(R.string.verify_network_lost), SuperToast.Background.RED);
@@ -162,12 +157,24 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
                 break;
             case LOGIN_SUCCESS:
                 showToast(getResources().getString(R.string.verify_login_success), SuperToast.Background.GREEN);
-                saveAccount(nameEditText.getText().toString(), passwordEditText.getText().toString());
+                saveAccount(nameEditText.getText().toString(), passwordEditText.getText().toString(), apiKey, userId);
                 hideKeyboard(passwordEditText);
-                presenter.getStations();
+                tryToGetStations();
                 break;
             case LOGIN_FAILURE:
                 showToast(getResources().getString(R.string.verify_login_failure), SuperToast.Background.RED);
+                break;
+            case APIKEY_INVAILABLE:
+                showToast(getResources().getString(R.string.error_api_key_invailable), SuperToast.Background.RED);
+                break;
+            case USERID_INVAILABLE:
+                showToast(getResources().getString(R.string.error_user_id_invailable), SuperToast.Background.RED);
+                break;
+            case GET_STATIONS_SUCCESS:
+//                showToast(getResources().getString(R.string.verify_get_stations_success), SuperToast.Background.GREEN);
+                break;
+            case GET_STATIONS_FAILURE:
+                showToast(getResources().getString(R.string.verify_get_stations_failure), SuperToast.Background.RED);
                 break;
             default:
                 break;
@@ -177,6 +184,25 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
     private void hideKeyboard(EditText fromView) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(fromView.getWindowToken(), 0);
+    }
+
+    private void tryToGetStations() {
+        presenter.getStations(new SplashPresenterImpl.GetStationCallback() {
+            @Override
+            public void callback(EStatus eStatus, List<MinStationFullObj> listStation) {
+                updateStatusView(eStatus, "", "");
+                if (eStatus == EStatus.GET_STATIONS_SUCCESS) {
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startActivity(new Intent(getApplicationContext(), MonitorContainer.class));
+                        }
+                    }, 500);
+                }
+                Log.i("0x00", listStation.size() + " ");
+            }
+        });
     }
 
     private ProgressDialog dialog;
@@ -215,24 +241,10 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
         }, TIMER);
     }
 
-    //##############################################################################################
-    /**
-     * initToolbar
-     *
-     * Sets up the toolbar, adds margin to top of toolbar; this is needed for devices running
-     * Lollipop or greater. If the device is running Kitkat or below, getStatusBarHeight will
-     * return 0.
-     *
-     */
-    private void initToolbar() {
-//        toolbar.setBackgroundColor(getResourceColor(R.color.transparent));
-//
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayShowTitleEnabled(false);
-//
-//        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
-//        params.setMargins(0, getStatusBarHeight(), 0, 0);
-//        toolbar.setLayoutParams(params);
+    @Override
+    public void launchMonitor() {
+//        BTSPreferences prefs = prefsManager.getPreferences();
+//        Log.i("0x00", prefs.userName + " | " + prefs.password + " | " + prefs.apiKey + " | " + prefs.userId);
     }
 
     private void initializeItems() {

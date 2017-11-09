@@ -67,7 +67,7 @@
                 <TextView
                     style="@style/sm_terbium_green"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="@dimen/space_S"
+                    android:layout_marginTop="@dimen/space_XS"
                     android:layout_gravity="left"
                     android:text="@string/title_log_in"
                     android:textAllCaps="true" />
@@ -147,6 +147,7 @@
                     android:id="@+id/password_edit"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_personal_info_height"
+                    android:layout_marginTop="@dimen/space_S"
                     android:visibility="visible">
 
                     <EditText
