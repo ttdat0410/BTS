@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -61,9 +60,10 @@ public class MonitorContainer extends BTSActivity {
             @Override
             public Fragment getItem(int position) {
 
-                for (int i = 0; i< numOfPage; i++) {
+                for (int i = 0; i<numOfPage; i++) {
                     if (i == position % numOfPage) {
-                        return RecyclerMonitorView.newInstance();
+                        int stationId = listAllStation.get(i).getStationInfo().getStationId();
+                        return RecyclerMonitorFragment.newInstance(stationId);
                     }
                 }
                 return null;
@@ -76,9 +76,9 @@ public class MonitorContainer extends BTSActivity {
             @Override
             public CharSequence getPageTitle(int position) {
 
-                for (int i = 0; i< numOfPage; i++) {
+                for (int i = 0; i<numOfPage; i++) {
                     if (i == position % numOfPage) {
-                        return "ABSC " + i;
+                        return listAllStation.get(i).getStationInfo().getStationName();
                     }
                 }
                 return "";

@@ -7,20 +7,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
+import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
+
 /**
  * Created by ANSV on 11/9/2017.
  */
 
 public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitorAdapter.DeviceHolder> {
 
-    private List<Object> dataSet;
+    private List<MinSensorFullObj> dataSet;
     private OnDeviceItemClickListener listener;
 
-    public RecyclerMonitorAdapter(List<Object> dataSet) {
+    public RecyclerMonitorAdapter(List<MinSensorFullObj> dataSet) {
         this.dataSet = dataSet;
     }
 
@@ -43,23 +46,26 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
     @Override
     public void onBindViewHolder(DeviceHolder holder, int position) {
 
-        final Object device = dataSet.get(position);
-        holder.deviceName.setText("Nhiệt độ");
+
+//        final Object device = dataSet.get(position);
+        holder.deviceName.setText(dataSet.get(position).getSensorInfo().getSensorName());
         holder.deviceAddress.setText("AA");
 
-        holder.rootView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null) {
-                    listener.onDeviceItemClick(v, device);
-                }
-            }
-        });
+
+
+//        holder.rootView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (listener != null) {
+//                    listener.onDeviceItemClick(v, device);
+//                }
+//            }
+//        });
     }
 
 
 
-    public void updateDataSet(List<Object> devices) {
+    public void updateDataSet(List<MinSensorFullObj> devices) {
         this.dataSet = devices;
         notifyDataSetChanged();
     }

@@ -2,7 +2,6 @@ package vn.vnpt.ansv.bts.ui.splash;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -27,11 +26,8 @@ import javax.inject.Inject;
 
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.common.injection.scope.ActivityScope;
-import vn.vnpt.ansv.bts.objects.CardviewObject;
-import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
 import vn.vnpt.ansv.bts.objects.MinStationFullListObj;
 import vn.vnpt.ansv.bts.objects.MinStationFullObj;
-import vn.vnpt.ansv.bts.objects.SensorDataObj;
 import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
 import vn.vnpt.ansv.bts.utils.EStatus;
@@ -213,7 +209,6 @@ public class SplashPresenterImpl implements SplashPresenter {
                 }
             };
             queue.add(stringRequest);
-
         }
     }
 }
