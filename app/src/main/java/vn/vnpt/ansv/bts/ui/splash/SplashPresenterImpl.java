@@ -158,12 +158,12 @@ public class SplashPresenterImpl implements SplashPresenter {
                                 splashView.launchMonitor(listStation);
                                 splashView.hideLoading();
                                 /*CardviewObject itemCardView;
-                                Log.i("0x00", "COUNT: " + listTram.size());
-                                for (int i = 0; i < listTram.size(); i++) {
+                                Log.i("0x00", "COUNT: " + listStation.size());
+                                for (int i = 0; i < listStation.size(); i++) {
 
-                                    id = listTram.get(i).getStationInfo().getStationId();
-                                    tenTram = listTram.get(i).getStationInfo().getStationName();
-                                    List<MinSensorFullObj> listSensorObj = listTram.get(i).getStationData().getSensorList().getList();
+                                    id = listStation.get(i).getStationInfo().getStationId();
+                                    tenTram = listStation.get(i).getStationInfo().getStationName();
+                                    List<MinSensorFullObj> listSensorObj = listStation.get(i).getStationData().getSensorList().getList();
                                     itemCardView = new CardviewObject();
                                     itemCardView.setId(id);
                                     itemCardView.setTenTram(tenTram);

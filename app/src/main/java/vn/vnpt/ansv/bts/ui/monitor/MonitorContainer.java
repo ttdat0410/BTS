@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.github.florent37.materialviewpager.header.HeaderDesign;
 
-import java.io.Serializable;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,10 +28,14 @@ import vn.vnpt.ansv.bts.ui.BTSActivity;
 
 public class MonitorContainer extends BTSActivity {
 
+    public static List<MinStationFullObj> listAllStation = null;
+    private int numOfPage = 0;
     @BindView(R.id.materialViewPager)
     MaterialViewPager mViewPager;
 
     public static void launch(Context context, List<MinStationFullObj> listStation) {
+
+        listAllStation = listStation;
         Intent intent = new Intent(context, MonitorContainer.class);
         context.startActivity(intent);
     }
@@ -47,30 +50,36 @@ public class MonitorContainer extends BTSActivity {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
+
+        // xet so luong pages
+        if (listAllStation.size() > 0) {
+            numOfPage = listAllStation.size();
+        } else {
+            numOfPage = 0;
+        }
         mViewPager.getViewPager().setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                switch (position % 12) {
-                    case 0:
+
+                for (int i = 0; i< numOfPage; i++) {
+                    if (i == position % numOfPage) {
                         return RecyclerMonitorView.newInstance();
-                    case 1:
-                        return RecyclerMonitorView.newInstance();
-                    default:
-                        return RecyclerMonitorView.newInstance();
+                    }
                 }
+                return null;
             }
             @Override
             public int getCount() {
-                return 12;
+                return numOfPage;
             }
 
             @Override
             public CharSequence getPageTitle(int position) {
-                switch (position % 2) {
-                    case 0:
-                        return "Tầng trệt";
-                    case 1:
-                        return "Tầng 1";
+
+                for (int i = 0; i< numOfPage; i++) {
+                    if (i == position % numOfPage) {
+                        return "ABSC " + i;
+                    }
                 }
                 return "";
             }
