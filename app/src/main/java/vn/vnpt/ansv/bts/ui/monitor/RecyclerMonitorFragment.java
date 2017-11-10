@@ -10,14 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.github.florent37.materialviewpager.header.MaterialViewPagerHeaderDecorator;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
@@ -31,7 +27,6 @@ import vn.vnpt.ansv.bts.utils.EStatus;
 @SuppressLint("ValidFragment")
 public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonitorView {
     private static final boolean GRID_LAYOUT = false;
-    private static final int ITEM_COUNT = 7;
     private RecyclerMonitorAdapter recyclerMonitorAdapter;
 
     @Inject

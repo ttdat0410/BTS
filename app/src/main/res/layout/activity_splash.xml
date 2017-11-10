@@ -65,7 +65,7 @@
                 android:paddingRight="@dimen/space_S">
 
                 <TextView
-                    style="@style/sm_terbium_green"
+                    style="@style/l_terbium_green"
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/space_XS"
                     android:layout_gravity="left"

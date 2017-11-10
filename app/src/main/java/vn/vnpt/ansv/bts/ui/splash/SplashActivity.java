@@ -296,5 +296,4 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
     private void showToast(String content, int color) {
         new BTSToast(this).showToast(content, color);
     }
-
 }

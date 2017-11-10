@@ -37,4 +37,6 @@
 
     <string name="dialog_verify_login">Đang xác thực</string>
 
+    <string name="sensor_not_initialized">--</string>
+
 </resources>

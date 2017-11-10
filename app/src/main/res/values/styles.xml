@@ -33,6 +33,7 @@
     </style>
 
     <style name="s_silicon_grey" parent="silicon_gray_text">
+
         <item name="android:textSize">@dimen/text_size_S</item>
     </style>
 
@@ -48,11 +49,19 @@
         <item name="android:textSize">@dimen/text_size_M</item>
     </style>
 
+    <style name="sm_silicon_grey" parent="silicon_gray_text">
+        <item name="android:textSize">@dimen/text_size_SM</item>
+    </style>
+
     <style name="sm_terbium_green" parent="terbium_green_text">
-        <item name="android:textSize">@dimen/text_size_L</item>
+        <item name="android:textSize">@dimen/text_size_SM</item>
     </style>
 
     <style name="l_silicon_grey" parent="silicon_gray_text">
+        <item name="android:textSize">@dimen/text_size_L</item>
+    </style>
+
+    <style name="l_terbium_green" parent="terbium_green_text">
         <item name="android:textSize">@dimen/text_size_L</item>
     </style>
 
@@ -68,6 +77,42 @@
 
     <style name="silicon_gray_text" parent="block">
         <item name="android:textColor">@color/sl_silicon_grey</item>
+    </style>
+
+    <style name="box_left" parent="box">
+        <!--&lt;!&ndash;<item name="android:layout_marginRight">@dimen/space_XS</item>&ndash;&gt;-->
+    </style>
+
+    <style name="box">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/space_XXXXL</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="envtitle" parent="sm_silicon_grey">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:gravity">left</item>
+        <item name="android:background">@drawable/clear_rect</item>
+
+    </style>
+
+    <style name="envbox">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/white_rect</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:clipChildren">false</item>
+    </style>
+
+    <style name="envcontrol" parent="wrap">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingTop">12dp</item>-
     </style>
 
 </resources>
