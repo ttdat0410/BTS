@@ -65,10 +65,14 @@
         <item name="android:textSize">@dimen/text_size_L</item>
     </style>
 
+    <style name="m_terbium_green" parent="terbium_green_text">
+        <item name="android:textSize">@dimen/text_size_M</item>
+    </style>
+
     <style name="divider_line">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/divider_height</item>
-        <item name="android:background">@color/divider_line</item>
+        <item name="android:background">@color/sl_light_grey</item>
     </style>
 
     <style name="terbium_green_text" parent="wrap">
@@ -100,8 +104,6 @@
     </style>
 
     <style name="envbox">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/white_rect</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:layout_gravity">center_horizontal</item>

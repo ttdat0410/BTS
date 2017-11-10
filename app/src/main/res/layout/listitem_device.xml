@@ -11,26 +11,29 @@
         android:layout_height="150dp"
         app:cardCornerRadius="2dp"
         app:cardElevation="2dp"
-        android:layout_marginBottom="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
         app:cardPreventCornerOverlap="false"
         app:contentPadding="0dp"
         app:cardUseCompatPadding="true"
         app:cardBackgroundColor="@color/white">
 
         <RelativeLayout
-            style="@style/match"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@color/white">
 
             <LinearLayout
                 style="@style/match"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingTop="@dimen/space_XS"
-                android:paddingLeft="@dimen/space_S"
-                android:paddingRight="@dimen/space_S"
-                android:paddingBottom="@dimen/space_XS">
+                android:paddingTop="@dimen/space_XXS"
+                android:paddingLeft="@dimen/space_XXS"
+                android:paddingRight="@dimen/space_XXS"
+                android:paddingBottom="@dimen/space_XXS">
 
                 <TextView
                     android:id="@+id/txtSensorName"
@@ -39,36 +42,61 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="DO AM"/>
+                    android:text="DO AM"
+                    android:fontFamily="sans-serif-bold"
+                    android:textAllCaps="true"/>
+
+                <View
+                    android:id="@+id/line"
+                    style="@style/divider_line"
+                    android:layout_below="@+id/txtSensorName"
+                    android:layout_marginTop="1dp"
+                    android:layout_alignParentBottom="true" />
 
                 <RelativeLayout
-                    style="@style/match"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:background="@color/white"
                     android:layout_marginTop="@dimen/space_XS">
 
-                    <ImageView
-                        android:id="@+id/imgSensorIcon"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_centerHorizontal="true"
-                        android:src="@mipmap/ic_temp_inactive"/>
+                    <LinearLayout
+                        android:id="@+id/dataView"
+                        style="@style/block"
+                        android:background="@color/white"
+                        android:layout_below="@+id/line"
+                        android:layout_marginTop="@dimen/space_XS"
+                        android:layout_marginRight="0dp"
+                        android:orientation="horizontal"
+                        android:gravity="right">
 
-                    <TextView
-                        android:id="@+id/txtSensorValue"
-                        style="@style/l_silicon_grey"
-                        android:layout_below="@+id/imgSensorIcon"
-                        android:layout_centerHorizontal="true"
-                        android:textAlignment="center"
-                        android:layout_marginTop="@dimen/space_XXS"
-                        android:text="12 %"/>
+                        <ImageView
+                            android:id="@+id/imgSensorIcon"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerHorizontal="true"
+                            android:src="@mipmap/ic_temp_inactive"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/txtSensorValue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/m_terbium_green"
+                            android:layout_below="@+id/imgSensorIcon"
+                            android:layout_marginLeft="@dimen/space_XS"
+                            android:text="12 %"
+                            android:fontFamily="sans-serif-bold"
+                            android:textAllCaps="true"
+                            android:layout_gravity="center"/>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/batteryView"
-                        style="@style/match"
-                        android:layout_centerVertical="true"
+                        style="@style/block"
                         android:background="@color/white"
-                        android:layout_below="@+id/txtSensorValue"
-                        android:layout_marginTop="@dimen/space_XS"
+                        android:layout_below="@+id/dataView"
+                        android:layout_marginTop="@dimen/space_XXS"
+                        android:layout_marginRight="0dp"
                         android:orientation="horizontal"
                         android:gravity="right">
 
@@ -79,21 +107,28 @@
                             android:layout_height="wrap_content"
                             android:text="20%"
                             android:layout_gravity="center"
-                            android:layout_marginRight="@dimen/space_XS"/>
+                            android:layout_marginRight="@dimen/space_XXS"
+                            android:fontFamily="sans-serif-light"
+                            android:textAllCaps="true"/>
 
                         <ImageView
                             android:id="@+id/imgBatteryIcon"
-                            android:layout_width="30dp"
-                            android:layout_height="25dp"
+                            android:layout_width="20dp"
+                            android:layout_height="12dp"
                             android:src="@mipmap/battery_0bar"
                             android:layout_gravity="center"
-                            android:layout_marginRight="@dimen/space_XS"/>
+                            android:layout_marginRight="@dimen/space_XXXS"/>
 
                     </LinearLayout>
+
                 </RelativeLayout>
+
             </LinearLayout>
+
         </RelativeLayout>
+
     </android.support.v7.widget.CardView>
+
 </FrameLayout>
 
 

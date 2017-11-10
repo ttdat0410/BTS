@@ -2,6 +2,7 @@ package vn.vnpt.ansv.bts.ui.monitor;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,8 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.github.florent37.materialviewpager.header.MaterialViewPagerHeaderDecorator;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,14 +45,12 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
     @SuppressLint("ValidFragment")
     public RecyclerMonitorFragment(int stationId) {
         this.stationId = stationId;
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         (((BTSApplication) getActivity().getApplicationContext()).getAppComponent()).inject(this);
         presenter.setView(this);
-        Log.i("0x00", stationId + " Station Id");
         return inflater.inflate(R.layout.fragment_recyclerview, container, false);
     }
 
@@ -58,10 +58,6 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        /*final List<Object> items = new ArrayList<>();
-        for (int i = 0; i < ITEM_COUNT; ++i) {
-            items.add(new Object());
-        }*/
         if (GRID_LAYOUT) {
             mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         } else {
@@ -69,6 +65,7 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
 //            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
         mRecyclerView.setHasFixedSize(true);
+
         presenter.getData(stationId, new RecyclerMonitorPresenterImpl.MonitorCallback() {
             @Override
             public void callback(EStatus eStatus, List<MinSensorFullObj> listSensorObj) {
@@ -76,11 +73,76 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
                 if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS) {
                     setupRecyclerMonitorAdapter(listSensorObj);
                 }
-
             }
         });
+        runBackground(15000);
+    }
 
+    private Runnable runnableCode = null;
+    private Handler handler = new Handler();
+    void startDelayed(final int intervalMS, int delayMS) {
+        runnableCode = new Runnable() {
+            @Override
+            public void run() {
+                handler.postDelayed(runnableCode, intervalMS);
+                presenter.getData(stationId, new RecyclerMonitorPresenterImpl.MonitorCallback() {
+                    @Override
+                    public void callback(EStatus eStatus, List<MinSensorFullObj> listSensorObj) {
 
+                        if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS) {
+                            recyclerMonitorAdapter.updateDataSet(listSensorObj);
+                        }
+                    }
+                });
+                Log.i("0x00", "RUNNING.... " + (new Date()));
+            }
+        };
+        handler.postDelayed(runnableCode, delayMS);
+    }
+
+    void runBackground(final int intervalMS) {
+        startDelayed(intervalMS, 0);
+    }
+
+    void stopBackground() {
+        handler.removeCallbacks(runnableCode);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i("0x00", "RecyclerMonitorFragment REUSME" + stationId);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i("0x00", "RecyclerMonitorFragment PAUSE" + stationId);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopBackground();
+        Log.i("0x00", "RecyclerMonitorFragment onDestroy" + stationId);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.i("0x00", " RecyclerMonitorFragment onDestroyView" + stationId);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i("0x00", "RecyclerMonitorFragment onStart" + stationId);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i("0x00", "RecyclerMonitorFragment onStop" + stationId);
     }
 
     /**
@@ -90,12 +152,10 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
      */
     private void setupRecyclerMonitorAdapter(List<MinSensorFullObj> listSensorObj) {
         mRecyclerView.addItemDecoration(new MaterialViewPagerHeaderDecorator());
-        List<Object> devices = new ArrayList<>();
         recyclerMonitorAdapter = new RecyclerMonitorAdapter(listSensorObj);
         recyclerMonitorAdapter.updateDataSet(listSensorObj);
 //        scannerAdapter.setListener(listener);
         mRecyclerView.setAdapter(recyclerMonitorAdapter);
-
     }
 
 //    private RecyclerMonitorAdapter.OnDeviceItemClickListener listener = new RecyclerMonitorAdapter.OnDeviceItemClickListener() {
@@ -107,8 +167,6 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
 //            startActivity(intent);
 //        }
 //    };
-
-    // RecyclerMonitorView
 
     @Override
     public void showLoading() {

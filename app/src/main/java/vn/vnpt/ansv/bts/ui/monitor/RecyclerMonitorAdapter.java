@@ -3,11 +3,14 @@ package vn.vnpt.ansv.bts.ui.monitor;
 import android.content.res.Resources;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -16,8 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
-
-import static vn.vnpt.ansv.bts.R.id.recyclerView;
+import vn.vnpt.ansv.bts.utils.Utils;
 
 /**
  * Created by ANSV on 11/9/2017.
@@ -52,14 +54,29 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
     public void onBindViewHolder(DeviceHolder holder, int position) {
 
 //        final Object device = dataSet.get(position);
-        holder.txtSensorName.setText(dataSet.get(position).getSensorInfo().getSensorName());
-//        holder.cardView.getLayoutParams().height = 300;
-//        holder.cardView.getLayoutParams().width = 200;
         FrameLayout.LayoutParams lp =
-                new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, getScreenWidth()/2 - 5);
+                new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
         holder.cardView.setLayoutParams(lp);
         holder.cardView.requestLayout();
-//        holder.deviceAddress.setText("AA");
+        //
+        String value = "";
+        String measurement = dataSet.get(position).getSensorInfo().getMeasurementUnit();
+        int batteryValue = dataSet.get(position).getSensorData().getList().get(0).getBattery();
+        int stationId = dataSet.get(position).getSensorData().getList().get(0).getStatusId();
+        if (measurement == null) {
+            value = dataSet.get(position).getSensorData().getList().get(0).getValue() + "";
+            holder.txtSensorValue.setText(value);
+
+        } else {
+            value = dataSet.get(position).getSensorData().getList().get(0).getValue()+"";
+            SpannableString ss1=  new SpannableString(measurement);
+            ss1.setSpan(new RelativeSizeSpan(0.5f), 0, ss1.length(), 0);
+            holder.txtSensorValue.setText(value + " " + ss1);
+        }
+        holder.txtSensorValue.setTextColor(Utils.setColorForSensorValue(stationId));
+        holder.txtSensorName.setText(dataSet.get(position).getSensorInfo().getSensorName().toUpperCase());
+        holder.txtBatteryValues.setText(batteryValue + "%");
+        holder.imgBatteryIcon.setImageResource(Utils.setBatteryImageView(batteryValue));
 
 
         /*for (int z = 0; z < listSensorObj.size(); z++) {
@@ -103,9 +120,11 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
         return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
-    public void updateDataSet(List<MinSensorFullObj> devices) {
-        this.dataSet = devices;
+    public void updateDataSet(List<MinSensorFullObj> listSensorObj) {
+        this.dataSet = null;
+        this.dataSet = listSensorObj;
         notifyDataSetChanged();
+        Log.i("0x00", this.dataSet.size() + " SIZE");
     }
 
     public void setListener(OnDeviceItemClickListener listener) {
@@ -118,18 +137,23 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
 
     public static class DeviceHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.card_view)
+        CardView cardView;
+
         @BindView(R.id.txtSensorName)
         TextView txtSensorName;
 
-        @BindView(R.id.card_view)
-        CardView cardView;
-//
-//        @BindView(R.id.device_address)
-//        TextView deviceAddress;
+        @BindView(R.id.txtSensorValue)
+        TextView txtSensorValue;
 
-//        @Bind(R.id.signal_strength)
-//        Button signalStrengthIndicator;
+        @BindView(R.id.txtBatteryValues)
+        TextView txtBatteryValues;
 
+        @BindView(R.id.imgSensorIcon)
+        ImageView imgSensorIcon;
+
+        @BindView(R.id.imgBatteryIcon)
+        ImageView imgBatteryIcon;
 
         View rootView;
 

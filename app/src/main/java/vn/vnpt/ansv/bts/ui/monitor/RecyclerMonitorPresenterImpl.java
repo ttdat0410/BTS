@@ -64,7 +64,6 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
     @Override
     public void getData(int stationId, final MonitorCallback callback) {
         BTSPreferences prefs = preferenceManager.getPreferences();
-        Log.i("0x00", prefs.apiKey + " || " + prefs.userId);
         String userId = prefs.userId;
         final String apiKey = prefs.apiKey;
 
@@ -89,13 +88,10 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
                                 Gson gson = new GsonBuilder().create();
                                 MinStationFullListObj minStationFullListObj = gson.fromJson(tram.toString(), MinStationFullListObj.class);
                                 List<MinStationFullObj> listStation = minStationFullListObj.getList();
-                                CardviewObject itemCardView;
                                 for (int i = 0; i < listStation.size(); i++) {
-
-                                    id = listStation.get(i).getStationInfo().getStationId();
-                                    tenTram = listStation.get(i).getStationInfo().getStationName();
                                     List<MinSensorFullObj> listSensorObj = listStation.get(i).getStationData().getSensorList().getList();
                                     callback.callback(EStatus.GET_SENSOR_OBJ_SUCCESS, listSensorObj);
+
 //                                    itemCardView = new CardviewObject();
 //                                    itemCardView.setId(id);
 //                                    itemCardView.setTenTram(tenTram);
@@ -117,7 +113,6 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
 
                                         List<SensorDataObj> sensorData = listSensorObj.get(z).getSensorData().getList();
                                         String sensorValue = String.valueOf(sensorData.get(0).getValue());
-                                        Log.i("0x00", sensorInfoObj.getSensorName() + " " + sensorInfoObj.getMeasurementUnit() + " | " + sensorValue + "\n");
                                     }*/
                                 }
                             } catch (JSONException e) {
