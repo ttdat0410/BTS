@@ -6,15 +6,12 @@ package vn.vnpt.ansv.bts.ui;
 
 public class BTSPreferences {
 
-
     public String userName;
     public String password;
     public String apiKey;
     public String userId;
 
-
     public BTSPreferences() {
-
     }
 
     @Override

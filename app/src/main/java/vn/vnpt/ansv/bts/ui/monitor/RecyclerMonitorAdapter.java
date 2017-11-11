@@ -1,6 +1,7 @@
 package vn.vnpt.ansv.bts.ui.monitor;
 
 import android.content.res.Resources;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
@@ -53,7 +54,6 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
     @Override
     public void onBindViewHolder(DeviceHolder holder, int position) {
 
-//        final Object device = dataSet.get(position);
         FrameLayout.LayoutParams lp =
                 new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
         holder.cardView.setLayoutParams(lp);
@@ -63,21 +63,21 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
         String measurement = dataSet.get(position).getSensorInfo().getMeasurementUnit();
         int batteryValue = dataSet.get(position).getSensorData().getList().get(0).getBattery();
         int stationId = dataSet.get(position).getSensorData().getList().get(0).getStatusId();
+
+        holder.txtSensorName.setText(dataSet.get(position).getSensorInfo().getSensorName().toUpperCase());
+        holder.txtSensorValue.setText(dataSet.get(position).getSensorData().getList().get(0).getValue()+"");
+        holder.txtSensorValue.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForSensorValue(stationId)));
+        holder.txtBatteryValues.setText(batteryValue + "%");
+        holder.txtBatteryValues.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForBatteryValue(batteryValue)));
+        holder.imgBatteryIcon.setImageResource(Utils.setBatteryImageView(batteryValue));
         if (measurement == null) {
-            value = dataSet.get(position).getSensorData().getList().get(0).getValue() + "";
-            holder.txtSensorValue.setText(value);
+            value = dataSet.get(position).getSensorData().getList().get(0).getValue()+"";
+            holder.txtMeasurementUnit.setText("");
 
         } else {
             value = dataSet.get(position).getSensorData().getList().get(0).getValue()+"";
-            SpannableString ss1=  new SpannableString(measurement);
-            ss1.setSpan(new RelativeSizeSpan(0.5f), 0, ss1.length(), 0);
-            holder.txtSensorValue.setText(value + " " + ss1);
+            holder.txtMeasurementUnit.setText("("+measurement+")");
         }
-        holder.txtSensorValue.setTextColor(Utils.setColorForSensorValue(stationId));
-        holder.txtSensorName.setText(dataSet.get(position).getSensorInfo().getSensorName().toUpperCase());
-        holder.txtBatteryValues.setText(batteryValue + "%");
-        holder.imgBatteryIcon.setImageResource(Utils.setBatteryImageView(batteryValue));
-
 
         /*for (int z = 0; z < listSensorObj.size(); z++) {
                                         int sensorId = listSensorObj.get(z).getSensorInfo().getSensorId();
@@ -145,6 +145,9 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
 
         @BindView(R.id.txtSensorValue)
         TextView txtSensorValue;
+
+        @BindView(R.id.txtMeasurementUnit)
+        TextView txtMeasurementUnit;
 
         @BindView(R.id.txtBatteryValues)
         TextView txtBatteryValues;

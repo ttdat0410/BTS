@@ -1,6 +1,7 @@
 package vn.vnpt.ansv.bts.ui.monitor;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -21,6 +22,8 @@ import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
+import vn.vnpt.ansv.bts.ui.BTSPreferences;
+import vn.vnpt.ansv.bts.ui.PreferenceManager;
 import vn.vnpt.ansv.bts.utils.EStatus;
 
 /**
@@ -33,6 +36,9 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
 
     @Inject
     RecyclerMonitorPresenter presenter;
+
+    @Inject
+    PreferenceManager preferenceManager;
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
@@ -87,10 +93,15 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
                 handler.postDelayed(runnableCode, intervalMS);
                 presenter.getData(stationId, new RecyclerMonitorPresenterImpl.MonitorCallback() {
                     @Override
-                    public void callback(EStatus eStatus, List<MinSensorFullObj> listSensorObj) {
+                    public void callback(EStatus eStatus, final List<MinSensorFullObj> listSensorObj) {
 
                         if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS) {
-                            recyclerMonitorAdapter.updateDataSet(listSensorObj);
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    recyclerMonitorAdapter.updateDataSet(listSensorObj);
+                                }
+                            }, 200);
                         }
                     }
                 });
@@ -109,40 +120,13 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        Log.i("0x00", "RecyclerMonitorFragment REUSME" + stationId);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i("0x00", "RecyclerMonitorFragment PAUSE" + stationId);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         stopBackground();
-        Log.i("0x00", "RecyclerMonitorFragment onDestroy" + stationId);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.i("0x00", " RecyclerMonitorFragment onDestroyView" + stationId);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.i("0x00", "RecyclerMonitorFragment onStart" + stationId);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i("0x00", "RecyclerMonitorFragment onStop" + stationId);
+        BTSPreferences prefs = preferenceManager.getPreferences();
+        prefs.apiKey = "";
+        prefs.userId = "";
+        preferenceManager.setPreferences(prefs);
     }
 
     /**
@@ -150,11 +134,17 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
      *
      * Sets up ScannerAdapter for the recycler view.
      */
-    private void setupRecyclerMonitorAdapter(List<MinSensorFullObj> listSensorObj) {
+    private void setupRecyclerMonitorAdapter(final List<MinSensorFullObj> listSensorObj) {
         mRecyclerView.addItemDecoration(new MaterialViewPagerHeaderDecorator());
         recyclerMonitorAdapter = new RecyclerMonitorAdapter(listSensorObj);
-        recyclerMonitorAdapter.updateDataSet(listSensorObj);
-//        scannerAdapter.setListener(listener);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                recyclerMonitorAdapter.updateDataSet(listSensorObj);
+            }
+        }, 500);
         mRecyclerView.setAdapter(recyclerMonitorAdapter);
     }
 
@@ -168,9 +158,5 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
 //        }
 //    };
 
-    @Override
-    public void showLoading() {
-        Log.i("0x00", "loading...");
-    }
 }
 

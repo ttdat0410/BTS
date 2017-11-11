@@ -49,9 +49,9 @@ public class Utils {
     }
 
     public static int setBatteryImageView(int batteryValue) {
-        if (batteryValue < 10) {
+        if (batteryValue < 5) {
             return R.mipmap.battery_0bar;
-        } else if (batteryValue >= 10 && batteryValue < 25) {
+        } else if (batteryValue >= 5 && batteryValue < 25) {
             return R.mipmap.battery_1bar;
         } else if (batteryValue >= 25 && batteryValue < 50) {
             return R.mipmap.battery_2bar;
@@ -64,11 +64,19 @@ public class Utils {
         }
     }
 
+    public static int setColorForBatteryValue(int batteryValue) {
+        if (batteryValue < 5) {
+            return R.color.sl_red_orange;
+        } else {
+            return R.color.sl_footer_grey;
+        }
+    }
+
     public static int setColorForSensorValue(int stationId) {
         if (stationId == 2) {
             return R.color.sl_terbium_green;
         } else {
-            return R.color.sl_light_grey;
+            return R.color.sl_terbium_green;
         }
     }
 }

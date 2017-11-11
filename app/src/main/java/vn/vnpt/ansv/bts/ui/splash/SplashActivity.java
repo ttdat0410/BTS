@@ -35,7 +35,7 @@ import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.objects.MinStationFullObj;
 import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
-import vn.vnpt.ansv.bts.ui.monitor.MonitorContainer;
+import vn.vnpt.ansv.bts.ui.monitor.container.MonitorContainer;
 import vn.vnpt.ansv.bts.utils.BTSToast;
 import vn.vnpt.ansv.bts.utils.EStatus;
 
@@ -112,7 +112,6 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
     }
 
     public void saveAccount(String username, String password, String apiKey, String userId) {
-
         BTSPreferences prefs = prefsManager.getPreferences();
         prefs.userName = username;
         prefs.password = password;

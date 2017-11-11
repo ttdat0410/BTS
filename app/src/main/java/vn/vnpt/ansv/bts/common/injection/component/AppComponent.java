@@ -6,6 +6,8 @@ import dagger.Component;
 import vn.vnpt.ansv.bts.common.injection.module.AppModule;
 import vn.vnpt.ansv.bts.common.injection.module.PresenterModule;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
+import vn.vnpt.ansv.bts.ui.monitor.container.MonitorContainer;
+import vn.vnpt.ansv.bts.ui.monitor.container.MonitorPresenterImpl;
 import vn.vnpt.ansv.bts.ui.monitor.RecyclerMonitorFragment;
 import vn.vnpt.ansv.bts.ui.monitor.RecyclerMonitorPresenterImpl;
 import vn.vnpt.ansv.bts.ui.splash.SplashActivity;
@@ -23,6 +25,8 @@ public interface AppComponent {
 
     void inject(SplashActivity o);
     void inject(SplashPresenterImpl o);
-    void inject(RecyclerMonitorFragment fr);
+    void inject(MonitorContainer o);
+    void inject(MonitorPresenterImpl o);
+    void inject(RecyclerMonitorFragment o);
     void inject(RecyclerMonitorPresenterImpl o);
 }

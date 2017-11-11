@@ -5,5 +5,4 @@ package vn.vnpt.ansv.bts.ui.monitor;
  */
 
 public interface RecyclerMonitorView {
-    void showLoading();
 }

@@ -6,6 +6,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import vn.vnpt.ansv.bts.ui.monitor.container.MonitorPresenter;
+import vn.vnpt.ansv.bts.ui.monitor.container.MonitorPresenterImpl;
 import vn.vnpt.ansv.bts.ui.monitor.RecyclerMonitorPresenter;
 import vn.vnpt.ansv.bts.ui.monitor.RecyclerMonitorPresenterImpl;
 import vn.vnpt.ansv.bts.ui.splash.SplashPresenter;
@@ -28,6 +30,12 @@ public class PresenterModule {
     @Singleton
     RecyclerMonitorPresenter provideRecyclerMonitorPresenter(Context context) {
         return new RecyclerMonitorPresenterImpl(context);
+    }
+
+    @Provides
+    @Singleton
+    MonitorPresenter provideMonitorPresenter(Context context) {
+        return new MonitorPresenterImpl(context);
     }
 
 }

@@ -36,6 +36,7 @@
     <string name="verify_get_stations_failure">Lấy danh sách trạm thất bại.</string>
 
     <string name="dialog_verify_login">Đang xác thực</string>
+    <string name="dialog_verify_get_sensor_list">Đang cập nhật dữ liệu</string>
 
     <string name="sensor_not_initialized">--</string>
 

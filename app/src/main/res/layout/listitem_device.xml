@@ -22,8 +22,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 style="@style/match"
@@ -56,7 +55,6 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/white"
                     android:layout_marginTop="@dimen/space_XS">
 
                     <LinearLayout
@@ -79,21 +77,33 @@
 
                         <TextView
                             android:id="@+id/txtSensorValue"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            style="@style/m_terbium_green"
+                            style="@style/mm_terbium_green"
                             android:layout_below="@+id/imgSensorIcon"
                             android:layout_marginLeft="@dimen/space_XS"
                             android:text="12 %"
-                            android:fontFamily="sans-serif-bold"
                             android:textAllCaps="true"
+                            android:fontFamily="sans-serif-bold"
                             android:layout_gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/txtMeasurementUnit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/sm_silicon_grey"
+                            android:layout_below="@+id/imgSensorIcon"
+                            android:layout_marginLeft="@dimen/space_XS"
+                            android:text="CC"
+                            android:textAllCaps="true"
+                            android:fontFamily="sans-serif-bold"
+                            android:layout_gravity="center"/>
+
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/batteryView"
                         style="@style/block"
-                        android:background="@color/white"
                         android:layout_below="@+id/dataView"
                         android:layout_marginTop="@dimen/space_XXS"
                         android:layout_marginRight="0dp"
