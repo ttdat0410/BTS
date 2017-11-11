@@ -59,10 +59,10 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
         holder.cardView.setLayoutParams(lp);
         holder.cardView.requestLayout();
         //
-        String value = "";
         String measurement = dataSet.get(position).getSensorInfo().getMeasurementUnit();
         int batteryValue = dataSet.get(position).getSensorData().getList().get(0).getBattery();
         int stationId = dataSet.get(position).getSensorData().getList().get(0).getStatusId();
+        int sensorTypeId = dataSet.get(position).getSensorInfo().getSensorTypeId();
 
         holder.txtSensorName.setText(dataSet.get(position).getSensorInfo().getSensorName().toUpperCase());
         holder.txtSensorValue.setText(dataSet.get(position).getSensorData().getList().get(0).getValue()+"");
@@ -70,15 +70,14 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
         holder.txtBatteryValues.setText(batteryValue + "%");
         holder.txtBatteryValues.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForBatteryValue(batteryValue)));
         holder.imgBatteryIcon.setImageResource(Utils.setBatteryImageView(batteryValue));
+        holder.imgSensorIcon.setImageResource(Utils.setSensorIconImageView(stationId, sensorTypeId));
         if (measurement == null) {
-            value = dataSet.get(position).getSensorData().getList().get(0).getValue()+"";
             holder.txtMeasurementUnit.setText("");
-
         } else {
-            value = dataSet.get(position).getSensorData().getList().get(0).getValue()+"";
-            holder.txtMeasurementUnit.setText("("+measurement+")");
+            holder.txtMeasurementUnit.setText("(" + measurement + ")");
         }
-
+        holder.txtMeasurementUnit.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), R.color.sl_footer_grey));
+        Log.i("0x00", holder.txtSensorName.getText() + " | " + sensorTypeId);
         /*for (int z = 0; z < listSensorObj.size(); z++) {
                                         int sensorId = listSensorObj.get(z).getSensorInfo().getSensorId();
                                         String sensorName = listSensorObj.get(z).getSensorInfo().getSensorName();

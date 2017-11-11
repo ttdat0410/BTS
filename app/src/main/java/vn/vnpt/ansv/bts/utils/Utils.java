@@ -18,6 +18,18 @@ import vn.vnpt.ansv.bts.R;
 
 public class Utils {
 
+    enum StatusDevice {
+        OFF(1),
+        ON(2);
+        public final int value;
+        StatusDevice(int value) {
+            this.value = value;
+        }
+        public int getValue() {
+            return value;
+        }
+    }
+
     public static final String BASE_URL = "http://10.4.1.204:8081/BTSRestWebService/";
 //    public static final String BASE_URL = "http://113.161.61.89:40081/BTSRestWebService/";
     public static SuperToast.Animations TOAST_ANIMATION = SuperToast.Animations.FLYIN;
@@ -77,6 +89,63 @@ public class Utils {
             return R.color.sl_terbium_green;
         } else {
             return R.color.sl_terbium_green;
+        }
+    }
+
+    public static int setSensorIconImageView(int stationId, int sensorTypeId) {
+
+        if (stationId == StatusDevice.OFF.getValue()) {
+            if (sensorTypeId == SensorTypeName.Light.getValue()) {
+                return R.mipmap.ic_light_inactive;
+            } else if (sensorTypeId == SensorTypeName.Temperature.getValue()) {
+                return R.mipmap.ic_temp_inactive;
+            } else if (sensorTypeId == SensorTypeName.Humidity.getValue()) {
+                return R.mipmap.ic_humidity_inactive;
+            } else if (sensorTypeId == SensorTypeName.Ac.getValue()) {
+                return R.mipmap.ic_lights_on_red;
+            } else if (sensorTypeId == SensorTypeName.Dc.getValue()) {
+                return R.mipmap.ic_lights_on_red;
+            } else if (sensorTypeId == SensorTypeName.Door.getValue()) {
+                return R.mipmap.ic_lights_on_red;
+            } else if (sensorTypeId == SensorTypeName.Smoke.getValue()) {
+                return R.mipmap.ic_lights_on_red;
+            } else if (sensorTypeId == SensorTypeName.Fire.getValue()) {
+                return R.mipmap.ic_lights_on_red;
+            } else if (sensorTypeId == SensorTypeName.Water.getValue()) {
+                return R.mipmap.ic_lights_on_red;
+            } else if (sensorTypeId == SensorTypeName.Sound.getValue()) {
+                return R.mipmap.ic_sound_level_inactive;
+            } else if (sensorTypeId == SensorTypeName.NH3.getValue()) {
+                return R.mipmap.ic_nh3_inactive;
+            } else {
+                return R.mipmap.ic_lights_on_green;
+            }
+        } else {
+            if (sensorTypeId == SensorTypeName.Light.getValue()) {
+                return R.mipmap.ic_motion;
+            } else if (sensorTypeId == SensorTypeName.Temperature.getValue()) {
+                return R.mipmap.ic_motion;
+            } else if (sensorTypeId == SensorTypeName.Humidity.getValue()) {
+                return R.mipmap.ic_motion;
+            } else if (sensorTypeId == SensorTypeName.Ac.getValue()) {
+                return R.mipmap.ic_motion;
+            } else if (sensorTypeId == SensorTypeName.Dc.getValue()) {
+                return R.mipmap.ic_motion;
+            } else if (sensorTypeId == SensorTypeName.Door.getValue()) {
+                return R.mipmap.ic_motion;
+            } else if (sensorTypeId == SensorTypeName.Smoke.getValue()) {
+                return R.mipmap.ic_motion;
+            } else if (sensorTypeId == SensorTypeName.Fire.getValue()) {
+                return R.mipmap.ic_motion;
+            } else if (sensorTypeId == SensorTypeName.Water.getValue()) {
+                return R.mipmap.ic_motion;
+            } else if (sensorTypeId == SensorTypeName.Sound.getValue()) {
+                return R.mipmap.ic_motion;
+            } else if (sensorTypeId == SensorTypeName.NH3.getValue()) {
+                return R.mipmap.ic_motion;
+            } else {
+                return R.mipmap.ic_motion;
+            }
         }
     }
 }

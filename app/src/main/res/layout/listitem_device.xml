@@ -91,12 +91,12 @@
                             android:id="@+id/txtMeasurementUnit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            style="@style/sm_silicon_grey"
+                            style="@style/sm_footer_grey"
                             android:layout_below="@+id/imgSensorIcon"
                             android:layout_marginLeft="@dimen/space_XS"
                             android:text="CC"
                             android:textAllCaps="true"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-light"
                             android:layout_gravity="center"/>
 
                     </LinearLayout>
