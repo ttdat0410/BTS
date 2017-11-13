@@ -37,5 +37,4 @@ public class PresenterModule {
     MonitorPresenter provideMonitorPresenter(Context context) {
         return new MonitorPresenterImpl(context);
     }
-
 }

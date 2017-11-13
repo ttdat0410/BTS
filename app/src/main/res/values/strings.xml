@@ -36,9 +36,12 @@
     <string name="verify_get_stations_failure">Lấy danh sách trạm thất bại.</string>
 
     <string name="dialog_verify_login">Đang xác thực</string>
-    <string name="dialog_verify_get_sensor_list">Đang cập nhật dữ liệu</string>
+    <string name="dialog_verify_get_sensor_list">Đang cập nhật dữ liệu...</string>
     <string name="dialog_try_again_button">THỬ LẠI</string>
     <string name="dialog_cancel">HỦY BỎ</string>
+
+    <string name="toast_get_data_success">Cập nhật dữ liệu thành công</string>
+    <string name="toast_get_data_failure">Cập nhật dữ liệu thất bại</string>
 
     <string name="sensor_not_initialized">--</string>
 

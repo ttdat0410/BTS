@@ -68,7 +68,8 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
         if (statusId == 2) {
             holder.txtSensorValue.setText(dataSet.get(position).getSensorData().getList().get(0).getValue()+"");
         } else {
-            holder.txtSensorValue.setText(holder.rootView.getResources().getString(R.string.sensor_not_initialized));
+//            holder.txtSensorValue.setText(holder.rootView.getResources().getString(R.string.sensor_not_initialized));
+            holder.txtSensorValue.setText(dataSet.get(position).getSensorData().getList().get(0).getValue()+"");
         }
         holder.txtSensorValue.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForSensorValue(statusId)));
         holder.txtBatteryValues.setText(batteryValue + "%");

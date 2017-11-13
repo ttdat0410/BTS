@@ -82,9 +82,10 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
 
                 if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS) {
                     setupRecyclerMonitorAdapter(listSensorObj);
+                    callback.callback(EStatus.GET_SENSOR_OBJ_SUCCESS);
                 } else if (eStatus == EStatus.NETWORK_FAILURE) {
                     callback.callback(EStatus.NETWORK_FAILURE);
-                    stopBackground();
+//                    stopBackground();
                 }
             }
         });
@@ -109,9 +110,10 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
                                     recyclerMonitorAdapter.updateDataSet(listSensorObj);
                                 }
                             }, 200);
+                            callback.callback(EStatus.GET_SENSOR_OBJ_SUCCESS);
                         } else if (eStatus == EStatus.NETWORK_FAILURE) {
                             callback.callback(EStatus.NETWORK_FAILURE);
-                            stopBackground();
+//                            stopBackground();
                         }
                     }
                 });

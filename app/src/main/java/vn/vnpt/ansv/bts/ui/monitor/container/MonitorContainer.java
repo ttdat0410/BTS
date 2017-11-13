@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -23,11 +22,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
+import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.objects.MinStationFullObj;
 import vn.vnpt.ansv.bts.ui.BTSActivity;
-import vn.vnpt.ansv.bts.ui.monitor.RecyclerMonitorFragment;
-import vn.vnpt.ansv.bts.ui.splash.SplashPresenterImpl;
-import vn.vnpt.ansv.bts.utils.EStatus;
+import vn.vnpt.ansv.bts.utils.BTSToast;
 
 /**
  * Created by ANSV on 11/9/2017.
@@ -36,7 +34,6 @@ import vn.vnpt.ansv.bts.utils.EStatus;
 public class MonitorContainer extends BTSActivity implements MonitorView {
 
     public static List<MinStationFullObj> listAllStation = null;
-    private int numOfPage = 0;
 
     @Inject
     MonitorPresenter presenter;
@@ -55,17 +52,12 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monitor);
         setTitle("");
+        (((BTSApplication)getApplication()).getAppComponent()).inject(this);
         ButterKnife.bind(this);
+        presenter.setView(this);
         final Toolbar toolbar = mViewPager.getToolbar();
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-        }
-
-        // xet so luong pages
-        if (listAllStation != null) {
-            numOfPage = listAllStation.size();
-        } else {
-            numOfPage = 0;
         }
 
         new Thread(new Runnable() {
@@ -73,87 +65,23 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
                 mViewPager.getViewPager().setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
                     @Override
                     public Fragment getItem(int position) {
-
-                        for (int i = 0; i<numOfPage; i++) {
-                            if (i == position % numOfPage) {
-                                int stationId = listAllStation.get(i).getStationInfo().getStationId();
-                                if (i == 0) {
-                                    return RecyclerMonitorFragment.newInstance(stationId, new SplashPresenterImpl.GetStationCallback() {
-                                        @Override
-                                        public void callback(EStatus eStatus) {
-                                            if (eStatus == EStatus.NETWORK_FAILURE) {
-                                                Log.i("0x00", "NETWORK DOWN...");
-                                                final AlertDialog.Builder builder = new AlertDialog.Builder(MonitorContainer.this);
-                                                builder.setTitle("Thông báo");
-                                                builder.setMessage("Mất kết nối server.");
-                                                builder.setPositiveButton(getResources().getString(R.string.dialog_try_again_button), null);
-                                                builder.setCancelable(false);
-                                                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-
-                                                    @Override
-                                                    public void onDismiss(DialogInterface dialog) {
-                                                    }
-
-                                                });
-
-                                                builder.show();
-                                            }
-                                        }
-                                    });
-                                } else {
-                                    return RecyclerMonitorFragment.newInstance(stationId, new SplashPresenterImpl.GetStationCallback() {
-                                        @Override
-                                        public void callback(EStatus eStatus) {
-                                        }
-                                    });
-                                }
-                            }
-                        }
-                        return null;
+                        return presenter.setFragment(listAllStation, position);
                     }
                     @Override
                     public int getCount() {
-                        return numOfPage;
+                        return presenter.getCount(listAllStation);
                     }
-
                     @Override
                     public CharSequence getPageTitle(int position) {
-
-                        for (int i = 0; i<numOfPage; i++) {
-                            if (i == position % numOfPage) {
-                                return listAllStation.get(i).getStationInfo().getStationName();
-                            }
-                        }
-                        return "";
+                        return presenter.getPageTitle(listAllStation, position);
                     }
                 });
 
                 mViewPager.setMaterialViewPagerListener(new MaterialViewPager.Listener() {
                     @Override
                     public HeaderDesign getHeaderDesign(int page) {
-                        switch (page) {
-                            case 0:
-                                return HeaderDesign.fromColorResAndUrl(
-                                        R.color.sl_terbium_green,
-                                        "http://buudienhospital.vn/wp-content/uploads/2017/04/3-1237x386.jpg");
-                            case 1:
-                                return HeaderDesign.fromColorResAndUrl(
-                                        R.color.sl_red_orange,
-                                        "http://buudienhospital.vn/wp-content/uploads/2017/04/tgd_vnpt.jpg");
-//                                "http://www.hdiphonewallpapers.us/phone-wallpapers/540x960-1/540x960-mobile-wallpapers-hd-2218x5ox3.jpg");
-                            case 2:
-                                return HeaderDesign.fromColorResAndUrl(
-                                        R.color.cyan,
-                                        "http://www.droid-life.com/wp-content/uploads/2014/10/lollipop-wallpapers10.jpg");
-                            case 3:
-                                return HeaderDesign.fromColorResAndUrl(
-                                        R.color.red,
-                                        "http://www.tothemobile.com/wp-content/uploads/2014/07/original.jpg");
-                        }
+                        return presenter.getHeaderDesign(listAllStation, page);
 
-                        return HeaderDesign.fromColorResAndUrl(
-                                R.color.sl_terbium_green,
-                                "http://buudienhospital.vn/wp-content/uploads/2017/04/3-1237x386.jpg");
                     }
                 });
 
@@ -161,67 +89,6 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
                 mViewPager.getPagerTitleStrip().setViewPager(mViewPager.getViewPager());
             }
         }).start();
-
-        /*mViewPager.getViewPager().setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-
-                for (int i = 0; i<numOfPage; i++) {
-                    if (i == position % numOfPage) {
-                        int stationId = listAllStation.get(i).getStationInfo().getStationId();
-                        return RecyclerMonitorFragment.newInstance(stationId);
-                    }
-                }
-                return null;
-            }
-            @Override
-            public int getCount() {
-                return numOfPage;
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-
-                for (int i = 0; i<numOfPage; i++) {
-                    if (i == position % numOfPage) {
-                        return listAllStation.get(i).getStationInfo().getStationName();
-                    }
-                }
-                return "";
-            }
-        });
-
-        mViewPager.setMaterialViewPagerListener(new MaterialViewPager.Listener() {
-            @Override
-            public HeaderDesign getHeaderDesign(int page) {
-                switch (page) {
-                    case 0:
-                        return HeaderDesign.fromColorResAndUrl(
-                                R.color.sl_terbium_green,
-                                "http://buudienhospital.vn/wp-content/uploads/2017/04/3-1237x386.jpg");
-                    case 1:
-                        return HeaderDesign.fromColorResAndUrl(
-                                R.color.sl_red_orange,
-                                "http://buudienhospital.vn/wp-content/uploads/2017/04/tgd_vnpt.jpg");
-//                                "http://www.hdiphonewallpapers.us/phone-wallpapers/540x960-1/540x960-mobile-wallpapers-hd-2218x5ox3.jpg");
-                    case 2:
-                        return HeaderDesign.fromColorResAndUrl(
-                                R.color.cyan,
-                                "http://www.droid-life.com/wp-content/uploads/2014/10/lollipop-wallpapers10.jpg");
-                    case 3:
-                        return HeaderDesign.fromColorResAndUrl(
-                                R.color.red,
-                                "http://www.tothemobile.com/wp-content/uploads/2014/07/original.jpg");
-                }
-
-                return HeaderDesign.fromColorResAndUrl(
-                        R.color.sl_terbium_green,
-                        "http://buudienhospital.vn/wp-content/uploads/2017/04/3-1237x386.jpg");
-            }
-        });
-
-        mViewPager.getViewPager().setOffscreenPageLimit(mViewPager.getViewPager().getAdapter().getCount());
-        mViewPager.getPagerTitleStrip().setViewPager(mViewPager.getViewPager());*/
 
         final View logo = findViewById(R.id.logo_white);
         if (logo != null) {
@@ -238,13 +105,12 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
     private ProgressDialog dialog;
     @Override
     public void showLoading() {
-        Log.i("0x00", "loading...");
         dialog = new ProgressDialog(MonitorContainer.this);
         dialog.setCancelable(false);
         dialog.setMax(100);
         dialog.setMessage(getResources().getString(R.string.dialog_verify_get_sensor_list));
         dialog.setTitle("");
-        dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.show();
     }
 
@@ -262,10 +128,35 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
         }
     }
 
+    private AlertDialog.Builder builder = null;
+    @Override
+    public AlertDialog.Builder showAlert() {
+        builder = new AlertDialog.Builder(MonitorContainer.this);
+        builder.setTitle("Thông báo");
+        builder.setMessage("Mất kết nối server.");
+        builder.setPositiveButton(getResources().getString(R.string.dialog_try_again_button), null);
+        builder.setCancelable(false);
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                showLoading();
+                dialog.dismiss();
+                MonitorPresenterImpl.isShowAlert = true;
+            }
+        });
+        return builder;
+    }
+
+    @Override
+    public void showToast(String content, int color) {
+        if (dialog.isShowing()) {
+            new BTSToast(this).showToast(content, color);
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        numOfPage = 0;
         listAllStation = null;
     }
 }

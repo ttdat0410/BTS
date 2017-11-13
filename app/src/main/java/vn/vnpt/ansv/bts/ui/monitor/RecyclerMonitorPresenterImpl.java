@@ -1,6 +1,7 @@
 package vn.vnpt.ansv.bts.ui.monitor;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import vn.vnpt.ansv.bts.api.APIManager;
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.common.injection.scope.ActivityScope;
 import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
@@ -70,6 +72,7 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
 
         } else {
             String url = Utils.BASE_URL + "monitor/sensor/" + userId + "/" + stationId;
+            Log.i("0x00", url);
             RequestQueue queue = Volley.newRequestQueue(context);
             final StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                     new Response.Listener<String>() {
@@ -124,6 +127,7 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> headers = new HashMap<String, String>();
                     headers.put("API_KEY", apiKey);
+                    Log.i("0x00", apiKey);
                     return headers;
                 }
             };
