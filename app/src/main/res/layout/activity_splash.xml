@@ -65,7 +65,7 @@
             style="@style/divider_line"
             android:layout_width="25dp"
             android:layout_height="2dp"
-            android:layout_marginTop="@dimen/space_XS"
+            android:layout_marginTop="@dimen/space_XXS"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
             android:background="@color/sl_terbium_green"/>

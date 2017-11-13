@@ -1,10 +1,12 @@
 package vn.vnpt.ansv.bts.ui.settings;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -58,6 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
                 txtStatus.setVisibility(View.INVISIBLE);
                 if (ip_edit_text.length()>=7 && port_edit_text.length()>0) {
                     txtStatus.setVisibility(View.INVISIBLE);
+                    hideKeyboard(port_edit_text);
                     finish();
 
                 } else {
@@ -73,6 +76,10 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    private void hideKeyboard(EditText fromView) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(fromView.getWindowToken(), 0);
+    }
     private void loadSharedPreference() {
         BTSPreferences prefs = preferenceManager.getPreferences();
         ip_edit_text.setText(prefs.ip);
