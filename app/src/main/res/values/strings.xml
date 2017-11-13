@@ -1,9 +1,15 @@
 <resources>
-    <string name="app_name">BTS</string>
+    <string name="app_name">GSCB</string>
 
     <string name="title_log_in">ĐĂNG NHẬP</string>
     <string name="title_username">Tên đăng nhập</string>
     <string name="title_password">Mật khẩu</string>
+    <string name="title_settings">CÀI ĐẶT</string>
+    <string name="title_ip">Ip</string>
+    <string name="title_port">Port</string>
+    <string name="title_check_ip">Kiểm tra ip</string>
+    <string name="title_his">BỆNH VIỆN BƯU ĐIỆN</string>
+    <string name="title_app_name">GIÁM SÁT CẢM BIẾN</string>
 
     <string name="status_server_success">Thành công</string>
     <string name="status_server_this_object_already_exists">Đối tượng này đã tồn tại</string>

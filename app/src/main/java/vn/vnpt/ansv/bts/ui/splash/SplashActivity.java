@@ -8,11 +8,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
@@ -20,6 +24,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.github.johnpersano.supertoasts.SuperToast;
 
@@ -36,6 +42,7 @@ import vn.vnpt.ansv.bts.objects.MinStationFullObj;
 import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
 import vn.vnpt.ansv.bts.ui.monitor.container.MonitorContainer;
+import vn.vnpt.ansv.bts.ui.settings.SettingsActivity;
 import vn.vnpt.ansv.bts.utils.BTSToast;
 import vn.vnpt.ansv.bts.utils.EStatus;
 
@@ -55,6 +62,8 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
     @Inject
     SplashPresenter presenter;
 
+    @BindView(R.id.titleLogin)
+    TextView titleLogin;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.mm_logo)
@@ -80,11 +89,14 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
             this.startActivityForResult(enableBtIntent, 1);
         }
         animationDuration = 300;
+        initToolbar();
         initializeItems();
         setupSharePreference();
         loginButton.setOnClickListener(onSplashClick);
+        titleLogin.setOnClickListener(onSplashClick);
     }
 
+    private int countOfClicked = 0;
     private View.OnClickListener onSplashClick = new View.OnClickListener() {
 
         @Override
@@ -100,6 +112,13 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
                                     loginButton.setEnabled(true);
                                 }
                             });
+                    break;
+                case R.id.titleLogin:
+
+
+                    countOfClicked++;
+                    Log.i("0x00", "clicked..." + countOfClicked);
+
                     break;
             }
         }
@@ -242,6 +261,49 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
                 MonitorContainer.launch(SplashActivity.this, listStation);
             }
         }, 500);
+    }
+
+    /*private Menu optionsMenu;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        optionsMenu = menu;
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }*/
+
+    /**
+     * initToolbar
+     *
+     * Sets up the toolbar, adds margin to top of toolbar; this is needed for devices running
+     * Lollipop or greater. If the device is running Kitkat or below, getStatusBarHeight will
+     * return 0.
+     *
+     */
+    private void initToolbar() {
+
+        if (Build.VERSION.SDK_INT < 23) {
+            toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+        } else {
+            toolbar.setBackgroundColor(getColor(R.color.transparent));
+        }
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
+        params.setMargins(0, 0, 0, 0);
+        toolbar.setLayoutParams(params);
     }
 
     private void initializeItems() {

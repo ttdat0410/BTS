@@ -3,16 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/match"
-    android:background="@color/sl_terbium_green">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentTop="true"
-        android:theme="@style/SearchToolbar"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:popupTheme="@style/Popup" />
+    android:background="@color/transparent">
 
     <ImageView
         style="@style/match"
@@ -21,7 +12,17 @@
         android:layout_gravity="center_horizontal"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
-        android:src="@mipmap/icn_splash"/>
+        android:src="@mipmap/icn_splash"
+        android:visibility="visible"/>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_M"
+        android:layout_alignParentTop="true"
+        android:theme="@style/SearchToolbar"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/Popup" />
 
     <LinearLayout
         style="@style/block"
@@ -29,19 +30,24 @@
         android:layout_below="@id/toolbar"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/titleHos"
+            style="@style/l_blue_green"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/space_XXXS"
+            android:layout_marginLeft="@dimen/space_XS"
+            android:layout_gravity="center"
+            android:text="@string/title_his"
+            android:textAllCaps="true"
+            android:visibility="visible"/>
+
         <ImageView
             style="@style/wrap"
             android:id="@+id/mm_logo"
             android:layout_gravity="center_horizontal"
-            android:src="@mipmap/icn_logo" />
-    </LinearLayout>
+            android:src="@mipmap/ic_logo" />
 
-    <!--<ImageView
-        style="@style/wrap"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/space_S"
-        android:src="@mipmap/icn_logo"/>-->
+    </LinearLayout>
 
     <!-- Bottom panel -->
     <FrameLayout
@@ -49,9 +55,8 @@
         android:id="@+id/bottom_panel"
         android:layout_below="@id/logo_block"
         android:background="@color/white"
-        android:layout_marginTop="@dimen/space_XL"
+        android:layout_marginTop="@dimen/space_XXL"
         android:visibility="invisible">
-
 
         <ScrollView
             style="@style/match"
@@ -65,32 +70,13 @@
                 android:paddingRight="@dimen/space_S">
 
                 <TextView
+                    android:id="@+id/titleLogin"
                     style="@style/l_terbium_green"
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/space_XS"
                     android:layout_gravity="left"
                     android:text="@string/title_log_in"
                     android:textAllCaps="true" />
-
-                <!-- name -->
-                <!--<RelativeLayout
-                    android:id="@+id/name_display"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/settings_personal_info_height"
-                    android:visibility="visible">
-
-                    <TextView
-                        style="@style/m_silicon_grey"
-                        android:id="@+id/name_display_text"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="@dimen/space_XXS"
-                        android:hint="Tên đăng nhập"
-                        android:textColorHint="@color/sl_grey" />
-
-                    <View
-                        style="@style/divider_line"
-                        android:layout_alignParentBottom="true" />
-                </RelativeLayout>-->
 
                 <!--set GONE HERE-->
                 <RelativeLayout

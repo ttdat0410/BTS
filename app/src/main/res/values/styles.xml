@@ -64,6 +64,14 @@
         <item name="android:textSize">@dimen/text_size_SM</item>
     </style>
 
+    <style name="m_terbium_green" parent="terbium_green_text">
+        <item name="android:textSize">@dimen/text_size_M</item>
+    </style>
+
+    <style name="mm_terbium_green" parent="terbium_green_text">
+        <item name="android:textSize">@dimen/text_size_MM</item>
+    </style>
+
     <style name="l_silicon_grey" parent="silicon_gray_text">
         <item name="android:textSize">@dimen/text_size_L</item>
     </style>
@@ -72,12 +80,8 @@
         <item name="android:textSize">@dimen/text_size_L</item>
     </style>
 
-    <style name="m_terbium_green" parent="terbium_green_text">
-        <item name="android:textSize">@dimen/text_size_M</item>
-    </style>
-
-    <style name="mm_terbium_green" parent="terbium_green_text">
-        <item name="android:textSize">@dimen/text_size_MM</item>
+    <style name="l_blue_green" parent="blue_text">
+        <item name="android:textSize">@dimen/text_size_L</item>
     </style>
 
     <style name="divider_line">
@@ -96,6 +100,10 @@
 
     <style name="footer_gray_text" parent="block">
         <item name="android:textColor">@color/sl_footer_grey</item>
+    </style>
+
+    <style name="blue_text" parent="wrap">
+        <item name="android:textColor">@color/primary_color_dark</item>
     </style>
 
     <style name="box_left" parent="box">

@@ -1,0 +1,20 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.splash.SplashActivity">
+
+    <item
+        android:id="@+id/action_history"
+        android:icon="@mipmap/ic_settings"
+        android:title="AA"
+        android:orderInCategory="100"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@mipmap/ic_settings"
+        android:title="Cài đặt"
+        android:orderInCategory="200"
+        app:showAsAction="always" />
+</menu>

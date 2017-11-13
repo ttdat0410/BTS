@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/match"
+    android:background="@color/sl_white">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/SearchToolbar"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/Popup" />
+
+    <ScrollView
+        style="@style/match"
+        android:layout_below="@id/toolbar"
+        android:fillViewport="true"
+        android:paddingTop="@dimen/space_XXXS">
+
+        <LinearLayout
+            style="@style/block"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/space_S"
+            android:paddingRight="@dimen/space_S">
+
+            <!--<TextView
+                style="@style/l_terbium_green"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/space_XS"
+                android:layout_gravity="left"
+                android:text="@string/title_settings"
+                android:textAllCaps="true" />-->
+
+            <!--set GONE HERE-->
+            <RelativeLayout
+                android:id="@+id/name_edit"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_personal_info_height"
+                android:visibility="visible">
+
+                <EditText
+                    style="@style/m_silicon_grey"
+                    android:layout_width="match_parent"
+                    android:id="@+id/name_edit_text"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/transparent"
+                    android:padding="0dp"
+                    android:singleLine="true"/>
+
+                <TextView
+                    style="@style/m_silicon_grey"
+                    android:layout_above="@id/name_edit_text"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/title_ip" />
+
+                <View
+                    style="@style/divider_line"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/sl_terbium_green"/>
+
+            </RelativeLayout>
+
+            <!--set GONE HERE-->
+            <RelativeLayout
+                android:id="@+id/password_edit"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_personal_info_height"
+                android:layout_marginTop="@dimen/space_S"
+                android:visibility="visible">
+
+                <EditText
+                    style="@style/m_silicon_grey"
+                    android:id="@+id/password_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/transparent"
+                    android:padding="0dp"
+                    android:singleLine="true" />
+
+                <TextView
+                    style="@style/m_silicon_grey"
+                    android:layout_above="@id/password_edit_text"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/title_port" />
+
+                <View
+                    android:id="@+id/v"
+                    style="@style/divider_line"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/sl_terbium_green" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/loginButton"
+                style="@style/m_silicon_grey"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/space_S"
+                android:layout_gravity="center"
+                android:background="@color/sl_terbium_green"
+                android:text="@string/title_check_ip"
+                android:textAllCaps="true" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
