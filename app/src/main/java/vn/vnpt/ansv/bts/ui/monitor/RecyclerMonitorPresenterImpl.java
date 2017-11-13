@@ -130,4 +130,14 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
             queue.add(stringRequest);
         }
     }
+
+//    @Override
+//    public void startBackground(int intervalMS) {
+//        view.startBackground(intervalMS);
+//    }
+//
+//    @Override
+//    public void stopBackground() {
+//        view.stopBackground();
+//    }
 }

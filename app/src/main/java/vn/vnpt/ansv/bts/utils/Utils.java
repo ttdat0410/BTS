@@ -84,17 +84,17 @@ public class Utils {
         }
     }
 
-    public static int setColorForSensorValue(int stationId) {
-        if (stationId == 2) {
+    public static int setColorForSensorValue(int statusId) {
+        if (statusId == 2) {
             return R.color.sl_terbium_green;
         } else {
             return R.color.sl_terbium_green;
         }
     }
 
-    public static int setSensorIconImageView(int stationId, int sensorTypeId) {
+    public static int setSensorIconImageView(int statusId, int sensorTypeId) {
 
-        if (stationId == StatusDevice.OFF.getValue()) {
+        if (statusId == StatusDevice.OFF.getValue()) {
             if (sensorTypeId == SensorTypeName.Light.getValue()) {
                 return R.mipmap.ic_light_inactive;
             } else if (sensorTypeId == SensorTypeName.Temperature.getValue()) {

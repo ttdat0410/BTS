@@ -37,6 +37,8 @@
 
     <string name="dialog_verify_login">Đang xác thực</string>
     <string name="dialog_verify_get_sensor_list">Đang cập nhật dữ liệu</string>
+    <string name="dialog_try_again_button">THỬ LẠI</string>
+    <string name="dialog_cancel">HỦY BỎ</string>
 
     <string name="sensor_not_initialized">--</string>
 

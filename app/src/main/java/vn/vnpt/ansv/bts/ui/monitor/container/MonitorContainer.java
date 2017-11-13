@@ -1,7 +1,9 @@
 package vn.vnpt.ansv.bts.ui.monitor.container;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,6 +26,8 @@ import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.objects.MinStationFullObj;
 import vn.vnpt.ansv.bts.ui.BTSActivity;
 import vn.vnpt.ansv.bts.ui.monitor.RecyclerMonitorFragment;
+import vn.vnpt.ansv.bts.ui.splash.SplashPresenterImpl;
+import vn.vnpt.ansv.bts.utils.EStatus;
 
 /**
  * Created by ANSV on 11/9/2017.
@@ -73,7 +77,36 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
                         for (int i = 0; i<numOfPage; i++) {
                             if (i == position % numOfPage) {
                                 int stationId = listAllStation.get(i).getStationInfo().getStationId();
-                                return RecyclerMonitorFragment.newInstance(stationId);
+                                if (i == 0) {
+                                    return RecyclerMonitorFragment.newInstance(stationId, new SplashPresenterImpl.GetStationCallback() {
+                                        @Override
+                                        public void callback(EStatus eStatus) {
+                                            if (eStatus == EStatus.NETWORK_FAILURE) {
+                                                Log.i("0x00", "NETWORK DOWN...");
+                                                final AlertDialog.Builder builder = new AlertDialog.Builder(MonitorContainer.this);
+                                                builder.setTitle("Thông báo");
+                                                builder.setMessage("Mất kết nối server.");
+                                                builder.setPositiveButton(getResources().getString(R.string.dialog_try_again_button), null);
+                                                builder.setCancelable(false);
+                                                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+                                                    @Override
+                                                    public void onDismiss(DialogInterface dialog) {
+                                                    }
+
+                                                });
+
+                                                builder.show();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    return RecyclerMonitorFragment.newInstance(stationId, new SplashPresenterImpl.GetStationCallback() {
+                                        @Override
+                                        public void callback(EStatus eStatus) {
+                                        }
+                                    });
+                                }
                             }
                         }
                         return null;

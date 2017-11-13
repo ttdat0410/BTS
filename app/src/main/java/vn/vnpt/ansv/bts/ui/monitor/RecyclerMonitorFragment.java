@@ -24,6 +24,7 @@ import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
 import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
+import vn.vnpt.ansv.bts.ui.splash.SplashPresenterImpl;
 import vn.vnpt.ansv.bts.utils.EStatus;
 
 /**
@@ -43,13 +44,16 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
-    public static RecyclerMonitorFragment newInstance(int stationId) {
-        return new RecyclerMonitorFragment(stationId);
+    private SplashPresenterImpl.GetStationCallback callback;
+
+    public static RecyclerMonitorFragment newInstance(int stationId, SplashPresenterImpl.GetStationCallback callback) {
+        return new RecyclerMonitorFragment(stationId, callback);
     }
 
     private int stationId;
     @SuppressLint("ValidFragment")
-    public RecyclerMonitorFragment(int stationId) {
+    public RecyclerMonitorFragment(int stationId, SplashPresenterImpl.GetStationCallback callback) {
+        this.callback = callback;
         this.stationId = stationId;
     }
 
@@ -78,10 +82,13 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
 
                 if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS) {
                     setupRecyclerMonitorAdapter(listSensorObj);
+                } else if (eStatus == EStatus.NETWORK_FAILURE) {
+                    callback.callback(EStatus.NETWORK_FAILURE);
+                    stopBackground();
                 }
             }
         });
-        runBackground(15000);
+        startBackground(10000);
     }
 
     private Runnable runnableCode = null;
@@ -102,21 +109,28 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
                                     recyclerMonitorAdapter.updateDataSet(listSensorObj);
                                 }
                             }, 200);
+                        } else if (eStatus == EStatus.NETWORK_FAILURE) {
+                            callback.callback(EStatus.NETWORK_FAILURE);
+                            stopBackground();
                         }
                     }
                 });
-                Log.i("0x00", "RUNNING.... " + (new Date()));
+
             }
         };
         handler.postDelayed(runnableCode, delayMS);
+        Log.i("0x00", "START BACKGROUND AT: " + (new Date()));
     }
 
-    void runBackground(final int intervalMS) {
+    @Override
+    public void startBackground(final int intervalMS) {
         startDelayed(intervalMS, 0);
     }
 
-    void stopBackground() {
+    @Override
+    public void stopBackground() {
         handler.removeCallbacks(runnableCode);
+        Log.i("0x00", "STOP BACKGROUND AT: " + (new Date()));
     }
 
     @Override
