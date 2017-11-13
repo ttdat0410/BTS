@@ -15,8 +15,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
@@ -26,14 +24,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.github.johnpersano.supertoasts.SuperToast;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
@@ -66,8 +60,14 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
     TextView titleLogin;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.mm_logo)
-    ImageView mmLogo;
+    @BindView(R.id.mm_vnpt_logo)
+    ImageView mm_vnpt_logo;
+    @BindView(R.id.mm_hospital_logo)
+    ImageView mm_hospital_logo;
+    @BindView(R.id.divLine)
+    View divLine;
+    @BindView(R.id.titleAppName)
+    TextView titleAppName;
     @BindView(R.id.bottom_panel)
     FrameLayout bottomPanel;
     @BindView(R.id.name_edit_text)
@@ -76,6 +76,8 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
     EditText passwordEditText;
     @BindView(R.id.loginButton)
     Button loginButton;
+    @BindView(R.id.titleVNPT)
+    TextView titleVNPT;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,12 +90,13 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
             Intent enableBtIntent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
             this.startActivityForResult(enableBtIntent, 1);
         }
+
         animationDuration = 300;
         initToolbar();
         initializeItems();
         setupSharePreference();
         loginButton.setOnClickListener(onSplashClick);
-        titleLogin.setOnClickListener(onSplashClick);
+        titleVNPT.setOnClickListener(onSplashClick);
     }
 
     private int countOfClicked = 0;
@@ -113,12 +116,12 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
                                 }
                             });
                     break;
-                case R.id.titleLogin:
-
-
+                case R.id.titleVNPT:
                     countOfClicked++;
-                    Log.i("0x00", "clicked..." + countOfClicked);
-
+                    if (countOfClicked >= 7) {
+                        countOfClicked = 0;
+                        startActivity(new Intent(SplashActivity.this, SettingsActivity.class));
+                    }
                     break;
             }
         }
@@ -128,6 +131,11 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
         BTSPreferences prefs = prefsManager.getPreferences();
         nameEditText.setText(prefs.userName);
         passwordEditText.setText(prefs.password);
+        if (prefs.ip == null && prefs.port == null) {
+            prefs.ip = "10.4.1.204";
+            prefs.port = "8081";
+            prefsManager.setPreferences(prefs);
+        }
     }
 
     public void saveAccount(String username, String password, String apiKey, String userId) {
@@ -309,30 +317,36 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
     private void initializeItems() {
         bottomPanel.setVisibility(View.INVISIBLE);
         toolbar.setVisibility(View.INVISIBLE);
-        mmLogo.setVisibility(View.VISIBLE);
+        mm_vnpt_logo.setVisibility(View.VISIBLE);
+        mm_hospital_logo.setVisibility(View.INVISIBLE);
+        titleAppName.setVisibility(View.INVISIBLE);
+        divLine.setVisibility(View.INVISIBLE);
     }
 
     private void animateItems() {
         AnimatorSet animatorSet = new AnimatorSet();
         ArrayList<Animator> animatorList = new ArrayList<>();
 
-        animatorList.add(mmLogo.getVisibility() == View.VISIBLE ? animateLogo() : null);
+        animatorList.add(mm_vnpt_logo.getVisibility() == View.VISIBLE ? animateLogo() : null);
         animatorList.add(toolbar.getVisibility() == View.INVISIBLE ? animateToolbar() : null);
         animatorList.add(bottomPanel.getVisibility() == View.INVISIBLE ? animateBottomPanel() : null);
+        animatorList.add(mm_hospital_logo.getVisibility() == View.INVISIBLE ? animateHospitalLogo() : null);
+        animatorList.add(titleAppName.getVisibility() == View.INVISIBLE ? animateAppName() : null);
+        animatorList.add(divLine.getVisibility() == View.INVISIBLE ? animateDivLine() : null);
 
         animatorSet.playTogether(animatorList);
         animatorSet.start();
     }
 
     private Animator animateLogo() {
-        ObjectAnimator mmLogoAnimator = ObjectAnimator.ofFloat(mmLogo, "alpha", 1.0f, 0.0f);
+        ObjectAnimator mmLogoAnimator = ObjectAnimator.ofFloat(mm_vnpt_logo, "alpha", 1.0f, 0.0f);
         mmLogoAnimator.setDuration(animationDuration);
         mmLogoAnimator.setInterpolator(linearInterpolator);
         mmLogoAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                mmLogo.setVisibility(View.INVISIBLE);
+                mm_vnpt_logo.setVisibility(View.INVISIBLE);
             }
         });
         return mmLogoAnimator;
@@ -352,6 +366,30 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
         bottomPanelAnimator.setDuration(animationDuration);
         bottomPanelAnimator.setInterpolator(linearInterpolator);
         return bottomPanelAnimator;
+    }
+
+    private Animator animateHospitalLogo() {
+        mm_hospital_logo.setVisibility(View.VISIBLE);
+        ObjectAnimator hospitalLogoAnimator = ObjectAnimator.ofFloat(toolbar, "alpha", 0.0f, 1.0f);
+        hospitalLogoAnimator.setDuration(animationDuration);
+        hospitalLogoAnimator.setInterpolator(linearInterpolator);
+        return hospitalLogoAnimator;
+    }
+
+    private Animator animateAppName() {
+        titleAppName.setVisibility(View.VISIBLE);
+        ObjectAnimator titleAppNameAnimator = ObjectAnimator.ofFloat(toolbar, "alpha", 0.0f, 1.0f);
+        titleAppNameAnimator.setDuration(animationDuration);
+        titleAppNameAnimator.setInterpolator(linearInterpolator);
+        return titleAppNameAnimator;
+    }
+
+    private Animator animateDivLine() {
+        divLine.setVisibility(View.VISIBLE);
+        ObjectAnimator divLineAnimator = ObjectAnimator.ofFloat(divLine, "alpha", 0.0f, 1.0f);
+        divLineAnimator.setDuration(animationDuration);
+        divLineAnimator.setInterpolator(linearInterpolator);
+        return divLineAnimator;
     }
 
     private void showToast(String content, int color) {

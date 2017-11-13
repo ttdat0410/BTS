@@ -14,6 +14,7 @@
     <dimen name="space_XXL">88dp</dimen>
     <dimen name="space_XXXL">112dp</dimen>
     <dimen name="space_XXXXL">156dp</dimen>
+    <dimen name="space_XXXXXL">200dp</dimen>
 
     <dimen name="text_size_XS">8sp</dimen>
     <dimen name="text_size_XXS">10sp</dimen>
@@ -28,6 +29,5 @@
     <dimen name="divider_height">1dp</dimen>
 
     <dimen name="settings_personal_info_height">60dp</dimen>
-
 
 </resources>

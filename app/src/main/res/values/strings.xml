@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">GSCB</string>
+    <string name="app_name">BVBD</string>
 
     <string name="title_log_in">ĐĂNG NHẬP</string>
     <string name="title_username">Tên đăng nhập</string>
     <string name="title_password">Mật khẩu</string>
-    <string name="title_settings">CÀI ĐẶT</string>
+    <string name="title_settings">CÀI ĐẶT IP/PORT</string>
     <string name="title_ip">Ip</string>
     <string name="title_port">Port</string>
     <string name="title_check_ip">Kiểm tra ip</string>

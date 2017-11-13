@@ -96,11 +96,11 @@ public class Utils {
 
         if (statusId == StatusDevice.OFF.getValue()) {
             if (sensorTypeId == SensorTypeName.Light.getValue()) {
-                return R.mipmap.ic_light_active;
+                return R.mipmap.ic_light_inactive;
             } else if (sensorTypeId == SensorTypeName.Temperature.getValue()) {
-                return R.mipmap.ic_temp_active;
+                return R.mipmap.ic_temp_inactive;
             } else if (sensorTypeId == SensorTypeName.Humidity.getValue()) {
-                return R.mipmap.ic_humidity_active;
+                return R.mipmap.ic_humidity_inactive;
             } else if (sensorTypeId == SensorTypeName.Ac.getValue()) {
                 return R.mipmap.ic_tint_background;
             } else if (sensorTypeId == SensorTypeName.Dc.getValue()) {
@@ -108,15 +108,15 @@ public class Utils {
             } else if (sensorTypeId == SensorTypeName.Door.getValue()) {
                 return R.mipmap.ic_tint_background;
             } else if (sensorTypeId == SensorTypeName.Smoke.getValue()) {
-                return R.mipmap.ic_motion;
+                return R.mipmap.ic_tint_background;
             } else if (sensorTypeId == SensorTypeName.Fire.getValue()) {
                 return R.mipmap.ic_tint_background;
             } else if (sensorTypeId == SensorTypeName.Water.getValue()) {
                 return R.mipmap.ic_tint_background;
             } else if (sensorTypeId == SensorTypeName.Sound.getValue()) {
-                return R.mipmap.ic_sound_active;
+                return R.mipmap.ic_sound_inactive;
             } else if (sensorTypeId == SensorTypeName.NH3.getValue()) {
-                return R.mipmap.ic_nh3_active;
+                return R.mipmap.ic_nh3_inactive;
             } else {
                 return R.mipmap.power_off;
             }
@@ -153,6 +153,6 @@ public class Utils {
         return "";
     }
 
-    
+
 
 }

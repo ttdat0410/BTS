@@ -10,6 +10,7 @@ import vn.vnpt.ansv.bts.ui.monitor.container.MonitorContainer;
 import vn.vnpt.ansv.bts.ui.monitor.container.MonitorPresenterImpl;
 import vn.vnpt.ansv.bts.ui.monitor.RecyclerMonitorFragment;
 import vn.vnpt.ansv.bts.ui.monitor.RecyclerMonitorPresenterImpl;
+import vn.vnpt.ansv.bts.ui.settings.SettingsActivity;
 import vn.vnpt.ansv.bts.ui.splash.SplashActivity;
 import vn.vnpt.ansv.bts.ui.splash.SplashPresenterImpl;
 
@@ -29,4 +30,5 @@ public interface AppComponent {
     void inject(MonitorPresenterImpl o);
     void inject(RecyclerMonitorFragment o);
     void inject(RecyclerMonitorPresenterImpl o);
+    void inject(SettingsActivity o);
 }

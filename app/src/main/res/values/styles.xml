@@ -40,6 +40,10 @@
         <item name="android:textSize">@dimen/text_size_SM</item>
     </style>
 
+    <style name="xxs_blue" parent="blue_text">
+        <item name="android:textSize">@dimen/text_size_XXS</item>
+    </style>
+
     <style name="xs_silicon_grey_version" parent="silicon_gray_text">
         <item name="android:textSize">@dimen/text_size_XS</item>
     </style>
@@ -80,8 +84,8 @@
         <item name="android:textSize">@dimen/text_size_L</item>
     </style>
 
-    <style name="l_blue_green" parent="blue_text">
-        <item name="android:textSize">@dimen/text_size_L</item>
+    <style name="ml_white" parent="white_text">
+        <item name="android:textSize">@dimen/text_size_ML</item>
     </style>
 
     <style name="divider_line">
@@ -102,8 +106,12 @@
         <item name="android:textColor">@color/sl_footer_grey</item>
     </style>
 
-    <style name="blue_text" parent="wrap">
+    <style name="blue_text" parent="block">
         <item name="android:textColor">@color/primary_color_dark</item>
+    </style>
+
+    <style name="white_text" parent="wrap">
+        <item name="android:textColor">@color/sl_light_peach</item>
     </style>
 
     <style name="box_left" parent="box">

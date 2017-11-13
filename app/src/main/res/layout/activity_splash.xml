@@ -18,11 +18,21 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/space_M"
+        android:layout_height="@dimen/space_XXXS"
         android:layout_alignParentTop="true"
         android:theme="@style/SearchToolbar"
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/Popup" />
+
+    <ImageView
+        style="@style/match"
+        android:id="@+id/mm_vnpt_logo"
+        android:layout_marginTop="0dp"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:src="@mipmap/icn_vnpt_tech"
+        android:visibility="visible"/>
 
     <LinearLayout
         style="@style/block"
@@ -30,22 +40,35 @@
         android:layout_below="@id/toolbar"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/titleHos"
-            style="@style/l_blue_green"
-            android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/space_XXXS"
-            android:layout_marginLeft="@dimen/space_XS"
-            android:layout_gravity="center"
-            android:text="@string/title_his"
-            android:textAllCaps="true"
-            android:visibility="visible"/>
-
         <ImageView
             style="@style/wrap"
-            android:id="@+id/mm_logo"
-            android:layout_gravity="center_horizontal"
-            android:src="@mipmap/ic_logo" />
+            android:id="@+id/mm_hospital_logo"
+            android:layout_marginTop="@dimen/space_XXXS"
+            android:layout_marginLeft="@dimen/space_XXXS"
+            android:layout_gravity="left"
+            android:src="@mipmap/ic_logo_hospital" />
+
+        <TextView
+            android:id="@+id/titleAppName"
+            style="@style/ml_white"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/space_M"
+            android:layout_gravity="center"
+            android:text="@string/title_app_name"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:fontFamily="sans-serif-bold"
+            android:visibility="visible"/>
+
+        <View
+            android:id="@+id/divLine"
+            style="@style/divider_line"
+            android:layout_width="25dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/space_XS"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:background="@color/sl_terbium_green"/>
 
     </LinearLayout>
 
@@ -53,14 +76,14 @@
     <FrameLayout
         style="@style/match"
         android:id="@+id/bottom_panel"
-        android:layout_below="@id/logo_block"
+        android:layout_below="@id/titleAppName"
         android:background="@color/white"
-        android:layout_marginTop="@dimen/space_XXL"
+        android:layout_marginTop="@dimen/space_XXXXXL"
         android:visibility="invisible">
 
         <ScrollView
             style="@style/match"
-            android:layout_below="@id/toolbar"
+            android:layout_below="@id/titleAppName"
             android:fillViewport="true">
 
             <LinearLayout
@@ -108,26 +131,6 @@
 
                 </RelativeLayout>
 
-                <!-- title -->
-                <!--<RelativeLayout
-                    android:id="@+id/title_display"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/settings_personal_info_height"
-                    android:visibility="visible">
-
-                    <TextView
-                        style="@style/m_silicon_grey"
-                        android:id="@+id/title_display_text"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="@dimen/space_XXS"
-                        android:hint="Mật khẩu"
-                        android:textColorHint="@color/sl_grey" />
-
-                    <View
-                        style="@style/divider_line"
-                        android:layout_alignParentBottom="true" />
-                </RelativeLayout>-->
-
                 <!--set GONE HERE-->
                 <RelativeLayout
                     android:id="@+id/password_edit"
@@ -169,6 +172,17 @@
                     android:background="@color/sl_terbium_green"
                     android:text="@string/title_log_in"
                     android:textAllCaps="true" />
+
+                <TextView
+                    android:id="@+id/titleVNPT"
+                    style="@style/xxs_blue"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/space_M"
+                    android:layout_gravity="bottom|end"
+                    android:textAlignment="center"
+                    android:text="VNPT - Technology"
+                    android:textAllCaps="true" />
+
             </LinearLayout>
         </ScrollView>
     </FrameLayout>

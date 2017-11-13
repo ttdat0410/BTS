@@ -10,14 +10,16 @@ public class BTSPreferences {
     public String password;
     public String apiKey;
     public String userId;
+    public String ip;
+    public String port;
 
     public BTSPreferences() {
     }
 
     @Override
     public String toString() {
-        return String.format("userName: %s, password: %s, apiKey: %s, userId: %s",
-                userName, password, apiKey, userId);
+        return String.format("ip: %s, port: %s, userName: %s, password: %s, apiKey: %s, userId: %s",
+                ip, port, userName, password, apiKey, userId);
     }
 
 }

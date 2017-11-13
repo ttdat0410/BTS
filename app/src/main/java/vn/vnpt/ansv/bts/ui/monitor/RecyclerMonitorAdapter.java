@@ -63,13 +63,13 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
         int batteryValue = dataSet.get(position).getSensorData().getList().get(0).getBattery();
         int statusId = dataSet.get(position).getSensorData().getList().get(0).getStatusId();
         int sensorTypeId = dataSet.get(position).getSensorInfo().getSensorTypeId();
-
+        double value = dataSet.get(position).getSensorData().getList().get(0).getValue();
         holder.txtSensorName.setText(dataSet.get(position).getSensorInfo().getSensorName().toUpperCase());
         if (statusId == 2) {
-            holder.txtSensorValue.setText(dataSet.get(position).getSensorData().getList().get(0).getValue()+"");
+            holder.txtSensorValue.setText(String.format("%.0f",value));
         } else {
 //            holder.txtSensorValue.setText(holder.rootView.getResources().getString(R.string.sensor_not_initialized));
-            holder.txtSensorValue.setText(dataSet.get(position).getSensorData().getList().get(0).getValue()+"");
+            holder.txtSensorValue.setText(String.format("%.0f",value));
         }
         holder.txtSensorValue.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForSensorValue(statusId)));
         holder.txtBatteryValues.setText(batteryValue + "%");
