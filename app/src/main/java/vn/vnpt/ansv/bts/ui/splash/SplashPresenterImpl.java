@@ -2,7 +2,6 @@ package vn.vnpt.ansv.bts.ui.splash;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -12,18 +11,14 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
-
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.common.injection.scope.ActivityScope;
 import vn.vnpt.ansv.bts.objects.MinStationFullListObj;
@@ -84,7 +79,7 @@ public class SplashPresenterImpl implements SplashPresenter {
             String url = null;
             RequestQueue queue = Volley.newRequestQueue(context);
             try {
-                url = Utils.BASE_URL+"apikey/login?username="+user.trim()+"&password="+Utils.SHA1(pass.trim());
+                url = Utils.getBaseUrl(context)+"apikey/login?username="+user.trim()+"&password="+Utils.SHA1(pass.trim());
                 final StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                         new Response.Listener<String>() {
                             @Override
@@ -136,7 +131,7 @@ public class SplashPresenterImpl implements SplashPresenter {
             callback.callback(EStatus.USERID_INVAILABLE);
 
         } else {
-            String url = Utils.BASE_URL + "monitor/sensor/" + userId;
+            String url = Utils.getBaseUrl(context) + "monitor/sensor/" + userId;
             RequestQueue queue = Volley.newRequestQueue(context);
             final StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                     new Response.Listener<String>() {

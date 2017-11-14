@@ -5,12 +5,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.github.johnpersano.supertoasts.SuperToast;
-
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import vn.vnpt.ansv.bts.R;
+import vn.vnpt.ansv.bts.ui.BTSPreferences;
+import vn.vnpt.ansv.bts.ui.PreferenceManager;
 
 /**
  * Created by ANSV on 11/8/2017.
@@ -18,6 +18,7 @@ import vn.vnpt.ansv.bts.R;
 
 public class Utils {
 
+    public static SuperToast.Animations TOAST_ANIMATION = SuperToast.Animations.FLYIN;
     enum StatusDevice {
         OFF(1),
         ON(2);
@@ -30,9 +31,14 @@ public class Utils {
         }
     }
 
-    public static final String BASE_URL = "http://10.4.1.204:8081/BTSRestWebService/";
-//    public static final String BASE_URL = "http://113.161.61.89:40081/BTSRestWebService/";
-    public static SuperToast.Animations TOAST_ANIMATION = SuperToast.Animations.FLYIN;
+    public static String getBaseUrl(Context context) {
+        PreferenceManager preferenceManager = new PreferenceManager(context);
+        BTSPreferences prefs = preferenceManager.getPreferences();
+        String ip = prefs.ip;
+        String port = prefs.port;
+        String baseUrl = "http://" + ip +":"+ port + "/BTSRestWebService/";
+        return baseUrl;
+    }
 
     public static String convertToHex(byte[] data) {
         StringBuilder buf = new StringBuilder();
@@ -152,5 +158,5 @@ public class Utils {
     public static String convertValueToName(int sensorTypeId, String valueString) {
         return "";
     }
-    
+
 }

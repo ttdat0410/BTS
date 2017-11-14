@@ -2,11 +2,8 @@ package vn.vnpt.ansv.bts.ui;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import com.google.gson.Gson;
-
 import java.util.Locale;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

@@ -1,7 +1,6 @@
 package vn.vnpt.ansv.bts.ui.monitor;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -102,7 +101,6 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
                 presenter.getData(stationId, new RecyclerMonitorPresenterImpl.MonitorCallback() {
                     @Override
                     public void callback(EStatus eStatus, final List<MinSensorFullObj> listSensorObj) {
-
                         if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS) {
                             handler.postDelayed(new Runnable() {
                                 @Override
@@ -111,6 +109,7 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
                                 }
                             }, 200);
                             callback.callback(EStatus.GET_SENSOR_OBJ_SUCCESS);
+
                         } else if (eStatus == EStatus.NETWORK_FAILURE) {
                             callback.callback(EStatus.NETWORK_FAILURE);
 //                            stopBackground();

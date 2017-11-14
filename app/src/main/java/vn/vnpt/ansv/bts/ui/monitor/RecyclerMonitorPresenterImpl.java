@@ -1,7 +1,6 @@
 package vn.vnpt.ansv.bts.ui.monitor;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -66,14 +65,12 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
             callback.callback(EStatus.USERID_INVAILABLE, null);
 
         } else {
-            String url = Utils.BASE_URL + "monitor/sensor/" + userId + "/" + stationId;
+            String url = Utils.getBaseUrl(context) + "monitor/sensor/" + userId + "/" + stationId;
             RequestQueue queue = Volley.newRequestQueue(context);
             final StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Integer id;
-                            String tenTram;
                             try {
                                 JSONObject object = new JSONObject(response);
                                 JSONObject tram = object.getJSONObject("data");
@@ -84,28 +81,6 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
                                     List<MinSensorFullObj> listSensorObj = listStation.get(i).getStationData().getSensorList().getList();
                                     callback.callback(EStatus.GET_SENSOR_OBJ_SUCCESS, listSensorObj);
 
-//                                    itemCardView = new CardviewObject();
-//                                    itemCardView.setId(id);
-//                                    itemCardView.setTenTram(tenTram);
-                                    /*for (int z = 0; z < listSensorObj.size(); z++) {
-                                        int sensorId = listSensorObj.get(z).getSensorInfo().getSensorId();
-                                        String sensorName = listSensorObj.get(z).getSensorInfo().getSensorName();
-                                        String sensorSerial = listSensorObj.get(z).getSensorInfo().getSensorSerial();
-                                        int sensorTypeId = listSensorObj.get(z).getSensorInfo().getSensorTypeId();
-                                        String measurementUnit = listSensorObj.get(z).getSensorInfo().getMeasurementUnit();
-                                        int warningModeId = listSensorObj.get(z).getSensorInfo().getWarningModeId();
-                                        int warningValue1 = listSensorObj.get(z).getSensorInfo().getWarningValue1();
-                                        int warningValue2 = listSensorObj.get(z).getSensorInfo().getWarningValue2();
-                                        int warningComp = listSensorObj.get(z).getSensorInfo().getWarningComp();
-
-                                        SensorInfoObj sensorInfoObj = new SensorInfoObj(sensorId,
-                                                sensorName, sensorSerial, sensorTypeId,
-                                                measurementUnit, warningModeId,
-                                                warningValue1, warningValue2, warningComp);
-
-                                        List<SensorDataObj> sensorData = listSensorObj.get(z).getSensorData().getList();
-                                        String sensorValue = String.valueOf(sensorData.get(0).getValue());
-                                    }*/
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -121,7 +96,6 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> headers = new HashMap<String, String>();
                     headers.put("API_KEY", apiKey);
-                    Log.i("0x00", apiKey);
                     return headers;
                 }
             };
@@ -129,13 +103,4 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
         }
     }
 
-//    @Override
-//    public void startBackground(int intervalMS) {
-//        view.startBackground(intervalMS);
-//    }
-//
-//    @Override
-//    public void stopBackground() {
-//        view.stopBackground();
-//    }
 }

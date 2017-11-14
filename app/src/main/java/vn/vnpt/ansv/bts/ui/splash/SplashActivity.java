@@ -100,7 +100,6 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
 
     private int countOfClicked = 0;
     private View.OnClickListener onSplashClick = new View.OnClickListener() {
-
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
