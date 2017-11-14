@@ -115,6 +115,10 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
                             });
                     break;
                 case R.id.titleVNPT:
+                    /**
+                     * sau 7 lần clicked, sẻ chuyển qua trang SettingsActivity class
+                     * @see SettingsActivity
+                     * */
                     countOfClicked++;
                     if (countOfClicked >= 7) {
                         countOfClicked = 0;
@@ -125,10 +129,16 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
         }
     };
 
+    /**
+     * Hàm load nội dung trong Preference ra view
+     * */
     private void setupSharePreference() {
         BTSPreferences prefs = prefsManager.getPreferences();
         nameEditText.setText(prefs.userName);
         passwordEditText.setText(prefs.password);
+        /**
+         * Gán trường ip và port trong Preference giá trị mặc định
+         * */
         if (prefs.ip == null && prefs.port == null) {
             prefs.ip = "113.161.61.89";
             prefs.port = "40081";
@@ -136,6 +146,13 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
         }
     }
 
+    /**
+     * Hàm lưu thông tin vào Preference
+     * @param username tên đăng nhập
+     * @param password mật khẩu
+     * @param apiKey apiKey
+     * @param userId userId
+     * */
     public void saveAccount(String username, String password, String apiKey, String userId) {
         BTSPreferences prefs = prefsManager.getPreferences();
         prefs.userName = username;
@@ -145,6 +162,14 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
         prefsManager.setPreferences(prefs);
     }
 
+    /**
+     * Hàm cập nhật trạng thái view được trả về từ các callback
+     * @see vn.vnpt.ansv.bts.ui.splash.SplashPresenterImpl.Callback
+     * @see vn.vnpt.ansv.bts.ui.splash.SplashPresenterImpl.GetStationCallback
+     * @param eStatus trạng thái view sẽ tồn tại
+     * @param apiKey apikey
+     * @param userId userId
+     * */
     private void updateStatusView(EStatus eStatus, String apiKey, String userId) {
         switch (eStatus) {
             case NETWORK_FAILURE:
@@ -205,11 +230,19 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
         }
     }
 
+    /**
+     * Hàm ẩn keyboard
+     * @param fromView từ view
+     * */
     private void hideKeyboard(EditText fromView) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(fromView.getWindowToken(), 0);
     }
 
+    /**
+     * Hàm lấy danh sách các trạm theo presenter
+     * @see SplashPresenter
+     * */
     private void tryToGetStations() {
         presenter.getStations(new SplashPresenterImpl.GetStationCallback() {
             @Override
@@ -223,6 +256,10 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
     }
 
     private ProgressDialog dialog;
+    /**
+     * Hàm implement từ view
+     * @see SplashView
+     * */
     @Override
     public void showLoading() {
         dialog = new ProgressDialog(SplashActivity.this);
@@ -234,6 +271,10 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
         dialog.show();
     }
 
+    /**
+     * Hàm implement từ view
+     * @see SplashView
+     * */
     @Override
     public void hideLoading() {
         if (dialog.isShowing()) {
@@ -247,6 +288,10 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
         }
     }
 
+    /**
+     * Hàm implement từ view
+     * @see SplashView
+     * */
     @Override
     public void showBottomView() {
         final Handler handler = new Handler();
@@ -258,6 +303,10 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
         }, TIMER);
     }
 
+    /**
+     * Hàm implement từ view
+     * @see SplashView
+     * */
     @Override
     public void launchMonitor(final List<MinStationFullObj> listStation) {
         final Handler handler = new Handler();

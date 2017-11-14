@@ -13,6 +13,7 @@ import java.util.Locale;
 
 import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
+import vn.vnpt.ansv.bts.objects.SensorDataObj;
 import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
 
@@ -23,6 +24,11 @@ import vn.vnpt.ansv.bts.ui.PreferenceManager;
 public class Utils {
 
     public static SuperToast.Animations TOAST_ANIMATION = SuperToast.Animations.FLYIN;
+
+    /**
+     * enum hiển thị trạng thái của thiết bị và cảm biến
+     * @see SensorDataObj
+     * */
     enum StatusDevice {
         OFF(1),
         ON(2);
@@ -35,6 +41,11 @@ public class Utils {
         }
     }
 
+    /**
+     * Hàm lấy url gốc của server
+     * @param context đối tượng cần lấy
+     * @return String
+     * */
     public static String getBaseUrl(Context context) {
         PreferenceManager preferenceManager = new PreferenceManager(context);
         BTSPreferences prefs = preferenceManager.getPreferences();
@@ -44,9 +55,14 @@ public class Utils {
         return baseUrl;
     }
 
-    public static String convertToHex(byte[] data) {
+    /**
+     * Hàm chuyển đổi mảng byte sang String
+     * @param datas mảng cần chuyển đổi
+     * @return String
+     * */
+    public static String convertToHex(byte[] datas) {
         StringBuilder buf = new StringBuilder();
-        for (byte b : data) {
+        for (byte b : datas) {
             int halfbyte = (b >>> 4) & 0x0F;
             int two_halfs = 0;
             do {
@@ -57,9 +73,14 @@ public class Utils {
         return buf.toString();
     }
 
-    public static String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    /**
+     * Hàm mã hóa nội dung string sang SHA1
+     * @param content nội dung cần mã hóa
+     * @return String
+     * */
+    public static String SHA1(String content) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
-        md.update(text.getBytes("iso-8859-1"), 0, text.length());
+        md.update(content.getBytes("iso-8859-1"), 0, content.length());
         byte[] sha1hash = md.digest();
         return convertToHex(sha1hash);
     }

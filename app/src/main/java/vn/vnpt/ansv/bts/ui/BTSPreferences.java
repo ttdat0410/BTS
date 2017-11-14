@@ -21,5 +21,4 @@ public class BTSPreferences {
         return String.format("ip: %s, port: %s, userName: %s, password: %s, apiKey: %s, userId: %s",
                 ip, port, userName, password, apiKey, userId);
     }
-
 }

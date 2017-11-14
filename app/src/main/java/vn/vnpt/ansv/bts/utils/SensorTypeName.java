@@ -4,6 +4,9 @@ package vn.vnpt.ansv.bts.utils;
  * Created by ANSV on 11/11/2017.
  */
 
+/**
+ * enum hiển thị mã loại cảm biến, quy định từ server
+ * */
 public enum SensorTypeName {
     Light      (1),
     Temperature(6),

@@ -1,7 +1,6 @@
 package vn.vnpt.ansv.bts.ui.splash;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -36,38 +35,80 @@ import vn.vnpt.ansv.bts.utils.Utils;
 @ActivityScope
 public class SplashPresenterImpl implements SplashPresenter {
 
+    /**
+     * interface cho phép gọi callback trong quá trình đăng nhập
+     * @see EStatus
+     * */
     public interface Callback {
+        /**
+         * Hàm callback
+         * @param eStatus trạng thái view
+         * @param apiKey api key lấy được từ server
+         * @param userId user id lấy được từ server
+         * */
         void callback(EStatus eStatus, String apiKey, String userId);
     }
+
+    /**
+     * interface cho phép gọi callback trong quá trình lấy danh sách các trạm
+     * @see EStatus
+     * */
     public interface GetStationCallback {
+        /**
+         * Hàm callback
+         * @param eStatus trạng thái view
+         * */
         void callback(EStatus eStatus);
     }
+
     private SplashView splashView;
     private Context context;
-    private SharedPreferences sp;
 
     @Inject
     PreferenceManager preferenceManager;
 
     @Inject
     public SplashPresenterImpl(Context context) {
+        // inject tới dagger
         ((BTSApplication) context).getAppComponent().inject(this);
         this.context = context;
     }
 
-    @Override
-    public boolean checkNetwork(Context context) {
-        return Utils.isNetworkAvailable(context);
-    }
-
+    /**
+     * Hàm implement setView
+     * @see SplashPresenter
+     * @param splashView view từ model MVP
+     * */
     @Override
     public void setView(SplashView splashView) {
         this.splashView = splashView;
         splashView.showBottomView();
     }
 
+    /**
+     * Hàm implement checkNetwork
+     * @see SplashPresenter
+     * @param context đối tượng có quyền sử dụng
+     * @return boolean
+     * */
+    @Override
+    public boolean checkNetwork(Context context) {
+        return Utils.isNetworkAvailable(context);
+    }
+
+    /**
+     * Hàm implement getUser cho phép gửi request để đăng nhập
+     * @see SplashPresenter
+     * @param user tên đăng nhập
+     * @param pass mật khẩu
+     * @param callback
+     * */
     @Override
     public void getUser(String user, String pass, final Callback callback) {
+        /**
+         * Kiểm tra nếu user hoặc mật khẩu rỗng thì trả về trạng thái USERNAME_IS_EMPTY hoặc PASSWORD_IS_EMPTY
+         * @see  EStatus
+         * */
         if (user.trim().isEmpty()) {
             callback.callback(EStatus.USERNAME_IS_EMPTY, "", "");
 
@@ -75,6 +116,10 @@ public class SplashPresenterImpl implements SplashPresenter {
             callback.callback(EStatus.PASSWORD_IS_EMPTY, "", "");
 
         } else {
+            /**
+             * Cho phép view gọi showLoading khi user và pass đều có nội dung
+             * @see SplashView
+             * */
             splashView.showLoading();
             String url = null;
             RequestQueue queue = Volley.newRequestQueue(context);
@@ -91,6 +136,10 @@ public class SplashPresenterImpl implements SplashPresenter {
                                     if (statusServerCode == StatusServer.Success.getValue()) {
                                         String apiKey = obj.getJSONObject("data").getString("apiKey");
                                         String userId = obj.getJSONObject("data").getString("userId");
+                                        /**
+                                         * Khi lấy được api và userId thì trả về callback SUCCESS,
+                                         * ngược lại trả về trạng thái server
+                                         * */
                                         callback.callback(EStatus.LOGIN_SUCCESS, apiKey, userId);
 
                                     } else if (statusServerCode == StatusServer.UsernameOrPasswordIsIncorrect.getValue()) {
@@ -103,6 +152,9 @@ public class SplashPresenterImpl implements SplashPresenter {
                                 }
                             }
                         }, new Response.ErrorListener() {
+                    /**
+                     * Trường hợp mất kết nối server
+                     * */
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         callback.callback(EStatus.NETWORK_FAILURE, "", "");
@@ -118,12 +170,21 @@ public class SplashPresenterImpl implements SplashPresenter {
             }
         }
     }
+
+    /**
+     * Hàm implement getStation cho phép request để lấy danh sách gateway
+     * @see SplashPresenter
+     * @param callback
+     * */
     @Override
     public void getStations(final GetStationCallback callback) {
         BTSPreferences preferences = preferenceManager.getPreferences();
         String userId = preferences.userId;
         final String apiKey = preferences.apiKey;
 
+        /**
+         * Kiểm tra chắc chắn tồn tại apiKey và userId
+         * */
         if (apiKey.trim().length() < 1) {
             callback.callback(EStatus.APIKEY_INVAILABLE);
 

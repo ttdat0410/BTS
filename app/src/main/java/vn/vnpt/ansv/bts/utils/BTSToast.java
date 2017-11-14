@@ -16,14 +16,19 @@ public class BTSToast {
         this.context = context;
     }
 
-    public static void showToast(String text, int color) {
+    /**
+     * Hàm hiển thị toast thông báo trạng thái hiện thời
+     * @param content nội dung cần hiển thị
+     * @param color màu nền cho toast
+     * */
+    public static void showToast(String content, int color) {
         SuperToast.cancelAllSuperToasts();
         SuperToast superToast = new SuperToast(context);
         superToast.setAnimations(Utils.TOAST_ANIMATION);
         superToast.setDuration(1000);
         superToast.setTextColor(Color.parseColor("#ffffff"));
         superToast.setTextSize(SuperToast.TextSize.SMALL);
-        superToast.setText(text);
+        superToast.setText(content);
         superToast.setBackground(color);
         superToast.getTextView().setTypeface(null);
         superToast.show();

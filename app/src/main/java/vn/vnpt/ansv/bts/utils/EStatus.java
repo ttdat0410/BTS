@@ -4,6 +4,9 @@ package vn.vnpt.ansv.bts.utils;
  * Created by ANSV on 11/9/2017.
  */
 
+/**
+ * enum hiên thị các trạng thái view khi có action hoặc sự kiện
+ * */
 public enum EStatus {
     NETWORK_FAILURE,
     USERNAME_IS_EMPTY,

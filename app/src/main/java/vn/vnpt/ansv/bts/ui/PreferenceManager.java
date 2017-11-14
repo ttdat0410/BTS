@@ -19,13 +19,11 @@ public class PreferenceManager {
     private static final String PREFERENCES_CONTENT = PreferenceManager.class.getSimpleName() + "preferences";
 
     private final SharedPreferences sharedPreferences;
-    private final Locale locale;
 
     private BTSPreferences preferences;
 
     @Inject
     public PreferenceManager(Context context) {
-        this.locale = context.getResources().getConfiguration().locale;
         this.sharedPreferences = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
         this.preferences = getPreferences();
     }

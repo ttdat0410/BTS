@@ -4,6 +4,9 @@ package vn.vnpt.ansv.bts.utils;
  * Created by ANSV on 11/8/2017.
  */
 
+/**
+ * enum hiển thị trang thái server trả về ứng với mỗi gói tin
+ * */
 public enum StatusServer {
     Success(1),
     ObjectAlreadyExists(2),

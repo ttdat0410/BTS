@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -42,22 +41,28 @@ public class SettingsActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-
     @BindView(R.id.ip_edit_text)
     EditText ip_edit_text;
-
     @BindView(R.id.port_edit_text)
     EditText port_edit_text;
-
     @BindView(R.id.checkIPButton)
     Button checkIPButton;
-
     @BindView(R.id.txtStatus)
     TextView txtStatus;
 
     @Inject
     PreferenceManager preferenceManager;
 
+    /**
+     * life cycle của SettingsActivity: Hàm cho phép load layout từ xml file
+     * - Gọi dagger model
+     * - bind tới ButterKnife
+     * - Khởi tạo toolbar
+     * - ẩn keyboard
+     * - load nội dung trong Preference ra view
+     * - Kiểm tra ip
+     * @param savedInstanceState
+     * */
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,11 +82,9 @@ public class SettingsActivity extends AppCompatActivity {
                 if (ip_edit_text.length()>=7 && port_edit_text.length()>0) {
                     showLoading();
                     txtStatus.setVisibility(View.INVISIBLE);
-
                     final String ip = ip_edit_text.getText().toString();
                     final String port = port_edit_text.getText().toString();
                     String urlCheck = "http://" + ip +":"+ port + "/BTSRestWebService/apikey/login?";
-
                     RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
                     final StringRequest stringRequest = new StringRequest(Request.Method.GET, urlCheck,
                             new Response.Listener<String>() {
@@ -127,6 +130,9 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private ProgressDialog dialog;
+    /**
+     * Hàm hiển thị dialog để kiểm tra ip
+     * */
     public void showLoading() {
         dialog = new ProgressDialog(SettingsActivity.this);
         dialog.setCancelable(false);
@@ -137,6 +143,9 @@ public class SettingsActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * Hàm ẩn dialod nếu dialog đó đang được hiển thị
+     * */
     public void hideLoading() {
         if (dialog.isShowing()) {
             final Handler handler = new Handler();
@@ -149,16 +158,29 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Hàm cho phép ẩn keyboard
+     * @param fromView ẩn từ view...
+     * */
     private void hideKeyboard(EditText fromView) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(fromView.getWindowToken(), 0);
     }
+
+    /**
+     * Hàm load nội dung trong Preference vào view
+     * */
     private void loadSharedPreference() {
         BTSPreferences prefs = preferenceManager.getPreferences();
         ip_edit_text.setText(prefs.ip);
         port_edit_text.setText(prefs.port);
     }
 
+    /**
+     * Hàm lưu các nội dung vào Preference
+     * @param ip ip
+     * @param port port
+     * */
     private void saveSharePreference(String ip, String port) {
         BTSPreferences prefs = preferenceManager.getPreferences();
         prefs.ip = ip;
@@ -166,6 +188,9 @@ public class SettingsActivity extends AppCompatActivity {
         preferenceManager.setPreferences(prefs);
     }
 
+    /**
+     * Hàm khởi tạo toolBar
+     * */
     private void initToolbar() {
 
         if (Build.VERSION.SDK_INT < 23) {
@@ -181,6 +206,11 @@ public class SettingsActivity extends AppCompatActivity {
         toolbar.setLayoutParams(params);
     }
 
+    /**
+     * Hàm hiển thị toast
+     * @param content nội dung cần hiển thị
+     * @param color màu nền cho toast
+     * */
     private void showToast(String content, int color) {
         new BTSToast(this).showToast(content, color);
     }
