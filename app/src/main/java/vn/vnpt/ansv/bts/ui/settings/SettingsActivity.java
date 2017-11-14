@@ -1,8 +1,10 @@
 package vn.vnpt.ansv.bts.ui.settings;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,14 +15,24 @@ import android.widget.RelativeLayout;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.github.johnpersano.supertoasts.SuperToast;
+import java.util.HashMap;
+import java.util.Map;
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
+import vn.vnpt.ansv.bts.utils.BTSToast;
 
 /**
  * Created by ANSV on 11/13/2017.
@@ -47,7 +59,7 @@ public class SettingsActivity extends AppCompatActivity {
     PreferenceManager preferenceManager;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         (((BTSApplication) getApplication()).getAppComponent()).inject(this);
@@ -59,9 +71,44 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 txtStatus.setVisibility(View.INVISIBLE);
                 if (ip_edit_text.length()>=7 && port_edit_text.length()>0) {
+                    showLoading();
                     txtStatus.setVisibility(View.INVISIBLE);
                     hideKeyboard(port_edit_text);
-                    finish();
+                    final String ip = ip_edit_text.getText().toString();
+                    final String port = port_edit_text.getText().toString();
+                    String urlCheck = "http://" + ip +":"+ port + "/BTSRestWebService/apikey/login?";
+
+                    RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                    final StringRequest stringRequest = new StringRequest(Request.Method.GET, urlCheck,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    if (response.length() > 5) {
+                                        showToast("ip, port khả dụng", SuperToast.Background.GREEN);
+                                        final Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                saveSharePreference(ip, port);
+                                                finish();
+                                            }
+                                        }, 500);
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            hideLoading();
+                            showToast("Không khả dụng, thử lại!", SuperToast.Background.RED);
+                        }
+                    }) {
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            HashMap<String, String> headers = new HashMap<String, String>();
+                            return headers;
+                        }
+                    };
+                    queue.add(stringRequest);
 
                 } else {
                     txtStatus.setVisibility(View.VISIBLE);
@@ -70,10 +117,32 @@ public class SettingsActivity extends AppCompatActivity {
                     } else if (port_edit_text.length() < 1) {
                         txtStatus.setText("trống port");
                     }
-
                 }
             }
         });
+    }
+
+    private ProgressDialog dialog;
+    public void showLoading() {
+        dialog = new ProgressDialog(SettingsActivity.this);
+        dialog.setCancelable(false);
+        dialog.setMax(100);
+        dialog.setMessage("Đang kiểm tra " + ip_edit_text.getText().toString() + "...");
+        dialog.setTitle("Thông báo");
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.show();
+    }
+
+    public void hideLoading() {
+        if (dialog.isShowing()) {
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.hide();
+                }
+            }, 500);
+        }
     }
 
     private void hideKeyboard(EditText fromView) {
@@ -84,6 +153,13 @@ public class SettingsActivity extends AppCompatActivity {
         BTSPreferences prefs = preferenceManager.getPreferences();
         ip_edit_text.setText(prefs.ip);
         port_edit_text.setText(prefs.port);
+    }
+
+    private void saveSharePreference(String ip, String port) {
+        BTSPreferences prefs = preferenceManager.getPreferences();
+        prefs.ip = ip;
+        prefs.port = port;
+        preferenceManager.setPreferences(prefs);
     }
 
     private void initToolbar() {
@@ -99,5 +175,9 @@ public class SettingsActivity extends AppCompatActivity {
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
         params.setMargins(0, 0, 0, 0);
         toolbar.setLayoutParams(params);
+    }
+
+    private void showToast(String content, int color) {
+        new BTSToast(this).showToast(content, color);
     }
 }

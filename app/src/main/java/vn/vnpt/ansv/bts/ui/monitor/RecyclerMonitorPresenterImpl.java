@@ -12,17 +12,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
-
-import vn.vnpt.ansv.bts.api.APIManager;
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.common.injection.scope.ActivityScope;
 import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
@@ -72,7 +67,6 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
 
         } else {
             String url = Utils.BASE_URL + "monitor/sensor/" + userId + "/" + stationId;
-            Log.i("0x00", url);
             RequestQueue queue = Volley.newRequestQueue(context);
             final StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                     new Response.Listener<String>() {

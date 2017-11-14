@@ -4,9 +4,6 @@ import android.content.res.Resources;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableString;
-import android.text.style.RelativeSizeSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +79,6 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
             holder.txtMeasurementUnit.setText("(" + measurement + ")");
         }
         holder.txtMeasurementUnit.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), R.color.sl_footer_grey));
-        Log.i("0x00", holder.txtSensorName.getText() + " | " + sensorTypeId + " | " + statusId);
         /*for (int z = 0; z < listSensorObj.size(); z++) {
                                         int sensorId = listSensorObj.get(z).getSensorInfo().getSensorId();
                                         String sensorName = listSensorObj.get(z).getSensorInfo().getSensorName();
@@ -128,7 +124,6 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
         this.dataSet = null;
         this.dataSet = listSensorObj;
         notifyDataSetChanged();
-        Log.i("0x00", this.dataSet.size() + " SIZE");
     }
 
     public void setListener(OnDeviceItemClickListener listener) {

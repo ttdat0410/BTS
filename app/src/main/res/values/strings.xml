@@ -5,8 +5,8 @@
     <string name="title_username">Tên đăng nhập</string>
     <string name="title_password">Mật khẩu</string>
     <string name="title_settings">CÀI ĐẶT IP/PORT</string>
-    <string name="title_ip">Ip</string>
-    <string name="title_port">Port</string>
+    <string name="title_ip">IP</string>
+    <string name="title_port">PORT</string>
     <string name="title_check_ip">Kiểm tra ip</string>
     <string name="title_his">BỆNH VIỆN BƯU ĐIỆN</string>
     <string name="title_app_name">GIÁM SÁT CẢM BIẾN</string>

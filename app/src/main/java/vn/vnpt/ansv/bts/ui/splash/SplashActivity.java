@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
@@ -132,8 +131,8 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
         nameEditText.setText(prefs.userName);
         passwordEditText.setText(prefs.password);
         if (prefs.ip == null && prefs.port == null) {
-            prefs.ip = "10.4.1.204";
-            prefs.port = "8081";
+            prefs.ip = "113.161.61.89";
+            prefs.port = "40081";
             prefsManager.setPreferences(prefs);
         }
     }
@@ -270,26 +269,6 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
             }
         }, 500);
     }
-
-    /*private Menu optionsMenu;
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        optionsMenu = menu;
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
 
     /**
      * initToolbar

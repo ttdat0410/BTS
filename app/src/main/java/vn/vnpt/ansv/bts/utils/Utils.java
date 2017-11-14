@@ -152,7 +152,5 @@ public class Utils {
     public static String convertValueToName(int sensorTypeId, String valueString) {
         return "";
     }
-
-
-
+    
 }

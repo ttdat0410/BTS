@@ -2,11 +2,8 @@ package vn.vnpt.ansv.bts.ui.monitor.container;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
-
 import com.github.florent37.materialviewpager.header.HeaderDesign;
-
 import java.util.List;
-
 import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.objects.MinStationFullObj;
