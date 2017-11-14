@@ -8,7 +8,11 @@ import com.github.johnpersano.supertoasts.SuperToast;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Comparator;
+import java.util.Locale;
+
 import vn.vnpt.ansv.bts.R;
+import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
 import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
 
@@ -60,12 +64,22 @@ public class Utils {
         return convertToHex(sha1hash);
     }
 
+    /**
+     * Hàm kiểm tra trạng thái mạng
+     * @param context đối tượng sử dụng
+     * @return boolean
+     * */
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    /**
+     * Hàm xét icon cho dung lượng pin dựa trên giá trị pin
+     * @param batteryValue giá trị pin
+     * @return int
+     * */
     public static int setBatteryImageView(int batteryValue) {
         if (batteryValue < 5) {
             return R.mipmap.battery_0bar;
@@ -82,6 +96,11 @@ public class Utils {
         }
     }
 
+    /**
+     * Hàm xét màu cho giá trị của pin dựa vào giá trị pin
+     * @param batteryValue giá trị pin.
+     * @return  int
+     * */
     public static int setColorForBatteryValue(int batteryValue) {
         if (batteryValue < 5) {
             return R.color.sl_red_orange;
@@ -90,6 +109,11 @@ public class Utils {
         }
     }
 
+    /**
+     * Hàm xét màu cho giá trị của cảm biến dựa vào trang thái bật tắt của cảm biến
+     * @param statusId trạng thái bật tắt của cảm biến
+     * @return int
+     * */
     public static int setColorForSensorValue(int statusId) {
         if (statusId == 2) {
             return R.color.sl_terbium_green;
@@ -98,6 +122,12 @@ public class Utils {
         }
     }
 
+    /**
+     * Hàm xét icon cho cảm biến dựa vào trang thái bật tắt của cảm biến và mã loại cảm biến
+     * @param statusId trạng thái bật tắt của cảm biến
+     * @param sensorTypeId mã loại cảm biến
+     * @return int
+     * */
     public static int setSensorIconImageView(int statusId, int sensorTypeId) {
 
         if (statusId == StatusDevice.OFF.getValue()) {
@@ -155,8 +185,28 @@ public class Utils {
         }
     }
 
-    public static String convertValueToName(int sensorTypeId, String valueString) {
-        return "";
-    }
+    /**
+     * Hàm so sánh, sắp xếp List theo sensorTypeId
+     * */
+    public static Comparator<MinSensorFullObj> comparatorWithSensorTypeId = new Comparator<MinSensorFullObj>() {
+        @Override
+        public int compare(MinSensorFullObj lhs, MinSensorFullObj rhs) {
+            int sensorTypeId1 = lhs.getSensorInfo().getSensorTypeId();
+            int sensorTypeId2 = rhs.getSensorInfo().getSensorTypeId();
+            return sensorTypeId1-sensorTypeId2;
+        }
+    };
 
+    /**
+     * Hàm so sánh, sắp xếp List theo sensorName
+     * */
+    public static Comparator<MinSensorFullObj> comparatorWithSensorName = new Comparator<MinSensorFullObj>() {
+        @Override
+        public int compare(MinSensorFullObj lhs, MinSensorFullObj rhs) {
+            Locale locale = Locale.ENGLISH;
+            String sensorName1 = lhs.getSensorInfo().getSensorName().toUpperCase(locale);
+            String sensorName2 = rhs.getSensorInfo().getSensorName().toUpperCase(locale);
+            return sensorName1.compareTo(sensorName2);
+        }
+    };
 }

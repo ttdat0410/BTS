@@ -1,6 +1,5 @@
 package vn.vnpt.ansv.bts.ui.monitor;
 
-import android.content.res.Resources;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -109,15 +108,6 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
 //                }
 //            }
 //        });
-    }
-
-
-    public static int getScreenWidth() {
-        return Resources.getSystem().getDisplayMetrics().widthPixels;
-    }
-
-    public static int getScreenHeight() {
-        return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
     public void updateDataSet(List<MinSensorFullObj> listSensorObj) {

@@ -65,15 +65,19 @@ public class SettingsActivity extends AppCompatActivity {
         (((BTSApplication) getApplication()).getAppComponent()).inject(this);
         ButterKnife.bind(this);
         initToolbar();
+        hideKeyboard(ip_edit_text);
+        hideKeyboard(port_edit_text);
         loadSharedPreference();
         checkIPButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideKeyboard(ip_edit_text);
+                hideKeyboard(port_edit_text);
                 txtStatus.setVisibility(View.INVISIBLE);
                 if (ip_edit_text.length()>=7 && port_edit_text.length()>0) {
                     showLoading();
                     txtStatus.setVisibility(View.INVISIBLE);
-                    hideKeyboard(port_edit_text);
+
                     final String ip = ip_edit_text.getText().toString();
                     final String port = port_edit_text.getText().toString();
                     String urlCheck = "http://" + ip +":"+ port + "/BTSRestWebService/apikey/login?";

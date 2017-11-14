@@ -12,9 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.github.florent37.materialviewpager.header.MaterialViewPagerHeaderDecorator;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,12 +25,16 @@ import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
 import vn.vnpt.ansv.bts.ui.splash.SplashPresenterImpl;
 import vn.vnpt.ansv.bts.utils.EStatus;
+import vn.vnpt.ansv.bts.utils.Utils;
 
 /**
  * Created by ANSV on 11/10/2017.
  */
 @SuppressLint("ValidFragment")
 public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonitorView {
+
+    private static final String TAG = RecyclerMonitorFragment.class.getSimpleName();
+
     private static final boolean GRID_LAYOUT = false;
     private RecyclerMonitorAdapter recyclerMonitorAdapter;
 
@@ -105,6 +109,8 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
+                                    Collections.sort(listSensorObj, Utils.comparatorWithSensorTypeId);
+                                    Collections.sort(listSensorObj, Utils.comparatorWithSensorName);
                                     recyclerMonitorAdapter.updateDataSet(listSensorObj);
                                 }
                             }, 200);
@@ -120,7 +126,7 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
             }
         };
         handler.postDelayed(runnableCode, delayMS);
-        Log.i("0x00", "START BACKGROUND AT: " + (new Date()));
+        Log.i(TAG, "START BACKGROUND AT: " + (new Date()));
     }
 
     @Override
@@ -131,7 +137,7 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
     @Override
     public void stopBackground() {
         handler.removeCallbacks(runnableCode);
-        Log.i("0x00", "STOP BACKGROUND AT: " + (new Date()));
+        Log.i(TAG, "STOP BACKGROUND AT: " + (new Date()));
     }
 
     @Override
