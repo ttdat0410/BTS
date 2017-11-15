@@ -95,7 +95,6 @@
                             android:layout_below="@+id/imgSensorIcon"
                             android:layout_marginLeft="@dimen/space_XS"
                             android:text="CC"
-                            android:textAllCaps="true"
                             android:fontFamily="sans-serif-light"
                             android:layout_gravity="center"/>
 

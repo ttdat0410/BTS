@@ -7,4 +7,6 @@ package vn.vnpt.ansv.bts.ui.monitor;
 public interface RecyclerMonitorPresenter {
     void setView(RecyclerMonitorView view);
     void getData(int stationId, RecyclerMonitorPresenterImpl.MonitorCallback callback);
+    void connectMQTT(String broker, String topic);
+    void subscribeToTopic(String topic);
 }

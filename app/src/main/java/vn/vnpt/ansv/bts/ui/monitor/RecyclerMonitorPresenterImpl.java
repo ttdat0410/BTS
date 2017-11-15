@@ -1,6 +1,7 @@
 package vn.vnpt.ansv.bts.ui.monitor;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -13,8 +14,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,10 +23,14 @@ import vn.vnpt.ansv.bts.common.injection.scope.ActivityScope;
 import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
 import vn.vnpt.ansv.bts.objects.MinStationFullListObj;
 import vn.vnpt.ansv.bts.objects.MinStationFullObj;
+import vn.vnpt.ansv.bts.objects.MinStationInfoObj;
 import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
 import vn.vnpt.ansv.bts.utils.EStatus;
 import vn.vnpt.ansv.bts.utils.Utils;
+
+import vn.vnpt.technology.mqtt.VNPTClient;
+import vn.vnpt.technology.mqtt.VNPTClientEventHandle;
 
 /**
  * Created by ANSV on 11/10/2017.
@@ -36,7 +39,7 @@ import vn.vnpt.ansv.bts.utils.Utils;
 public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
 
     public interface MonitorCallback {
-        void callback(EStatus eStatus, List<MinSensorFullObj> listSensorObj);
+        void callback(EStatus eStatus, List<MinSensorFullObj> listSensorObj, String gatewaySerial);
     }
 
     private RecyclerMonitorView view;
@@ -61,10 +64,10 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
         final String apiKey = prefs.apiKey;
 
         if (apiKey.trim().length() < 1) {
-            callback.callback(EStatus.APIKEY_INVAILABLE, null);
+            callback.callback(EStatus.APIKEY_INVAILABLE, null, null);
 
         } else if (userId.trim().length() < 1) {
-            callback.callback(EStatus.USERID_INVAILABLE, null);
+            callback.callback(EStatus.USERID_INVAILABLE, null, null);
 
         } else {
             String url = Utils.getBaseUrl(context) + "monitor/sensor/" + userId + "/" + stationId;
@@ -75,13 +78,15 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
                         public void onResponse(String response) {
                             try {
                                 JSONObject object = new JSONObject(response);
-                                JSONObject tram = object.getJSONObject("data");
+                                JSONObject data = object.getJSONObject("data");
                                 Gson gson = new GsonBuilder().create();
-                                MinStationFullListObj minStationFullListObj = gson.fromJson(tram.toString(), MinStationFullListObj.class);
+                                MinStationFullListObj minStationFullListObj = gson.fromJson(data.toString(), MinStationFullListObj.class);
                                 List<MinStationFullObj> listStation = minStationFullListObj.getList();
                                 for (int i = 0; i < listStation.size(); i++) {
+
+                                    String gatewaySerial = listStation.get(i).getStationInfo().getGatewaySerial();
                                     List<MinSensorFullObj> listSensorObj = listStation.get(i).getStationData().getSensorList().getList();
-                                    callback.callback(EStatus.GET_SENSOR_OBJ_SUCCESS, listSensorObj);
+                                    callback.callback(EStatus.GET_SENSOR_OBJ_SUCCESS, listSensorObj, gatewaySerial);
 
                                 }
                             } catch (JSONException e) {
@@ -91,7 +96,7 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    callback.callback(EStatus.NETWORK_FAILURE, null);
+                    callback.callback(EStatus.NETWORK_FAILURE, null, null);
                 }
             }) {
                 @Override
@@ -105,4 +110,34 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
         }
     }
 
+    VNPTClient vnptClient;
+    @Override
+    public void connectMQTT(String broker, String topic) {
+        try {
+            /*vnptClient = new VNPTClient(Utils.createdRandomString(7), broker);
+            vnptClient.connect(null, null, null, null);
+            subscribeToTopic(topic);*/
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void subscribeToTopic(String topic) {
+        try {
+            vnptClient.subscribe(topic, new VNPTClientEventHandle() {
+                @Override
+                public void onMessageArrived(String topic, String message) {
+                    Log.i("0x00", message);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
+/*
+
+11-15 10:59:12.552 13597-13597/vn.vnpt.ansv.bts I/0x00: http://10.4.1.204:8081/BTSRestWebService/monitor/sensor/47/65
+        11-15 10:59:12.560 13597-13816/vn.vnpt.ansv.bts I/0x00: 6a8e73a12cc5736c9c200e2814b757db
+        11-15 10:59:12.574 13597-13597/vn.vnpt.ansv.bts I/0x00: http://10.4.1.204:8081/BTSRestWebService/monitor/sensor/47/66*/

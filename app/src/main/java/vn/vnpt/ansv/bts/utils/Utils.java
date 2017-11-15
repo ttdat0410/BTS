@@ -10,6 +10,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.Random;
 
 import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
@@ -39,6 +40,25 @@ public class Utils {
         public int getValue() {
             return value;
         }
+    }
+
+    /**
+     * Hàm lấy broker cho MQTT
+     * */
+    public static String getBroker(Context context) {
+        PreferenceManager preferenceManager = new PreferenceManager(context);
+        BTSPreferences prefs = preferenceManager.getPreferences();
+        String ip = prefs.ip;
+
+        if (ip.equalsIgnoreCase("113.161.61.89")) {
+            return "tcp://" + ip + ":41883";
+        } else {
+            return "tcp://10.4.1.210:1883";
+        }
+    }
+
+    public static String getTopic() {
+        return "/SCPCloud/DEVICE/";
     }
 
     /**
@@ -230,4 +250,19 @@ public class Utils {
             return sensorName1.compareTo(sensorName2);
         }
     };
+
+    /**
+     * Hàm tạo chuỗi random
+     * */
+    public static String createdRandomString(int length) {
+        char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < length; i++) {
+            char c = chars[random.nextInt(chars.length)];
+            sb.append(c);
+        }
+        String output = sb.toString();
+        return output;
+    }
 }

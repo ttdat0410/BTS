@@ -81,11 +81,12 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
 
         presenter.getData(stationId, new RecyclerMonitorPresenterImpl.MonitorCallback() {
             @Override
-            public void callback(EStatus eStatus, List<MinSensorFullObj> listSensorObj) {
+            public void callback(EStatus eStatus, List<MinSensorFullObj> listSensorObj, String gatewaySerial) {
 
-                if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS) {
+                if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS && gatewaySerial.length() > 0) {
                     setupRecyclerMonitorAdapter(listSensorObj);
                     callback.callback(EStatus.GET_SENSOR_OBJ_SUCCESS);
+                    presenter.connectMQTT(Utils.getBroker(getActivity().getApplication()), Utils.getTopic()+gatewaySerial);
                 } else if (eStatus == EStatus.NETWORK_FAILURE) {
                     callback.callback(EStatus.NETWORK_FAILURE);
 //                    stopBackground();
@@ -104,7 +105,7 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
                 handler.postDelayed(runnableCode, intervalMS);
                 presenter.getData(stationId, new RecyclerMonitorPresenterImpl.MonitorCallback() {
                     @Override
-                    public void callback(EStatus eStatus, final List<MinSensorFullObj> listSensorObj) {
+                    public void callback(EStatus eStatus, final List<MinSensorFullObj> listSensorObj, String gatewaySerial) {
                         if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS) {
                             handler.postDelayed(new Runnable() {
                                 @Override
