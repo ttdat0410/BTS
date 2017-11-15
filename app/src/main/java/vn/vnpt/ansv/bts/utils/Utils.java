@@ -139,7 +139,7 @@ public class Utils {
         if (statusId == 2) {
             return R.color.sl_terbium_green;
         } else {
-            return R.color.sl_terbium_green;
+            return R.color.sl_grey;
         }
     }
 

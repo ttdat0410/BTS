@@ -62,11 +62,11 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
         double value = dataSet.get(position).getSensorData().getList().get(0).getValue();
         holder.txtSensorName.setText(dataSet.get(position).getSensorInfo().getSensorName().toUpperCase());
         if (statusId == 2) {
-            holder.txtSensorValue.setText(String.format("%.0f",value));
+            holder.txtMeasurementUnit.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), R.color.sl_footer_grey));
         } else {
-//            holder.txtSensorValue.setText(holder.rootView.getResources().getString(R.string.sensor_not_initialized));
-            holder.txtSensorValue.setText(String.format("%.0f",value));
+            holder.txtMeasurementUnit.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), R.color.sl_grey));
         }
+        holder.txtSensorValue.setText(String.format("%.0f",value));
         holder.txtSensorValue.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForSensorValue(statusId)));
         holder.txtBatteryValues.setText(batteryValue + "%");
         holder.txtBatteryValues.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForBatteryValue(batteryValue)));
@@ -77,7 +77,6 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
         } else {
             holder.txtMeasurementUnit.setText("(" + measurement + ")");
         }
-        holder.txtMeasurementUnit.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), R.color.sl_footer_grey));
         /*for (int z = 0; z < listSensorObj.size(); z++) {
                                         int sensorId = listSensorObj.get(z).getSensorInfo().getSensorId();
                                         String sensorName = listSensorObj.get(z).getSensorInfo().getSensorName();
