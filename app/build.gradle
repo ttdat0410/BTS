@@ -114,7 +114,6 @@ dependencies {
     compile 'com.android.support:mediarouter-v7:23.3.0'
     compile 'com.android.support:palette-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
-    compile files('libs/SCP_MessageBroker_Client_v1.4.jar')
 
     // Retrofit
 //    compile "com.squareup.retrofit2:retrofit:2.1.0"

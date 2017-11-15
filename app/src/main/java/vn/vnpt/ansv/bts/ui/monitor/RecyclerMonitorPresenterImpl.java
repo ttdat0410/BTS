@@ -1,8 +1,6 @@
 package vn.vnpt.ansv.bts.ui.monitor;
 
 import android.content.Context;
-import android.util.Log;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,14 +21,10 @@ import vn.vnpt.ansv.bts.common.injection.scope.ActivityScope;
 import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
 import vn.vnpt.ansv.bts.objects.MinStationFullListObj;
 import vn.vnpt.ansv.bts.objects.MinStationFullObj;
-import vn.vnpt.ansv.bts.objects.MinStationInfoObj;
 import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
 import vn.vnpt.ansv.bts.utils.EStatus;
 import vn.vnpt.ansv.bts.utils.Utils;
-
-import vn.vnpt.technology.mqtt.VNPTClient;
-import vn.vnpt.technology.mqtt.VNPTClientEventHandle;
 
 /**
  * Created by ANSV on 11/10/2017.
@@ -110,7 +104,6 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
         }
     }
 
-    VNPTClient vnptClient;
     @Override
     public void connectMQTT(String broker, String topic) {
         try {
@@ -125,12 +118,12 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
     @Override
     public void subscribeToTopic(String topic) {
         try {
-            vnptClient.subscribe(topic, new VNPTClientEventHandle() {
+            /*vnptClient.subscribe(topic, new VNPTClientEventHandle() {
                 @Override
                 public void onMessageArrived(String topic, String message) {
                     Log.i("0x00", message);
                 }
-            });
+            });*/
         } catch (Exception e) {
             e.printStackTrace();
         }
