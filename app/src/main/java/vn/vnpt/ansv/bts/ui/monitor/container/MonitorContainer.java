@@ -11,7 +11,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.florent37.materialviewpager.MaterialViewPager;
@@ -40,6 +42,9 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
 
     @BindView(R.id.materialViewPager)
     MaterialViewPager mViewPager;
+
+    @BindView(R.id.titleGateway)
+    TextView titleGateway;
 
     public static void launch(Context context, List<MinStationFullObj> listStation) {
         listAllStation = listStation;
@@ -87,19 +92,21 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
 
                 mViewPager.getViewPager().setOffscreenPageLimit(mViewPager.getViewPager().getAdapter().getCount());
                 mViewPager.getPagerTitleStrip().setViewPager(mViewPager.getViewPager());
+                mViewPager.getPagerTitleStrip().setTextColor(getResources().getColor(R.color.sl_white));
+                mViewPager.getPagerTitleStrip().setTextSize(30);
             }
         }).start();
 
-        final View logo = findViewById(R.id.logo_white);
-        if (logo != null) {
-            logo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mViewPager.notifyHeaderChanged();
-                    Toast.makeText(getApplicationContext(), "Yes, the title is clickable", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+//        final View logo = findViewById(R.id.logo_white);
+//        if (logo != null) {
+//            logo.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    mViewPager.notifyHeaderChanged();
+//                    Toast.makeText(getApplicationContext(), "Yes, the title is clickable", Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//        }
     }
 
     private ProgressDialog dialog;

@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="DO AM"
+                    android:text="--"
                     android:fontFamily="sans-serif-bold"
                     android:textAllCaps="true"/>
 
@@ -55,14 +55,14 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/space_XS">
+                    android:layout_marginTop="@dimen/space_XXS">
 
                     <LinearLayout
                         android:id="@+id/dataView"
                         style="@style/block"
                         android:background="@color/white"
                         android:layout_below="@+id/line"
-                        android:layout_marginTop="@dimen/space_XS"
+                        android:layout_marginTop="@dimen/space_XXS"
                         android:layout_marginRight="0dp"
                         android:orientation="horizontal"
                         android:gravity="right">
@@ -82,7 +82,7 @@
                             style="@style/mm_terbium_green"
                             android:layout_below="@+id/imgSensorIcon"
                             android:layout_marginLeft="@dimen/space_XS"
-                            android:text="12 %"
+                            android:text="--"
                             android:textAllCaps="true"
                             android:fontFamily="sans-serif-bold"
                             android:layout_gravity="center"/>
@@ -94,7 +94,7 @@
                             style="@style/sm_footer_grey"
                             android:layout_below="@+id/imgSensorIcon"
                             android:layout_marginLeft="@dimen/space_XS"
-                            android:text="CC"
+                            android:text="(--)"
                             android:fontFamily="sans-serif-light"
                             android:layout_gravity="center"/>
 
@@ -104,7 +104,7 @@
                         android:id="@+id/batteryView"
                         style="@style/block"
                         android:layout_below="@+id/dataView"
-                        android:layout_marginTop="@dimen/space_XXS"
+                        android:layout_marginTop="@dimen/space_XXXS"
                         android:layout_marginRight="0dp"
                         android:orientation="horizontal"
                         android:gravity="right">
@@ -114,7 +114,7 @@
                             style="@style/s_silicon_grey"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="20%"
+                            android:text="--%"
                             android:layout_gravity="center"
                             android:layout_marginRight="@dimen/space_XXS"
                             android:fontFamily="sans-serif-light"
@@ -134,7 +134,7 @@
                         android:id="@+id/lineUpdateTime"
                         style="@style/divider_line"
                         android:layout_below="@+id/batteryView"
-                        android:layout_marginTop="5dp" />
+                        android:layout_marginTop="2dp" />
 
                     <TextView
                         android:id="@+id/txtUpdateTime"
@@ -156,8 +156,6 @@
     </android.support.v7.widget.CardView>
 
 </FrameLayout>
-
-
 
 
 
