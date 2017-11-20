@@ -8,7 +8,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="170dp"
         app:cardCornerRadius="2dp"
         app:cardElevation="2dp"
         android:layout_marginBottom="5dp"
@@ -129,6 +129,23 @@
                             android:layout_marginRight="@dimen/space_XXXS"/>
 
                     </LinearLayout>
+
+                    <View
+                        android:id="@+id/lineUpdateTime"
+                        style="@style/divider_line"
+                        android:layout_below="@+id/batteryView"
+                        android:layout_marginTop="5dp" />
+
+                    <TextView
+                        android:id="@+id/txtUpdateTime"
+                        style="@style/xxs_silicon_grey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lineUpdateTime"
+                        android:text="--"
+                        android:layout_marginRight="@dimen/space_XXXS"
+                        android:textAlignment="textEnd"
+                        android:fontFamily="sans-serif-bold" />
 
                 </RelativeLayout>
 

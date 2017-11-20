@@ -3,6 +3,7 @@ package vn.vnpt.ansv.bts.ui.monitor;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,57 +58,64 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
         holder.cardView.requestLayout();
         //
         String measurement = dataSet.get(position).getSensorInfo().getMeasurementUnit();
+        Timestamp updateTime = dataSet.get(position).getSensorData().getList().get(0).getCreatedTime();
+        double value = dataSet.get(position).getSensorData().getList().get(0).getValue();
         int batteryValue = dataSet.get(position).getSensorData().getList().get(0).getBattery();
         int statusId = dataSet.get(position).getSensorData().getList().get(0).getStatusId();
         int sensorTypeId = dataSet.get(position).getSensorInfo().getSensorTypeId();
-        double value = dataSet.get(position).getSensorData().getList().get(0).getValue();
+        int warningModeId = dataSet.get(position).getSensorInfo().getWarningModeId();
+        int warningComp = dataSet.get(position).getSensorInfo().getWarningComp();
+        int warningValue1 = dataSet.get(position).getSensorInfo().getWarningValue1();
+        int warningValue2 = dataSet.get(position).getSensorInfo().getWarningValue2();
         holder.txtSensorName.setText(dataSet.get(position).getSensorInfo().getSensorName().toUpperCase());
-        if (statusId == 2) {
-            holder.txtMeasurementUnit.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), R.color.sl_footer_grey));
-        } else {
-            holder.txtMeasurementUnit.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), R.color.sl_grey));
-        }
-        holder.txtSensorValue.setText(String.format("%.0f",value));
         holder.txtSensorValue.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForSensorValue(statusId)));
+        holder.imgSensorIcon.setImageResource(Utils.setSensorIconImageView(statusId, sensorTypeId));
+        holder.txtSensorValue.setText(String.format("%.0f",value));
         holder.txtBatteryValues.setText(batteryValue + "%");
         holder.txtBatteryValues.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForBatteryValue(batteryValue)));
         holder.imgBatteryIcon.setImageResource(Utils.setBatteryImageView(batteryValue));
         holder.imgSensorIcon.setImageResource(Utils.setSensorIconImageView(statusId, sensorTypeId));
+        holder.txtUpdateTime.setText(splitTimeStamp(updateTime.toString()));
+
+        holder.txtUpdateTime.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForUpdateTime(statusId)));
+
         if (measurement == null) {
             holder.txtMeasurementUnit.setText("");
         } else {
             holder.txtMeasurementUnit.setText("(" + measurement + ")");
         }
-        /*for (int z = 0; z < listSensorObj.size(); z++) {
-                                        int sensorId = listSensorObj.get(z).getSensorInfo().getSensorId();
-                                        String sensorName = listSensorObj.get(z).getSensorInfo().getSensorName();
-                                        String sensorSerial = listSensorObj.get(z).getSensorInfo().getSensorSerial();
-                                        int sensorTypeId = listSensorObj.get(z).getSensorInfo().getSensorTypeId();
-                                        String measurementUnit = listSensorObj.get(z).getSensorInfo().getMeasurementUnit();
-                                        int warningModeId = listSensorObj.get(z).getSensorInfo().getWarningModeId();
-                                        int warningValue1 = listSensorObj.get(z).getSensorInfo().getWarningValue1();
-                                        int warningValue2 = listSensorObj.get(z).getSensorInfo().getWarningValue2();
-                                        int warningComp = listSensorObj.get(z).getSensorInfo().getWarningComp();
+        if (statusId == 2) {
+            holder.txtMeasurementUnit.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), R.color.sl_footer_grey));
+        } else {
+            holder.txtMeasurementUnit.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), R.color.sl_grey));
+        }
 
-                                        SensorInfoObj sensorInfoObj = new SensorInfoObj(sensorId,
-                                                sensorName, sensorSerial, sensorTypeId,
-                                                measurementUnit, warningModeId,
-                                                warningValue1, warningValue2, warningComp);
+       /* if (warningModeId == 1 && warningComp > 0) {
+            if ((warningComp == 1 && value <= warningValue1)
+                    || (warningComp == 2 && value >= warningValue1)
+                    || (warningComp == 3 && (value >= warningValue1 && value <= warningValue2))
+                    || (warningComp == 4 && (value <= warningValue1 || value >= warningValue2))) {
+                holder.txtSensorValue.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForSensorValue(statusId)));
+                holder.imgSensorIcon.setImageResource(Utils.setSensorIconImageView(statusId, sensorTypeId));
+            } else {
+                holder.txtSensorValue.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForSensorValue(statusId)));
+                holder.imgSensorIcon.setImageResource(Utils.setSensorIconImageView(statusId, sensorTypeId));
+            }
+        }*/
 
-                                        List<SensorDataObj> sensorData = listSensorObj.get(z).getSensorData().getList();
-                                        String sensorValue = String.valueOf(sensorData.get(0).getValue());
-                                        Log.i("0x00", sensorInfoObj.getSensorName() + " " + sensorInfoObj.getMeasurementUnit() + " | " + sensorValue + "\n");
-                                    }*/
+        splitTimeStamp(updateTime.toString()+"");
 
+    }
 
-//        holder.rootView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (listener != null) {
-//                    listener.onDeviceItemClick(v, device);
-//                }
-//            }
-//        });
+    public String splitTimeStamp(String timeStampString) {
+        String[] timeStamp = timeStampString.split(" ");
+        String[] date = timeStamp[0].split("\\-");
+        String[] fullTime = timeStamp[1].split("\\.");
+        String time = fullTime[0];
+        String yyyy = date[0];
+        String MM = date[1];
+        String dd = date[2];
+        return time + ", " + dd + "/" + MM + "/" + yyyy;
     }
 
     public void updateDataSet(List<MinSensorFullObj> listSensorObj) {
@@ -145,6 +154,9 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
 
         @BindView(R.id.imgBatteryIcon)
         ImageView imgBatteryIcon;
+
+        @BindView(R.id.txtUpdateTime)
+        TextView txtUpdateTime;
 
         View rootView;
 

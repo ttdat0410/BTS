@@ -32,6 +32,10 @@
         <item name="android:textCursorDrawable">@drawable/cursor</item>
     </style>
 
+    <style name="xxs_silicon_grey" parent="silicon_gray_text">
+        <item name="android:textSize">@dimen/text_size_XXS</item>
+    </style>
+
     <style name="s_silicon_grey" parent="silicon_gray_text">
         <item name="android:textSize">@dimen/text_size_S</item>
     </style>
@@ -46,10 +50,6 @@
 
     <style name="xs_silicon_grey_version" parent="silicon_gray_text">
         <item name="android:textSize">@dimen/text_size_XS</item>
-    </style>
-
-    <style name="xxs_silicon_grey" parent="silicon_gray_text">
-        <item name="android:textSize">@dimen/text_size_XXS</item>
     </style>
 
     <style name="s_terbium_green" parent="terbium_green_text">

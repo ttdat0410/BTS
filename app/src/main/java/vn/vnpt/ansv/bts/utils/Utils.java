@@ -8,6 +8,7 @@ import com.github.johnpersano.supertoasts.SuperToast;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.Random;
@@ -17,6 +18,9 @@ import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
 import vn.vnpt.ansv.bts.objects.SensorDataObj;
 import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by ANSV on 11/8/2017.
@@ -156,8 +160,21 @@ public class Utils {
      * @return int
      * */
     public static int setColorForSensorValue(int statusId) {
-        if (statusId == 2) {
+        if (statusId == StatusDevice.ON.getValue()) {
             return R.color.sl_terbium_green;
+        } else {
+            return R.color.sl_grey;
+        }
+    }
+
+    /**
+     * Hàm xét màu cho cập nhật thời gian mới nhất
+     * @param statusId Trạng thái cảm biến
+     * @return int
+     * */
+    public static int setColorForUpdateTime(int statusId) {
+        if (statusId == StatusDevice.ON.getValue()) {
+            return R.color.sl_dark_violet;
         } else {
             return R.color.sl_grey;
         }
@@ -197,6 +214,7 @@ public class Utils {
             } else {
                 return R.mipmap.power_off;
             }
+
         } else {
             if (sensorTypeId == SensorTypeName.Light.getValue()) {
                 return R.mipmap.ic_light_active;
@@ -224,6 +242,7 @@ public class Utils {
                 return R.mipmap.power_on;
             }
         }
+
     }
 
     /**
@@ -265,4 +284,22 @@ public class Utils {
         String output = sb.toString();
         return output;
     }
+
+   /* public static String splitTimeStamp(Timestamp timestamp) {
+        String timeStampString = timestamp.toString();
+        String day = timeStampString.split(" ")[0];
+        String fullTime = timeStampString.split(" ")[1];
+        String time = fullTime.split(".")[0];
+        return time + ", " + day;
+    }*/
+
+   /* public static String convertTime(String time){
+        String dateTime = "";
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss.a");
+
+//        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss, dd/MM/yyyy");
+        Date date = new Date(time);
+        dateTime = dateFormat.format(date);
+        return dateTime;
+    }*/
 }

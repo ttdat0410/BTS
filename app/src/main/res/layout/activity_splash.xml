@@ -76,14 +76,14 @@
     <FrameLayout
         style="@style/match"
         android:id="@+id/bottom_panel"
-        android:layout_below="@id/titleAppName"
+        android:layout_below="@+id/titleAppName"
         android:background="@color/white"
         android:layout_marginTop="@dimen/space_XXXXXL"
         android:visibility="invisible">
 
         <ScrollView
             style="@style/match"
-            android:layout_below="@id/titleAppName"
+            android:layout_below="@+id/titleAppName"
             android:fillViewport="true">
 
             <LinearLayout

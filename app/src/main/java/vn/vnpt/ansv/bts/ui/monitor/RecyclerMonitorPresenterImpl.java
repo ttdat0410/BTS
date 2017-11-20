@@ -1,6 +1,8 @@
 package vn.vnpt.ansv.bts.ui.monitor;
 
 import android.content.Context;
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -12,6 +14,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +81,6 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
                                 MinStationFullListObj minStationFullListObj = gson.fromJson(data.toString(), MinStationFullListObj.class);
                                 List<MinStationFullObj> listStation = minStationFullListObj.getList();
                                 for (int i = 0; i < listStation.size(); i++) {
-
                                     String gatewaySerial = listStation.get(i).getStationInfo().getGatewaySerial();
                                     List<MinSensorFullObj> listSensorObj = listStation.get(i).getStationData().getSensorList().getList();
                                     callback.callback(EStatus.GET_SENSOR_OBJ_SUCCESS, listSensorObj, gatewaySerial);

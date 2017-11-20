@@ -93,7 +93,7 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
                 }
             }
         });
-        startBackground(10000);
+        startBackground(15000);
     }
 
     private Runnable runnableCode = null;
