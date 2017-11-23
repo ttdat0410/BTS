@@ -1,6 +1,8 @@
 package vn.vnpt.ansv.bts.ui.splash;
 
 import android.content.Context;
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,6 +22,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.common.injection.scope.ActivityScope;
+import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
 import vn.vnpt.ansv.bts.objects.MinStationFullListObj;
 import vn.vnpt.ansv.bts.objects.MinStationFullObj;
 import vn.vnpt.ansv.bts.ui.BTSPreferences;
@@ -266,5 +269,47 @@ public class SplashPresenterImpl implements SplashPresenter {
             };
             queue.add(stringRequest);
         }
+    }
+
+    @Override
+    public void getRoleId() {
+        BTSPreferences prefs = preferenceManager.getPreferences();
+        String userId = prefs.userId;
+        final String apiKey = prefs.apiKey;
+        String url = Utils.getBaseUrl(context) + "account/getMyAccountInfo/" + userId;
+        RequestQueue queue = Volley.newRequestQueue(context);
+        final StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            JSONObject data = object.getJSONObject("data");
+                            BTSPreferences prefs = preferenceManager.getPreferences();
+                            if (data.has("roleId") && data.has("role")) {
+                                Log.i("0x00", data.getString("roleId"));
+                                prefs.roleId = data.getString("roleId");
+                                preferenceManager.setPreferences(prefs);
+                            } else {
+                                prefs.roleId = data.getString("");
+                                preferenceManager.setPreferences(prefs);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("API_KEY", apiKey);
+                return headers;
+            }
+        };
+        queue.add(stringRequest);
     }
 }

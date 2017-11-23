@@ -11,4 +11,5 @@ public interface SplashPresenter {
     boolean checkNetwork(Context context);
     void getUser(String user, String pass, SplashPresenterImpl.Callback callback);
     void getStations(SplashPresenterImpl.GetStationCallback callback);
+    void getRoleId();
 }

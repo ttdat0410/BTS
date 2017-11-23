@@ -1,7 +1,6 @@
 package vn.vnpt.ansv.bts.ui.monitor;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -15,7 +14,6 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,31 +102,6 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
                 }
             };
             queue.add(stringRequest);
-        }
-    }
-
-    @Override
-    public void connectMQTT(String broker, String topic) {
-        try {
-            /*vnptClient = new VNPTClient(Utils.createdRandomString(7), broker);
-            vnptClient.connect(null, null, null, null);
-            subscribeToTopic(topic);*/
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void subscribeToTopic(String topic) {
-        try {
-            /*vnptClient.subscribe(topic, new VNPTClientEventHandle() {
-                @Override
-                public void onMessageArrived(String topic, String message) {
-                    Log.i("0x00", message);
-                }
-            });*/
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

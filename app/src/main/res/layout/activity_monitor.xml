@@ -25,8 +25,21 @@
         app:viewpager_headerAdditionalHeight="0dp"
         app:viewpager_displayToolbarWhenSwipe="true"
         app:viewpager_transparentToolbar="false"
-        app:viewpager_animatedHeaderImage="true" />
+        app:viewpager_animatedHeaderImage="true" >
+
+        <zemin.notification.NotificationView
+            android:id="@+id/nv"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </com.github.florent37.materialviewpager.MaterialViewPager>
 
     <include layout="@layout/drawer" />
+
 
 </android.support.v4.widget.DrawerLayout>

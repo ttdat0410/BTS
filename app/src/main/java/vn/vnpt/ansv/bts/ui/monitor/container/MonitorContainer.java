@@ -12,14 +12,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.github.florent37.materialviewpager.header.HeaderDesign;
 
 import java.util.List;
+
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +26,14 @@ import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.objects.MinStationFullObj;
 import vn.vnpt.ansv.bts.ui.BTSActivity;
 import vn.vnpt.ansv.bts.utils.BTSToast;
+import zemin.notification.NotificationBuilder;
+import zemin.notification.NotificationDelegater;
+import zemin.notification.NotificationEntry;
+import zemin.notification.NotificationGlobal;
+import zemin.notification.NotificationListener;
+import zemin.notification.NotificationLocal;
+import zemin.notification.NotificationRemote;
+import zemin.notification.NotificationView;
 
 /**
  * Created by ANSV on 11/9/2017.
@@ -43,8 +49,14 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
     @BindView(R.id.materialViewPager)
     MaterialViewPager mViewPager;
 
-    @BindView(R.id.titleGateway)
-    TextView titleGateway;
+    @BindView(R.id.nv)
+    NotificationView nv;
+
+
+    private NotificationDelegater mDelegater;
+    private NotificationRemote mRemote;
+    private NotificationLocal mLocal;
+    private NotificationGlobal mGlobal;
 
     public static void launch(Context context, List<MinStationFullObj> listStation) {
         listAllStation = listStation;
@@ -60,10 +72,37 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
         (((BTSApplication)getApplication()).getAppComponent()).inject(this);
         ButterKnife.bind(this);
         presenter.setView(this);
+        mDelegater = NotificationDelegater.getInstance();
+//        mRemote = mDelegater.remote();
+        mLocal = mDelegater.local();
+//        mGlobal = mDelegater.global();
+//        // enable global view && board
+//        mGlobal.setViewEnabled(true);
+//        mGlobal.setBoardEnabled(true);
+        mLocal.setView(nv);
+
         final Toolbar toolbar = mViewPager.getToolbar();
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
+        presenter.connectMQTT();
+        presenter.subscribeToMQTT("AD54B847", new MonitorPresenterImpl.MQTTCallback() {
+            @Override
+            public void detectNoise() {
+                Log.i("0x00", "has data");
+                String title = getNextTitle();
+                String text = getNextText();
+
+                NotificationBuilder.V2 builder = NotificationBuilder.remote()
+                        .setSmallIconResource(R.mipmap.ic_sound_active)
+                        .setTicker(title + ": " + text)
+                        .setTitle(title)
+                        .addAction(zemin.notification.R.drawable.clear_button, "yes", null, null)
+                        .setText(text);
+
+                mDelegater.send(builder.getNotification());
+            }
+        });
 
         new Thread(new Runnable() {
             public void run() {
@@ -97,16 +136,54 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
             }
         }).start();
 
-//        final View logo = findViewById(R.id.logo_white);
-//        if (logo != null) {
-//            logo.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    mViewPager.notifyHeaderChanged();
-//                    Toast.makeText(getApplicationContext(), "Yes, the title is clickable", Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // add listener
+        mDelegater.addListener(mNotificationListener);
+
+        // update notification count
+//        mTvTotalCount.setText(String.valueOf(mDelegater.getNotificationCount()));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // remove listener
+        mDelegater.removeListener(mNotificationListener);
+    }
+
+    private final NotificationListener mNotificationListener = new NotificationListener() {
+        @Override
+        public void onArrival(NotificationEntry entry) {
+            updateNotificationCount(entry);
+        }
+
+        @Override
+        public void onCancel(NotificationEntry entry) {
+            updateNotificationCount(entry);
+        }
+
+        @Override
+        public void onUpdate(NotificationEntry entry) {
+        }
+    };
+
+    private void updateNotificationCount(NotificationEntry entry) {
+        if (entry.isSentToRemote()) {
+//            mTvRemoteCount.setText(String.valueOf(mRemote.getNotificationCount()));
+        }
+        if (entry.isSentToLocalView()) {
+//            mTvLocalCount.setText(String.valueOf(mLocal.getNotificationCount()));
+        }
+        if (entry.isSentToGlobalView()) {
+//            mTvGlobalCount.setText(String.valueOf(mGlobal.getNotificationCount()));
+        }
+//        mTvTotalCount.setText(String.valueOf(mDelegater.getNotificationCount()));
     }
 
     private ProgressDialog dialog;
@@ -165,6 +242,40 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
     protected void onDestroy() {
         super.onDestroy();
         listAllStation = null;
+    }
+
+    ///
+    private int mTitleIdx;
+    private int mTextIdx;
+
+
+    private static final String[] mTitleSet = new String[] {
+            "Guess Who",
+            "Meet Android",
+            "I'm a Notification",
+    };
+
+    private static final String[] mTextSet = new String[] {
+            "hello world",
+            "welcome to the android world",
+            "welcome to code samples for zemin-notification. " +
+                    "Here you can browse sample code and learn how to send, show and cancel a notification.",
+            "zemin-notification library is available on GitHub under the Apache License v2.0. " +
+                    "You are free to make use of it.",
+    };
+
+    private String getNextTitle() {
+        if (mTitleIdx == mTitleSet.length) {
+            mTitleIdx = 0;
+        }
+        return mTitleSet[mTitleIdx++];
+    }
+
+    private String getNextText() {
+        if (mTextIdx == mTextSet.length) {
+            mTextIdx = 0;
+        }
+        return mTextSet[mTextIdx++];
     }
 }
 

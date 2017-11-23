@@ -208,6 +208,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
                 showToast(getResources().getString(R.string.verify_login_success), SuperToast.Background.GREEN);
                 saveAccount(nameEditText.getText().toString(), passwordEditText.getText().toString(), apiKey, userId);
                 hideKeyboard(passwordEditText);
+                presenter.getRoleId();
                 tryToGetStations();
                 break;
             case LOGIN_FAILURE:

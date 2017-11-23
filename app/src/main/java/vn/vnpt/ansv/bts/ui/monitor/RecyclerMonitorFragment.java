@@ -86,13 +86,13 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
                 if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS && gatewaySerial.length() > 0) {
                     setupRecyclerMonitorAdapter(listSensorObj);
                     callback.callback(EStatus.GET_SENSOR_OBJ_SUCCESS);
-                    presenter.connectMQTT(Utils.getBroker(getActivity().getApplication()), Utils.getTopic()+gatewaySerial);
                 } else if (eStatus == EStatus.NETWORK_FAILURE) {
                     callback.callback(EStatus.NETWORK_FAILURE);
 //                    stopBackground();
                 }
             }
         });
+
         startBackground(15000);
     }
 
