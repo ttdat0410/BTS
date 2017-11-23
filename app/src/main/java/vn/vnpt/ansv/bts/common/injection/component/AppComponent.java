@@ -13,6 +13,7 @@ import vn.vnpt.ansv.bts.ui.monitor.RecyclerMonitorPresenterImpl;
 import vn.vnpt.ansv.bts.ui.settings.SettingsActivity;
 import vn.vnpt.ansv.bts.ui.splash.SplashActivity;
 import vn.vnpt.ansv.bts.ui.splash.SplashPresenterImpl;
+import vn.vnpt.ansv.bts.utils.NotificationUtils;
 
 /**
  * Created by ANSV on 11/9/2017.

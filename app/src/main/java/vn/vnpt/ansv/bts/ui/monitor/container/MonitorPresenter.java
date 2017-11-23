@@ -21,4 +21,5 @@ public interface MonitorPresenter {
     void connectMQTT();
     void subscribeToMQTT(String topic, MonitorPresenterImpl.MQTTCallback callback);
     void publicToMQTT(String topic);
+    void showNotification();
 }

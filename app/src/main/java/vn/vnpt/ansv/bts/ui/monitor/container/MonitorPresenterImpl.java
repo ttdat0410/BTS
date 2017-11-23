@@ -1,7 +1,9 @@
 package vn.vnpt.ansv.bts.ui.monitor.container;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.github.florent37.materialviewpager.header.HeaderDesign;
@@ -17,6 +19,7 @@ import vn.vnpt.ansv.bts.ui.PreferenceManager;
 import vn.vnpt.ansv.bts.ui.monitor.RecyclerMonitorFragment;
 import vn.vnpt.ansv.bts.ui.splash.SplashPresenterImpl;
 import vn.vnpt.ansv.bts.utils.EStatus;
+import vn.vnpt.ansv.bts.utils.NotificationUtils;
 import vn.vnpt.ansv.bts.utils.Utils;
 import vn.vnpt.technology.mqtt.VNPTClient;
 import vn.vnpt.technology.mqtt.VNPTClientEventHandle;
@@ -182,5 +185,79 @@ public class MonitorPresenterImpl implements MonitorPresenter {
     @Override
     public void publicToMQTT(String topic) {
 
+    }
+
+    @Override
+    public void showNotification() {
+
+        /*if (!NotificationUtils.isAppIsInBackground(context)) {
+            // app is in foreground, broadcast the push message
+            Intent pushNotification = new Intent(Utils.PUSH_NOTIFICATION);
+            pushNotification.putExtra("message", "ALO");
+            LocalBroadcastManager.getInstance(context).sendBroadcast(pushNotification);
+
+            // play notification sound
+            NotificationUtils notificationUtils = new NotificationUtils(context);
+            notificationUtils.playNotificationSound();
+            Log.i("0x00", "FDFGHJDSGFHJ");
+        }else{
+            // If the app is in background, firebase itself handles the notification
+        }*/
+
+        if (NotificationUtils.isAppIsInBackground(context)) {
+            // app is in foreground, broadcast the push message
+            Intent pushNotification = new Intent(Utils.PUSH_NOTIFICATION);
+            pushNotification.putExtra("message", "ALO");
+            LocalBroadcastManager.getInstance(context).sendBroadcast(pushNotification);
+
+            // play notification sound
+            NotificationUtils notificationUtils = new NotificationUtils(context);
+            notificationUtils.playNotificationSound();
+        } else {
+            // app is in background, show the notification in notification tray
+            Intent resultIntent = new Intent(context, MonitorContainer.class);
+            resultIntent.putExtra("message", "ALK");
+
+            // check for image attachment
+                showNotificationMessage(context, "a", "b", "VF", resultIntent);
+                // image is present, show notification with image
+//                showNotificationMessageWithBigImage(context, title, message, timestamp, resultIntent, imageUrl);
+        }
+    }
+
+    private NotificationUtils notificationUtils;
+
+    /**
+     * Showing notification with text only
+     */
+    private void showNotificationMessage(Context context, String title, String message, String timeStamp, Intent intent) {
+        notificationUtils = new NotificationUtils(context);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
+    }
+
+    /**
+     * Showing notification with text and image
+     */
+    private void showNotificationMessageWithBigImage(Context context, String title, String message, String timeStamp, Intent intent, String imageUrl) {
+        notificationUtils = new NotificationUtils(context);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        notificationUtils.showNotificationMessage(title, message, timeStamp, intent, imageUrl);
+    }
+
+    private void handleNotification(String message) {
+        if (!NotificationUtils.isAppIsInBackground(context)) {
+            // app is in foreground, broadcast the push message
+            Intent pushNotification = new Intent(Utils.PUSH_NOTIFICATION);
+            pushNotification.putExtra("message", message);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(pushNotification);
+
+            // play notification sound
+            NotificationUtils notificationUtils = new NotificationUtils(context);
+            notificationUtils.playNotificationSound();
+            Log.i("0x00", "FDFGHJDSGFHJ");
+        }else{
+            // If the app is in background, firebase itself handles the notification
+        }
     }
 }

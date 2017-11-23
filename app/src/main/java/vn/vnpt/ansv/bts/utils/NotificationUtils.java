@@ -1,4 +1,8 @@
-package vn.vnpt.ansv.bts.notification;
+package vn.vnpt.ansv.bts.utils;
+
+/**
+ * Created by ANSV on 11/23/2017.
+ */
 
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -31,9 +35,8 @@ import java.util.List;
 import vn.vnpt.ansv.bts.R;
 
 /**
- * Created by ANSV on 11/23/2017.
+ * Created by Ravi on 31/03/15.
  */
-
 public class NotificationUtils {
 
     private static String TAG = NotificationUtils.class.getSimpleName();
@@ -63,7 +66,7 @@ public class NotificationUtils {
                         mContext,
                         0,
                         intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
+                        PendingIntent.FLAG_CANCEL_CURRENT
                 );
 
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
@@ -107,11 +110,11 @@ public class NotificationUtils {
                 .setWhen(getTimeMilliSec(timeStamp))
                 .setSmallIcon(R.mipmap.ic_sound_active)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                .setContentText(message)
                 .build();
 
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(NotificationID.getID(), notification);
+        notificationManager.notify(Utils.NOTIFICATION_ID, notification);
     }
 
     private void showBigNotification(Bitmap bitmap, NotificationCompat.Builder mBuilder, int icon, String title, String message, String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
@@ -129,11 +132,11 @@ public class NotificationUtils {
                 .setWhen(getTimeMilliSec(timeStamp))
                 .setSmallIcon(R.mipmap.ic_sound_active)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                .setContentText(message)
                 .build();
 
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(NotificationID.getID(), notification);
+        notificationManager.notify(Utils.NOTIFICATION_ID_BIG_IMAGE, notification);
     }
 
     /**
