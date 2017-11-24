@@ -232,7 +232,7 @@ public class MonitorPresenterImpl implements MonitorPresenter {
                                 id,
                                 context,
                                 titleNotification,
-                                Utils.convertToTime((new Date().toString())),
+                                others,
                                 Utils.convertToTime((new Date().toString())),
                                 resultIntent
                         );
@@ -246,7 +246,7 @@ public class MonitorPresenterImpl implements MonitorPresenter {
                                 id,
                                 context,
                                 titleNotification,
-                                Utils.convertToTime((new Date().toString())),
+                                others,
                                 Utils.convertToTime((new Date().toString())),
                                 resultIntent
                         );
