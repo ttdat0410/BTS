@@ -201,7 +201,6 @@ public class MonitorPresenterImpl implements MonitorPresenter {
         }
     }
 
-
     @Override
     public void publicToMQTT(String topic) {
 
@@ -222,40 +221,28 @@ public class MonitorPresenterImpl implements MonitorPresenter {
                 BTSPreferences prefs = preferenceManager.getPreferences();
                 formatType = jsonObject.getString("formatType");
                 others = jsonObject.getString("other");
+                String[] otherArray = others.split(";");
+                String subData = otherArray[4];
+                String[] subDataArray = subData.split(",");
                 String roleId = prefs.roleId;
                 if (roleId.equalsIgnoreCase(Role.Admin.getValue())) {
-                    // BACKGROUND
-                    if (NotificationUtils.isAppIsInBackground(context)) {
-                        Intent resultIntent = new Intent(context, MonitorContainer.class);
-                        resultIntent.putExtra("message", message);
-                        showNotificationMessage(
-                                id,
-                                context,
-                                titleNotification,
-                                others,
-                                Utils.convertToTime((new Date().toString())),
-                                resultIntent
-                        );
-                        NotificationUtils notificationUtils = new NotificationUtils(context);
-                        notificationUtils.playNotificationSound();
-
-                    } else { // FOREGROUND
+                    if (subDataArray[0].equalsIgnoreCase("SS000DE0A10D190")) {
                         Intent resultIntent = new Intent(context, MonitorContainer.class);
                         resultIntent.putExtra("message", others);
                         showNotificationMessage(
                                 id,
                                 context,
                                 titleNotification,
-                                others,
+                                subDataArray[4] + "dB",
                                 Utils.convertToTime((new Date().toString())),
                                 resultIntent
                         );
                         handleNotification(others);
+                        id++;
                     }
-                    id++;
                 }
-
             } else {
+                id=0;
             }
 
         } catch (JSONException e) {
@@ -287,15 +274,11 @@ public class MonitorPresenterImpl implements MonitorPresenter {
         BTSPreferences prefs = preferenceManager.getPreferences();
         String roleId = prefs.roleId;
         if (roleId.equalsIgnoreCase(Role.Admin.getValue())) {
-            // FOREGROUND
-            if (!NotificationUtils.isAppIsInBackground(context)) {
-                Intent pushNotification = new Intent(Utils.PUSH_NOTIFICATION);
-                pushNotification.putExtra("message", "CẢNH BÁO ÂM THANH");
-                LocalBroadcastManager.getInstance(context).sendBroadcast(pushNotification);
-                NotificationUtils notificationUtils = new NotificationUtils(context);
-                notificationUtils.playNotificationSound();
-            } else {
-            }
+            Intent pushNotification = new Intent(Utils.PUSH_NOTIFICATION);
+            pushNotification.putExtra("message", "CẢNH BÁO ÂM THANH");
+            LocalBroadcastManager.getInstance(context).sendBroadcast(pushNotification);
+            NotificationUtils notificationUtils = new NotificationUtils(context);
+            notificationUtils.playNotificationSound();
         }
     }
 }

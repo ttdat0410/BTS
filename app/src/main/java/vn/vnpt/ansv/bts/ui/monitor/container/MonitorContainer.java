@@ -70,7 +70,7 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
             @Override
             public void detectNoise(String message) {
-                Log.i("0x00", "RECEIVED DATA:  " + message);
+//                Log.i("0x00", "RECEIVED DATA:  " + message);
                 presenter.showNotification(message);
             }
         });
