@@ -3,13 +3,15 @@ package vn.vnpt.ansv.bts.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import com.github.johnpersano.supertoasts.SuperToast;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 
@@ -18,9 +20,6 @@ import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
 import vn.vnpt.ansv.bts.objects.SensorDataObj;
 import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by ANSV on 11/8/2017.
@@ -30,18 +29,9 @@ public class Utils {
 
     public static SuperToast.Animations TOAST_ANIMATION = SuperToast.Animations.FLYIN;
 
-    // global topic to receive app wide push notifications
-    public static final String TOPIC_GLOBAL = "global";
-
-    // broadcast receiver intent filters
-    public static final String REGISTRATION_COMPLETE = "registrationComplete";
     public static final String PUSH_NOTIFICATION = "pushNotification";
-
-    // id to handle the notification in the notification tray
-    public static final int NOTIFICATION_ID = 100;
     public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
 
-    public static final String SHARED_PREF = "ah_firebase";
     /**
      * enum hiển thị trạng thái của thiết bị và cảm biến
      * @see SensorDataObj
@@ -72,7 +62,7 @@ public class Utils {
             return "tcp://10.4.1.210:1883";
         }
     }
-
+    public static String defaultTopic = "AD54B847";
     public static String getTopic() {
         return "/SCPCloud/DEVICE/";
     }
@@ -297,21 +287,22 @@ public class Utils {
         return output;
     }
 
-   /* public static String splitTimeStamp(Timestamp timestamp) {
-        String timeStampString = timestamp.toString();
-        String day = timeStampString.split(" ")[0];
-        String fullTime = timeStampString.split(" ")[1];
-        String time = fullTime.split(".")[0];
-        return time + ", " + day;
-    }*/
-
-   /* public static String convertTime(String time){
+    public static String convertToTime(String time){
         String dateTime = "";
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss.a");
-
-//        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss, dd/MM/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss, dd/MM/yyyy");
         Date date = new Date(time);
         dateTime = dateFormat.format(date);
         return dateTime;
-    }*/
+    }
+
+    public static long getTimeMilliSec(String timeStamp) {
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss, dd/MM/yyyy");
+        try {
+            Date date = format.parse(timeStamp);
+            return date.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

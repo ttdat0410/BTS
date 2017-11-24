@@ -148,6 +148,7 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
         BTSPreferences prefs = preferenceManager.getPreferences();
         prefs.apiKey = "";
         prefs.userId = "";
+        prefs.roleId = "";
         preferenceManager.setPreferences(prefs);
     }
 

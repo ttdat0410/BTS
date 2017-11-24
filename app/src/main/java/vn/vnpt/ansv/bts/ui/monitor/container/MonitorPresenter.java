@@ -19,7 +19,8 @@ public interface MonitorPresenter {
     CharSequence getPageTitle(List<MinStationFullObj> listAllStation, int position);
     HeaderDesign getHeaderDesign(List<MinStationFullObj> listAllStation, int page);
     void connectMQTT();
-    void subscribeToMQTT(String topic, MonitorPresenterImpl.MQTTCallback callback);
+    void subscribeToTopic(String topic, MonitorPresenterImpl.MQTTCallback callback);
+    void unsubscribeToToptic(String topic);
     void publicToMQTT(String topic);
-    void showNotification();
+    void showNotification(String message);
 }

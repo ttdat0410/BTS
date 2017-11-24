@@ -38,6 +38,7 @@ import vn.vnpt.ansv.bts.ui.monitor.container.MonitorContainer;
 import vn.vnpt.ansv.bts.ui.settings.SettingsActivity;
 import vn.vnpt.ansv.bts.utils.BTSToast;
 import vn.vnpt.ansv.bts.utils.EStatus;
+import vn.vnpt.ansv.bts.utils.NotificationUtils;
 
 /**
  * Created by ANSV on 11/9/2017.
@@ -315,6 +316,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
             @Override
             public void run() {
                 MonitorContainer.launch(SplashActivity.this, listStation);
+                NotificationUtils.clearNotifications(getApplicationContext());
             }
         }, 500);
     }

@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-
 import com.github.florent37.materialviewpager.header.HeaderDesign;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.Date;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.objects.MinStationFullObj;
@@ -31,13 +31,12 @@ import vn.vnpt.technology.mqtt.VNPTClientEventHandle;
 public class MonitorPresenterImpl implements MonitorPresenter {
 
     public interface MQTTCallback {
-        void detectNoise();
+        void detectNoise(String message);
     }
-
-    enum Role {
+    private enum Role {
         Admin("505"),
         Other("515");
-        public final String value;
+        private final String value;
         Role(String value) {
             this.value = value;
         }
@@ -142,11 +141,13 @@ public class MonitorPresenterImpl implements MonitorPresenter {
                 "http://buudienhospital.vn/wp-content/uploads/2017/04/3-1237x386.jpg");
     }
 
+    //**************************************************/
+    //                     MQTT                        */
+    //**************************************************/
     private VNPTClient vnptClient = null;
     @Override
     public void connectMQTT() {
         String broker = Utils.getBroker(context);
-
         BTSPreferences prefs = preferenceManager.getPreferences();
         String roleId = prefs.roleId;
         if(roleId.length() > 0 && roleId.equalsIgnoreCase(Role.Admin.getValue())) {
@@ -163,19 +164,19 @@ public class MonitorPresenterImpl implements MonitorPresenter {
     }
 
     @Override
-    public void subscribeToMQTT(String topic, final MQTTCallback callback) {
-        Log.i("0x00", "try to subscribe to " + topic);
+    public void subscribeToTopic(String topic, final MQTTCallback callback) {
+        Log.i("0x00", "Subscribe to " + topic);
         try {
             if (vnptClient != null) {
-                Log.i("0x00", "subscribe success");
+                Log.i("0x00", "subscribe to " + topic + " success");
                 vnptClient.subscribe(Utils.getTopic() + topic, new VNPTClientEventHandle() {
                     @Override
                     public void onMessageArrived(String topic, String message) {
-                        callback.detectNoise();
+                        callback.detectNoise(message);
                     }
                 });
             } else {
-                Log.i("0x00", "subscribe unsuccess");
+                Log.i("0x00", "subscribe to " + topic + " fail");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -183,81 +184,118 @@ public class MonitorPresenterImpl implements MonitorPresenter {
     }
 
     @Override
+    public void unsubscribeToToptic(String topic) {
+        Log.i("0x00", "Unsubscribe to " + topic);
+        try {
+            if (vnptClient != null) {
+                vnptClient.unsubscribe(Utils.getTopic() + topic);
+                vnptClient.disconnect();
+                vnptClient = null;
+                Log.i("0x00", "unsubscribe to " + topic + " success");
+            } else {
+                Log.i("0x00", "unsubscribe to " + topic + " fail");
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
     public void publicToMQTT(String topic) {
 
     }
 
+    //**************************************************/
+    //                     NOTIFICATION                */
+    //**************************************************/
+    private int id = 0;
+    private String titleNotification = "Cảnh báo âm thanh";
     @Override
-    public void showNotification() {
+    public void showNotification(String message) {
+        try {
+            JSONObject jsonObject = new JSONObject(message);
+            String formatType = "";
+            String others = "";
+            if (jsonObject.has("formatType") && jsonObject.has("other")) {
+                BTSPreferences prefs = preferenceManager.getPreferences();
+                formatType = jsonObject.getString("formatType");
+                others = jsonObject.getString("other");
+                String roleId = prefs.roleId;
+                if (roleId.equalsIgnoreCase(Role.Admin.getValue())) {
+                    // BACKGROUND
+                    if (NotificationUtils.isAppIsInBackground(context)) {
+                        Intent resultIntent = new Intent(context, MonitorContainer.class);
+                        resultIntent.putExtra("message", message);
+                        showNotificationMessage(
+                                id,
+                                context,
+                                titleNotification,
+                                Utils.convertToTime((new Date().toString())),
+                                Utils.convertToTime((new Date().toString())),
+                                resultIntent
+                        );
+                        NotificationUtils notificationUtils = new NotificationUtils(context);
+                        notificationUtils.playNotificationSound();
 
-        /*if (!NotificationUtils.isAppIsInBackground(context)) {
-            // app is in foreground, broadcast the push message
-            Intent pushNotification = new Intent(Utils.PUSH_NOTIFICATION);
-            pushNotification.putExtra("message", "ALO");
-            LocalBroadcastManager.getInstance(context).sendBroadcast(pushNotification);
+                    } else { // FOREGROUND
+                        Intent resultIntent = new Intent(context, MonitorContainer.class);
+                        resultIntent.putExtra("message", others);
+                        showNotificationMessage(
+                                id,
+                                context,
+                                titleNotification,
+                                Utils.convertToTime((new Date().toString())),
+                                Utils.convertToTime((new Date().toString())),
+                                resultIntent
+                        );
+                        handleNotification(others);
+                    }
+                    id++;
+                }
 
-            // play notification sound
-            NotificationUtils notificationUtils = new NotificationUtils(context);
-            notificationUtils.playNotificationSound();
-            Log.i("0x00", "FDFGHJDSGFHJ");
-        }else{
-            // If the app is in background, firebase itself handles the notification
-        }*/
+            } else {
+            }
 
-        if (NotificationUtils.isAppIsInBackground(context)) {
-            // app is in foreground, broadcast the push message
-            Intent pushNotification = new Intent(Utils.PUSH_NOTIFICATION);
-            pushNotification.putExtra("message", "ALO");
-            LocalBroadcastManager.getInstance(context).sendBroadcast(pushNotification);
-
-            // play notification sound
-            NotificationUtils notificationUtils = new NotificationUtils(context);
-            notificationUtils.playNotificationSound();
-        } else {
-            // app is in background, show the notification in notification tray
-            Intent resultIntent = new Intent(context, MonitorContainer.class);
-            resultIntent.putExtra("message", "ALK");
-
-            // check for image attachment
-                showNotificationMessage(context, "a", "b", "VF", resultIntent);
-                // image is present, show notification with image
-//                showNotificationMessageWithBigImage(context, title, message, timestamp, resultIntent, imageUrl);
+        } catch (JSONException e) {
+            Log.e("0x00", "Json Exception: " + e.getMessage());
+        } catch (Exception e) {
+            Log.e("0x00", "Exception: " + e.getMessage());
         }
     }
 
     private NotificationUtils notificationUtils;
-
     /**
-     * Showing notification with text only
+     * Hiển thị notification với text
      */
-    private void showNotificationMessage(Context context, String title, String message, String timeStamp, Intent intent) {
-        notificationUtils = new NotificationUtils(context);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
+    private void showNotificationMessage(int id, Context context, String title, String message, String timeStamp, Intent intent) {
+        BTSPreferences prefs = preferenceManager.getPreferences();
+        String roleId = prefs.roleId;
+        if (roleId.equalsIgnoreCase(Role.Admin.getValue())) {
+            notificationUtils = new NotificationUtils(context);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            notificationUtils.showNotificationMessage(id, title, message, timeStamp, intent);
+        }
     }
 
     /**
-     * Showing notification with text and image
-     */
-    private void showNotificationMessageWithBigImage(Context context, String title, String message, String timeStamp, Intent intent, String imageUrl) {
-        notificationUtils = new NotificationUtils(context);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        notificationUtils.showNotificationMessage(title, message, timeStamp, intent, imageUrl);
-    }
-
+     * Hàm hiển thị notification theo toast khi app đang trong chế độ foregroound
+     * */
     private void handleNotification(String message) {
-        if (!NotificationUtils.isAppIsInBackground(context)) {
-            // app is in foreground, broadcast the push message
-            Intent pushNotification = new Intent(Utils.PUSH_NOTIFICATION);
-            pushNotification.putExtra("message", message);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(pushNotification);
 
-            // play notification sound
-            NotificationUtils notificationUtils = new NotificationUtils(context);
-            notificationUtils.playNotificationSound();
-            Log.i("0x00", "FDFGHJDSGFHJ");
-        }else{
-            // If the app is in background, firebase itself handles the notification
+        BTSPreferences prefs = preferenceManager.getPreferences();
+        String roleId = prefs.roleId;
+        if (roleId.equalsIgnoreCase(Role.Admin.getValue())) {
+            // FOREGROUND
+            if (!NotificationUtils.isAppIsInBackground(context)) {
+                Intent pushNotification = new Intent(Utils.PUSH_NOTIFICATION);
+                pushNotification.putExtra("message", "CẢNH BÁO ÂM THANH");
+                LocalBroadcastManager.getInstance(context).sendBroadcast(pushNotification);
+                NotificationUtils notificationUtils = new NotificationUtils(context);
+                notificationUtils.playNotificationSound();
+            } else {
+            }
         }
     }
 }
