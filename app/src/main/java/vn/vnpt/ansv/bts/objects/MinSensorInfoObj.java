@@ -14,6 +14,7 @@ public class MinSensorInfoObj {
 	private int warningValue1;
 	private int warningValue2;
 	private int warningComp;
+	private String tempSensorName;
 	
 	public MinSensorInfoObj() {
 		super();
@@ -26,6 +27,7 @@ public class MinSensorInfoObj {
 		this.warningValue1 = -1;
 		this.warningValue2 = -1;
 		this.warningComp = -1;
+		this.tempSensorName = null;
 		
 	}
 	public MinSensorInfoObj(int sensorId, String sensorName, String sensorSerial, int sensorTypeId,
@@ -103,5 +105,13 @@ public class MinSensorInfoObj {
 
 	public void setWarningComp(int warningComp) {
 		this.warningComp = warningComp;
+	}
+
+	public String getTempSensorName() {
+		return tempSensorName;
+	}
+
+	public void setTempSensorName(String tempSensorName) {
+		this.tempSensorName = tempSensorName;
 	}
 }

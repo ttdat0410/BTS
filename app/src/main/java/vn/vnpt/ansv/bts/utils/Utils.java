@@ -266,8 +266,8 @@ public class Utils {
         @Override
         public int compare(MinSensorFullObj lhs, MinSensorFullObj rhs) {
             Locale locale = Locale.ENGLISH;
-            String sensorName1 = lhs.getSensorInfo().getSensorName().toUpperCase(locale);
-            String sensorName2 = rhs.getSensorInfo().getSensorName().toUpperCase(locale);
+            String sensorName1 = lhs.getSensorInfo().getTempSensorName().toUpperCase(locale);
+            String sensorName2 = rhs.getSensorInfo().getTempSensorName().toUpperCase(locale);
             return sensorName1.compareTo(sensorName2);
         }
     };

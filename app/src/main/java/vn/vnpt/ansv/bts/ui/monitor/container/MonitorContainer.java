@@ -135,7 +135,6 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
         switch (requestCode) {
             case 0:
-                Log.i("0x00", "HFDJSGFHJSDFG");
                 break;
 
             default:

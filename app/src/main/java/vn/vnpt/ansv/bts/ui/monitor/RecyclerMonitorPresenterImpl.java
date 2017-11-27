@@ -1,6 +1,7 @@
 package vn.vnpt.ansv.bts.ui.monitor;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -81,6 +82,33 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
                                 for (int i = 0; i < listStation.size(); i++) {
                                     String gatewaySerial = listStation.get(i).getStationInfo().getGatewaySerial();
                                     List<MinSensorFullObj> listSensorObj = listStation.get(i).getStationData().getSensorList().getList();
+
+                                    /**
+                                     * gán sensorName vào tempSensorName để sắp xếp hiển thị cảm biến theo tempSensorName
+                                     * theo "Nhiet do ngoai troi" - "Do am ngoai troi" - ....
+                                     * */
+                                    for (int k = 0; k<listSensorObj.size(); k++) {
+
+                                        String sensorName = listSensorObj.get(k).getSensorInfo().getSensorName();
+
+                                        if (listSensorObj.get(k).getSensorInfo().getSensorId() == 209
+                                                && listSensorObj.get(k).getSensorInfo().getSensorSerial().equalsIgnoreCase("SS00117D8D7E060")) {
+                                            listSensorObj.get(k).getSensorInfo().setTempSensorName("AAAA0 " + sensorName);
+
+                                        } else if (listSensorObj.get(k).getSensorInfo().getSensorId() == 211
+                                                && listSensorObj.get(k).getSensorInfo().getSensorSerial().equalsIgnoreCase("SS00117D8D7E070")) {
+                                            listSensorObj.get(k).getSensorInfo().setTempSensorName("AAAA1 " + sensorName);
+
+                                        } else {
+                                            listSensorObj.get(k).getSensorInfo().setTempSensorName(sensorName);
+
+                                        }
+                                        /*Log.i("0x00", sensorName + " | "
+                                                + listSensorObj.get(k).getSensorInfo().getTempSensorName()
+                                                + " | " + listSensorObj.get(k).getSensorInfo().getSensorSerial()
+                                                + " | " + listSensorObj.get(k).getSensorInfo().getSensorId());*/
+                                    }
+
                                     callback.callback(EStatus.GET_SENSOR_OBJ_SUCCESS, listSensorObj, gatewaySerial);
 
                                 }
