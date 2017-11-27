@@ -16,6 +16,7 @@ import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.objects.MinStationFullObj;
 import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
+import vn.vnpt.ansv.bts.ui.ShowCamActivity;
 import vn.vnpt.ansv.bts.ui.monitor.RecyclerMonitorFragment;
 import vn.vnpt.ansv.bts.ui.splash.SplashPresenterImpl;
 import vn.vnpt.ansv.bts.utils.EStatus;
@@ -221,13 +222,14 @@ public class MonitorPresenterImpl implements MonitorPresenter {
                 urlCam = jsonObject.getString("urlCam");
                 String roleId = prefs.roleId;
                 if (roleId.equalsIgnoreCase(Role.Admin.getValue())) {
-                    Intent resultIntent = new Intent(context, MonitorContainer.class);
+                    ShowCamActivity.urlCam = urlCam;
+                    Intent resultIntent = new Intent(context, ShowCamActivity.class);
                     resultIntent.putExtra("message", urlCam);
                     showNotificationMessage(
                             id,
                             context,
                             titleNotification,
-                            urlCam,
+                            "Bấm để xem...",
                             Utils.convertToTime((new Date().toString())),
                             resultIntent
                     );

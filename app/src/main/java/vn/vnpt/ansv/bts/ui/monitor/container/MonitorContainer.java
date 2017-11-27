@@ -16,6 +16,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.github.florent37.materialviewpager.header.HeaderDesign;
 import com.github.johnpersano.supertoasts.SuperToast;
@@ -69,10 +71,10 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
             @Override
             public void detectNoise(String message) {
-//                Log.i("0x00", "RECEIVED DATA:  " + message);
                 presenter.showNotification(message);
             }
         });
+
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -127,6 +129,18 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         super.onPause();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
+        switch (requestCode) {
+            case 0:
+                Log.i("0x00", "HFDJSGFHJSDFG");
+                break;
+
+            default:
+                super.onActivityResult(requestCode, responseCode, intent);
+        }
     }
 
     private ProgressDialog dialog;

@@ -20,8 +20,11 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 
 import java.io.IOException;
@@ -55,17 +58,16 @@ public class NotificationUtils {
         if (TextUtils.isEmpty(message))
             return;
 
-
         // notification icon
         final int icon = R.mipmap.ic_sound_w;
 
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         final PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         mContext,
                         0,
                         intent,
-                        PendingIntent.FLAG_CANCEL_CURRENT
+                        PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
@@ -96,9 +98,7 @@ public class NotificationUtils {
     private void showSmallNotification(int id, NotificationCompat.Builder mBuilder, int icon, String title, String message, String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-
         inboxStyle.addLine(message);
-
         Notification notification;
         notification = mBuilder.setSmallIcon(icon).setTicker(title).setWhen(0)
                 .setAutoCancel(true)
