@@ -215,31 +215,24 @@ public class MonitorPresenterImpl implements MonitorPresenter {
     public void showNotification(String message) {
         try {
             JSONObject jsonObject = new JSONObject(message);
-            String formatType = "";
-            String others = "";
-            if (jsonObject.has("formatType") && jsonObject.has("other")) {
+            String urlCam = "";
+            if (jsonObject.has("urlCam")) {
                 BTSPreferences prefs = preferenceManager.getPreferences();
-                formatType = jsonObject.getString("formatType");
-                others = jsonObject.getString("other");
-                String[] otherArray = others.split(";");
-                String subData = otherArray[4];
-                String[] subDataArray = subData.split(",");
+                urlCam = jsonObject.getString("urlCam");
                 String roleId = prefs.roleId;
                 if (roleId.equalsIgnoreCase(Role.Admin.getValue())) {
-                    if (subDataArray[0].equalsIgnoreCase("SS000DE0A10D190")) {
-                        Intent resultIntent = new Intent(context, MonitorContainer.class);
-                        resultIntent.putExtra("message", others);
-                        showNotificationMessage(
-                                id,
-                                context,
-                                titleNotification,
-                                subDataArray[4] + "dB",
-                                Utils.convertToTime((new Date().toString())),
-                                resultIntent
-                        );
-                        handleNotification(others);
-                        id++;
-                    }
+                    Intent resultIntent = new Intent(context, MonitorContainer.class);
+                    resultIntent.putExtra("message", urlCam);
+                    showNotificationMessage(
+                            id,
+                            context,
+                            titleNotification,
+                            urlCam,
+                            Utils.convertToTime((new Date().toString())),
+                            resultIntent
+                    );
+                    handleNotification(urlCam);
+                    id++;
                 }
             } else {
                 id=0;
