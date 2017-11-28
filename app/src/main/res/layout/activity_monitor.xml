@@ -3,45 +3,49 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
+    android:background="@color/sl_light_grey"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout
+        style="@style/match"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="0dp">
 
-
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewOutside"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:background="@color/light_gray"
+            android:layout_marginBottom="0dp"/>
 
         <com.github.florent37.materialviewpager.MaterialViewPager
             android:id="@+id/materialViewPager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/sl_light_grey"
-            app:viewpager_logo="@layout/header_logo"
             app:viewpager_pagerTitleStrip="@layout/material_view_pager_pagertitlestrip_newstand"
-            app:viewpager_logoMarginTop="40dp"
+            app:viewpager_logoMarginTop="0dp"
             app:viewpager_color="@color/sl_terbium_green"
-            app:viewpager_headerHeight="130dp"
+            app:viewpager_headerHeight="50dp"
             app:viewpager_headerAlpha="1.0"
             app:viewpager_imageHeaderDarkLayerAlpha="0.2"
             app:viewpager_hideLogoWithFade="false"
             app:viewpager_hideToolbarAndTitle="true"
             app:viewpager_enableToolbarElevation="true"
             app:viewpager_parallaxHeaderFactor="1.5"
-            app:viewpager_headerAdditionalHeight="20dp"
+            app:viewpager_headerAdditionalHeight="5dp"
             app:viewpager_displayToolbarWhenSwipe="true"
             app:viewpager_transparentToolbar="false"
-            app:viewpager_animatedHeaderImage="true" >
+            app:viewpager_animatedHeaderImage="true"
+            >
 
         </com.github.florent37.materialviewpager.MaterialViewPager>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewOutside"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp" />
-
-    </RelativeLayout>
+    </LinearLayout>
 
     <include layout="@layout/drawer" />
 

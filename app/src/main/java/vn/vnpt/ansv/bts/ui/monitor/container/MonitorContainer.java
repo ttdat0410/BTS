@@ -19,6 +19,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.github.florent37.materialviewpager.header.HeaderDesign;
@@ -84,7 +85,8 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
 
         final Toolbar toolbar = mViewPager.getToolbar();
         if (toolbar != null) {
-            setSupportActionBar(toolbar);
+//            setSupportActionBar(toolbar);
+            toolbar.setVisibility(View.GONE);
         }
         // MQTT -----------------
         presenter.connectMQTT();

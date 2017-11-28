@@ -82,41 +82,23 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
                                     String gatewaySerial = listStation.get(i).getStationInfo().getGatewaySerial();
                                     List<MinSensorFullObj> listSensorObj = listStation.get(i).getStationData().getSensorList().getList();
 
-                                    boolean hasTempOutside = false;
-                                    boolean hasHumiOutside = false;
                                     /**
                                      * gán sensorName vào tempSensorName để sắp xếp hiển thị cảm biến theo tempSensorName
                                      * theo "Nhiet do ngoai troi" - "Do am ngoai troi" - ....
                                      * */
                                     for (int k = 0; k<listSensorObj.size(); k++) {
 
-                                        int sensorId = listSensorObj.get(k).getSensorInfo().getSensorId();
                                         String sensorSerial = listSensorObj.get(k).getSensorInfo().getSensorSerial();
                                         String sensorName = listSensorObj.get(k).getSensorInfo().getSensorName();
 
                                         if (sensorSerial.equalsIgnoreCase("SS00117D8D7E060")) {
                                             listSensorObj.get(k).getSensorInfo().setTempSensorName("AAAA0 " + sensorName);
-                                            hasTempOutside = true;
 
                                         } else if (sensorSerial.equalsIgnoreCase("SS00117D8D7E070")) {
                                             listSensorObj.get(k).getSensorInfo().setTempSensorName("AAAA1 " + sensorName);
-                                            hasHumiOutside = true;
 
                                         } else {
                                             listSensorObj.get(k).getSensorInfo().setTempSensorName(sensorName);
-                                        }
-                                    }
-
-                                    if (listSensorObj.size() > 0) {
-
-                                        if (!hasHumiOutside) {
-                                            List<MinSensorFullObj> minSensorFullObjTemp = listStation.get(0).getStationData().getSensorList().getList();
-                                            minSensorFullObjTemp.get(0).getSensorInfo().setTempSensorName("AAAA0");
-                                            listSensorObj.add(listSensorObj.size(), minSensorFullObjTemp.get(0));
-                                            List<MinSensorFullObj> minSensorFullObjHumi = listStation.get(0).getStationData().getSensorList().getList();
-                                            minSensorFullObjTemp.get(0).getSensorInfo().setTempSensorName("AAAA1");
-                                            listSensorObj.add(listSensorObj.size(), minSensorFullObjHumi.get(0));
-
                                         }
                                     }
 

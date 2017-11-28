@@ -80,6 +80,12 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
 
         if (typeCell == TypeCell.INSIDE) {
 
+            if (sensorSerial.equalsIgnoreCase("SS00117D8D7E060") || sensorSerial.equalsIgnoreCase("SS00117D8D7E070")) {
+                holder.cardView.setVisibility(View.GONE);
+            } else {
+                holder.cardView.setVisibility(View.VISIBLE);
+            }
+
             holder.txtSensorName.setText(dataSet.get(position).getSensorInfo().getSensorName().toUpperCase());
             holder.txtSensorValue.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForSensorValue(statusId)));
             holder.imgSensorIcon.setImageResource(Utils.setSensorIconImageView(statusId, sensorTypeId));
@@ -104,11 +110,11 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
             }
             splitTimeStamp(updateTime.toString() + "");
 
+
         } else if (typeCell == TypeCell.OUTSIDE){
 
             if ((sensorId == 209 && sensorSerial.equalsIgnoreCase("SS00117D8D7E060"))
                     || (sensorId == 211 && sensorSerial.equalsIgnoreCase("SS00117D8D7E070"))) {
-
                 holder.txtSensorName.setText(dataSet.get(position).getSensorInfo().getSensorName().toUpperCase());
                 holder.txtSensorValue.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForSensorValue(statusId)));
                 holder.imgSensorIcon.setImageResource(Utils.setSensorIconImageView(statusId, sensorTypeId));
@@ -134,7 +140,6 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
                 splitTimeStamp(updateTime.toString() + "");
 
             }
-
         }
     }
 
