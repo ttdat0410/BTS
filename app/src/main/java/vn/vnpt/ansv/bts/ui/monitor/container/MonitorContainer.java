@@ -25,6 +25,7 @@ import com.github.florent37.materialviewpager.header.HeaderDesign;
 import com.github.florent37.materialviewpager.header.MaterialViewPagerHeaderDecorator;
 import com.github.johnpersano.supertoasts.SuperToast;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
@@ -154,7 +155,7 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
     private void setLayoutManager() {
         mRecyclerViewOutside.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
         mRecyclerViewOutside.setHasFixedSize(true);
-        startBackground(5000);
+        startBackground(15000);
     }
 
     /**
@@ -170,6 +171,8 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                Collections.sort(listSensorObj, Utils.comparatorWithSensorTypeId);
+                Collections.sort(listSensorObj, Utils.comparatorWithSensorName);
                 recyclerMonitorAdapter.updateDataSet(listSensorObj);
             }
         }, 500);
@@ -192,6 +195,8 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
+                                    Collections.sort(listSensorObj, Utils.comparatorWithSensorTypeId);
+                                    Collections.sort(listSensorObj, Utils.comparatorWithSensorName);
                                     recyclerMonitorAdapter.updateDataSet(listSensorObj);
                                 }
                             }, 200);

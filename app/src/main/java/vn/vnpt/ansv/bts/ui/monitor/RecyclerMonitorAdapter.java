@@ -60,22 +60,26 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
     @Override
     public void onBindViewHolder(DeviceHolder holder, int position) {
 
-        if (typeCell == TypeCell.INSIDE || typeCell == TypeCell.OUTSIDE) {
-            FrameLayout.LayoutParams lp =
-                    new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-            holder.cardView.setLayoutParams(lp);
-            holder.cardView.requestLayout();
-            //
-            String measurement = dataSet.get(position).getSensorInfo().getMeasurementUnit();
-            Timestamp updateTime = dataSet.get(position).getSensorData().getList().get(0).getCreatedTime();
-            double value = dataSet.get(position).getSensorData().getList().get(0).getValue();
-            int batteryValue = dataSet.get(position).getSensorData().getList().get(0).getBattery();
-            int statusId = dataSet.get(position).getSensorData().getList().get(0).getStatusId();
-            int sensorTypeId = dataSet.get(position).getSensorInfo().getSensorTypeId();
-            int warningModeId = dataSet.get(position).getSensorInfo().getWarningModeId();
-            int warningComp = dataSet.get(position).getSensorInfo().getWarningComp();
-            int warningValue1 = dataSet.get(position).getSensorInfo().getWarningValue1();
-            int warningValue2 = dataSet.get(position).getSensorInfo().getWarningValue2();
+        FrameLayout.LayoutParams lp =
+                new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        holder.cardView.setLayoutParams(lp);
+        holder.cardView.requestLayout();
+        //
+        String measurement = dataSet.get(position).getSensorInfo().getMeasurementUnit();
+        Timestamp updateTime = dataSet.get(position).getSensorData().getList().get(0).getCreatedTime();
+        double value = dataSet.get(position).getSensorData().getList().get(0).getValue();
+        int batteryValue = dataSet.get(position).getSensorData().getList().get(0).getBattery();
+        int statusId = dataSet.get(position).getSensorData().getList().get(0).getStatusId();
+        int sensorTypeId = dataSet.get(position).getSensorInfo().getSensorTypeId();
+        int sensorId = dataSet.get(position).getSensorInfo().getSensorId();
+        String sensorSerial = dataSet.get(position).getSensorInfo().getSensorSerial();
+        int warningModeId = dataSet.get(position).getSensorInfo().getWarningModeId();
+        int warningComp = dataSet.get(position).getSensorInfo().getWarningComp();
+        int warningValue1 = dataSet.get(position).getSensorInfo().getWarningValue1();
+        int warningValue2 = dataSet.get(position).getSensorInfo().getWarningValue2();
+
+        if (typeCell == TypeCell.INSIDE) {
+
             holder.txtSensorName.setText(dataSet.get(position).getSensorInfo().getSensorName().toUpperCase());
             holder.txtSensorValue.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForSensorValue(statusId)));
             holder.imgSensorIcon.setImageResource(Utils.setSensorIconImageView(statusId, sensorTypeId));
@@ -100,11 +104,37 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
             }
             splitTimeStamp(updateTime.toString() + "");
 
-        } else {
-            FrameLayout.LayoutParams lp =
-                    new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-            holder.cardView.setLayoutParams(lp);
-            holder.cardView.requestLayout();
+        } else if (typeCell == TypeCell.OUTSIDE){
+
+            if ((sensorId == 209 && sensorSerial.equalsIgnoreCase("SS00117D8D7E060"))
+                    || (sensorId == 211 && sensorSerial.equalsIgnoreCase("SS00117D8D7E070"))) {
+
+                holder.txtSensorName.setText(dataSet.get(position).getSensorInfo().getSensorName().toUpperCase());
+                holder.txtSensorValue.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForSensorValue(statusId)));
+                holder.imgSensorIcon.setImageResource(Utils.setSensorIconImageView(statusId, sensorTypeId));
+                holder.txtSensorValue.setText(String.format("%.0f", value));
+                holder.txtBatteryValues.setText(batteryValue + "%");
+                holder.txtBatteryValues.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForBatteryValue(batteryValue)));
+                holder.imgBatteryIcon.setImageResource(Utils.setBatteryImageView(batteryValue));
+                holder.imgSensorIcon.setImageResource(Utils.setSensorIconImageView(statusId, sensorTypeId));
+                holder.txtUpdateTime.setText(splitTimeStamp(updateTime.toString()));
+
+                holder.txtUpdateTime.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForUpdateTime(statusId)));
+
+                if (measurement == null) {
+                    holder.txtMeasurementUnit.setText("");
+                } else {
+                    holder.txtMeasurementUnit.setText("(" + measurement + ")");
+                }
+                if (statusId == 2) {
+                    holder.txtMeasurementUnit.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), R.color.sl_footer_grey));
+                } else {
+                    holder.txtMeasurementUnit.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), R.color.sl_grey));
+                }
+                splitTimeStamp(updateTime.toString() + "");
+
+            }
+
         }
     }
 

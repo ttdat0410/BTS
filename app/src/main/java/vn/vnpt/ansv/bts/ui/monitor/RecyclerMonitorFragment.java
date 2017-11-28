@@ -163,6 +163,8 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                Collections.sort(listSensorObj, Utils.comparatorWithSensorTypeId);
+                Collections.sort(listSensorObj, Utils.comparatorWithSensorName);
                 recyclerMonitorAdapter.updateDataSet(listSensorObj);
             }
         }, 500);

@@ -1,7 +1,6 @@
 package vn.vnpt.ansv.bts.ui.monitor;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -83,30 +82,42 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
                                     String gatewaySerial = listStation.get(i).getStationInfo().getGatewaySerial();
                                     List<MinSensorFullObj> listSensorObj = listStation.get(i).getStationData().getSensorList().getList();
 
+                                    boolean hasTempOutside = false;
+                                    boolean hasHumiOutside = false;
                                     /**
                                      * gán sensorName vào tempSensorName để sắp xếp hiển thị cảm biến theo tempSensorName
                                      * theo "Nhiet do ngoai troi" - "Do am ngoai troi" - ....
                                      * */
                                     for (int k = 0; k<listSensorObj.size(); k++) {
 
+                                        int sensorId = listSensorObj.get(k).getSensorInfo().getSensorId();
+                                        String sensorSerial = listSensorObj.get(k).getSensorInfo().getSensorSerial();
                                         String sensorName = listSensorObj.get(k).getSensorInfo().getSensorName();
 
-                                        if (listSensorObj.get(k).getSensorInfo().getSensorId() == 209
-                                                && listSensorObj.get(k).getSensorInfo().getSensorSerial().equalsIgnoreCase("SS00117D8D7E060")) {
+                                        if (sensorSerial.equalsIgnoreCase("SS00117D8D7E060")) {
                                             listSensorObj.get(k).getSensorInfo().setTempSensorName("AAAA0 " + sensorName);
+                                            hasTempOutside = true;
 
-                                        } else if (listSensorObj.get(k).getSensorInfo().getSensorId() == 211
-                                                && listSensorObj.get(k).getSensorInfo().getSensorSerial().equalsIgnoreCase("SS00117D8D7E070")) {
+                                        } else if (sensorSerial.equalsIgnoreCase("SS00117D8D7E070")) {
                                             listSensorObj.get(k).getSensorInfo().setTempSensorName("AAAA1 " + sensorName);
+                                            hasHumiOutside = true;
 
                                         } else {
                                             listSensorObj.get(k).getSensorInfo().setTempSensorName(sensorName);
+                                        }
+                                    }
+
+                                    if (listSensorObj.size() > 0) {
+
+                                        if (!hasHumiOutside) {
+                                            List<MinSensorFullObj> minSensorFullObjTemp = listStation.get(0).getStationData().getSensorList().getList();
+                                            minSensorFullObjTemp.get(0).getSensorInfo().setTempSensorName("AAAA0");
+                                            listSensorObj.add(listSensorObj.size(), minSensorFullObjTemp.get(0));
+                                            List<MinSensorFullObj> minSensorFullObjHumi = listStation.get(0).getStationData().getSensorList().getList();
+                                            minSensorFullObjTemp.get(0).getSensorInfo().setTempSensorName("AAAA1");
+                                            listSensorObj.add(listSensorObj.size(), minSensorFullObjHumi.get(0));
 
                                         }
-                                        /*Log.i("0x00", sensorName + " | "
-                                                + listSensorObj.get(k).getSensorInfo().getTempSensorName()
-                                                + " | " + listSensorObj.get(k).getSensorInfo().getSensorSerial()
-                                                + " | " + listSensorObj.get(k).getSensorInfo().getSensorId());*/
                                     }
 
                                     callback.callback(EStatus.GET_SENSOR_OBJ_SUCCESS, listSensorObj, gatewaySerial);
@@ -133,8 +144,3 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
         }
     }
 }
-/*
-
-11-15 10:59:12.552 13597-13597/vn.vnpt.ansv.bts I/0x00: http://10.4.1.204:8081/BTSRestWebService/monitor/sensor/47/65
-        11-15 10:59:12.560 13597-13816/vn.vnpt.ansv.bts I/0x00: 6a8e73a12cc5736c9c200e2814b757db
-        11-15 10:59:12.574 13597-13597/vn.vnpt.ansv.bts I/0x00: http://10.4.1.204:8081/BTSRestWebService/monitor/sensor/47/66*/
