@@ -15,37 +15,55 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.github.florent37.materialviewpager.header.HeaderDesign;
+import com.github.florent37.materialviewpager.header.MaterialViewPagerHeaderDecorator;
 import com.github.johnpersano.supertoasts.SuperToast;
+
+import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import vn.vnpt.ansv.bts.R;
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
+import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
 import vn.vnpt.ansv.bts.objects.MinStationFullObj;
 import vn.vnpt.ansv.bts.ui.BTSActivity;
+import vn.vnpt.ansv.bts.ui.monitor.RecyclerMonitorAdapter;
+import vn.vnpt.ansv.bts.ui.monitor.RecyclerMonitorPresenter;
+import vn.vnpt.ansv.bts.ui.monitor.RecyclerMonitorPresenterImpl;
+import vn.vnpt.ansv.bts.ui.monitor.RecyclerMonitorView;
 import vn.vnpt.ansv.bts.utils.BTSToast;
+import vn.vnpt.ansv.bts.utils.EStatus;
+import vn.vnpt.ansv.bts.utils.TypeCell;
 import vn.vnpt.ansv.bts.utils.Utils;
 
 /**
  * Created by ANSV on 11/9/2017.
  */
 
-public class MonitorContainer extends BTSActivity implements MonitorView {
+public class MonitorContainer extends BTSActivity implements MonitorView, RecyclerMonitorView {
 
     public static List<MinStationFullObj> listAllStation = null;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-
+    private int stationId = -1;
     @Inject
     MonitorPresenter presenter;
 
+    @Inject
+    RecyclerMonitorPresenter recyclerMonitorPresenter;
+
     @BindView(R.id.materialViewPager)
     MaterialViewPager mViewPager;
+
+    @BindView(R.id.recyclerViewOutside)
+    RecyclerView mRecyclerViewOutside;
 
     public static void launch(Context context, List<MinStationFullObj> listStation) {
         listAllStation = listStation;
@@ -61,11 +79,13 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
         (((BTSApplication)getApplication()).getAppComponent()).inject(this);
         ButterKnife.bind(this);
         presenter.setView(this);
+        recyclerMonitorPresenter.setView(this);
 
         final Toolbar toolbar = mViewPager.getToolbar();
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
+        // MQTT -----------------
         presenter.connectMQTT();
         presenter.subscribeToTopic(Utils.defaultTopic, new MonitorPresenterImpl.MQTTCallback() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
@@ -84,6 +104,19 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
                 }
             }
         };
+        // -----------------------
+        setLayoutManager();
+        // get item
+        stationId = listAllStation.get(0).getStationInfo().getStationId();
+        recyclerMonitorPresenter.getData(stationId, new RecyclerMonitorPresenterImpl.MonitorCallback() {
+            @Override
+            public void callback(EStatus eStatus, List<MinSensorFullObj> listSensorObj, String gatewaySerial) {
+                if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS && gatewaySerial.length() > 0) {
+                    setupRecyclerViewAdapter(listSensorObj);
+                } else if (eStatus == EStatus.NETWORK_FAILURE) {
+                }
+            }
+        });
 
         new Thread(new Runnable() {
             public void run() {
@@ -116,8 +149,63 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
                 mViewPager.getPagerTitleStrip().setTextSize(30);
             }
         }).start();
-
     }
+
+    private void setLayoutManager() {
+        mRecyclerViewOutside.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+        mRecyclerViewOutside.setHasFixedSize(true);
+        startBackground(5000);
+    }
+
+    /**
+     * setupScannerAdapter
+     *
+     * Sets up ScannerAdapter for the recycler view.
+     */
+    private RecyclerMonitorAdapter recyclerMonitorAdapter;
+    private void setupRecyclerViewAdapter(final List<MinSensorFullObj> listSensorObj) {
+        mRecyclerViewOutside.addItemDecoration(new MaterialViewPagerHeaderDecorator());
+        recyclerMonitorAdapter = new RecyclerMonitorAdapter(listSensorObj, TypeCell.OUTSIDE);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                recyclerMonitorAdapter.updateDataSet(listSensorObj);
+            }
+        }, 500);
+        mRecyclerViewOutside.setAdapter(recyclerMonitorAdapter);
+    }
+
+    private Runnable runnableCode = null;
+    private Handler handler = new Handler();
+    void startDelayed(final int intervalMS, int delayMS) {
+
+        runnableCode = new Runnable() {
+            @Override
+            public void run() {
+                Log.i("0x00", "running... ");
+                handler.postDelayed(runnableCode, intervalMS);
+                recyclerMonitorPresenter.getData(stationId, new RecyclerMonitorPresenterImpl.MonitorCallback() {
+                    @Override
+                    public void callback(EStatus eStatus, final List<MinSensorFullObj> listSensorObj, String gatewaySerial) {
+                        if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS) {
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    recyclerMonitorAdapter.updateDataSet(listSensorObj);
+                                }
+                            }, 200);
+
+                        } else if (eStatus == EStatus.NETWORK_FAILURE) {
+                        }
+                    }
+                });
+
+            }
+        };
+        handler.postDelayed(runnableCode, delayMS);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -129,6 +217,14 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        listAllStation = null;
+        presenter.unsubscribeToToptic(Utils.defaultTopic);
+        stopBackground();
     }
 
     @Override
@@ -168,6 +264,17 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
         }
     }
 
+    @Override
+    public void startBackground(int intervalMS) {
+        startDelayed(intervalMS, 0);
+    }
+
+    @Override
+    public void stopBackground() {
+        handler.removeCallbacks(runnableCode);
+        Log.i("0x00", "MONITOR ALL STOP BACKGROUND AT: " + (new Date()));
+    }
+
     private AlertDialog.Builder builder = null;
     @Override
     public AlertDialog.Builder showAlert() {
@@ -192,13 +299,6 @@ public class MonitorContainer extends BTSActivity implements MonitorView {
         if (dialog.isShowing()) {
             new BTSToast(this).showToast(content, color);
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        listAllStation = null;
-        presenter.unsubscribeToToptic(Utils.defaultTopic);
     }
 }
 

@@ -25,6 +25,7 @@ import vn.vnpt.ansv.bts.ui.BTSPreferences;
 import vn.vnpt.ansv.bts.ui.PreferenceManager;
 import vn.vnpt.ansv.bts.ui.splash.SplashPresenterImpl;
 import vn.vnpt.ansv.bts.utils.EStatus;
+import vn.vnpt.ansv.bts.utils.TypeCell;
 import vn.vnpt.ansv.bts.utils.Utils;
 
 /**
@@ -75,7 +76,6 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
             mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         } else {
             mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-//            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
         mRecyclerView.setHasFixedSize(true);
 
@@ -88,7 +88,6 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
                     callback.callback(EStatus.GET_SENSOR_OBJ_SUCCESS);
                 } else if (eStatus == EStatus.NETWORK_FAILURE) {
                     callback.callback(EStatus.NETWORK_FAILURE);
-//                    stopBackground();
                 }
             }
         });
@@ -119,7 +118,6 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
 
                         } else if (eStatus == EStatus.NETWORK_FAILURE) {
                             callback.callback(EStatus.NETWORK_FAILURE);
-//                            stopBackground();
                         }
                     }
                 });
@@ -159,7 +157,7 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
      */
     private void setupRecyclerMonitorAdapter(final List<MinSensorFullObj> listSensorObj) {
         mRecyclerView.addItemDecoration(new MaterialViewPagerHeaderDecorator());
-        recyclerMonitorAdapter = new RecyclerMonitorAdapter(listSensorObj);
+        recyclerMonitorAdapter = new RecyclerMonitorAdapter(listSensorObj, TypeCell.INSIDE);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -170,16 +168,6 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
         }, 500);
         mRecyclerView.setAdapter(recyclerMonitorAdapter);
     }
-
-//    private RecyclerMonitorAdapter.OnDeviceItemClickListener listener = new RecyclerMonitorAdapter.OnDeviceItemClickListener() {
-//        @Override
-//        public void onDeviceItemClick(View view, Objects device) {
-//            Intent intent = new Intent(ScannerActivity.this, DemosSelectionActivity.class);
-//            intent.putExtra(ThunderBoardConstants.EXTRA_DEVICE_NAME, device.getName());
-//            intent.putExtra(ThunderBoardConstants.EXTRA_DEVICE_ADDRESS, device.getAddress());
-//            startActivity(intent);
-//        }
-//    };
 
 }
 
