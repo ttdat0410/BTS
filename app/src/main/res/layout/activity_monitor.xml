@@ -6,10 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <com.github.florent37.materialviewpager.MaterialViewPager
         android:id="@+id/materialViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/sl_light_grey"
         app:viewpager_logo="@layout/header_logo"
         app:viewpager_pagerTitleStrip="@layout/material_view_pager_pagertitlestrip_newstand"
@@ -21,15 +24,23 @@
         app:viewpager_hideLogoWithFade="false"
         app:viewpager_hideToolbarAndTitle="true"
         app:viewpager_enableToolbarElevation="true"
-        app:viewpager_parallaxHeaderFactor="0"
-        app:viewpager_headerAdditionalHeight="0dp"
+        app:viewpager_parallaxHeaderFactor="1.5"
+        app:viewpager_headerAdditionalHeight="20dp"
         app:viewpager_displayToolbarWhenSwipe="true"
         app:viewpager_transparentToolbar="false"
         app:viewpager_animatedHeaderImage="true" >
 
+
+
     </com.github.florent37.materialviewpager.MaterialViewPager>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="135dp"
+            android:background="@color/sl_terbium_green"/>
+    </RelativeLayout>
     <include layout="@layout/drawer" />
-
 
 </android.support.v4.widget.DrawerLayout>

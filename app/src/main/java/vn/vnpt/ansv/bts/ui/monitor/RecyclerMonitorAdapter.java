@@ -3,7 +3,6 @@ package vn.vnpt.ansv.bts.ui.monitor;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +28,10 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
     private List<MinSensorFullObj> dataSet;
     private OnDeviceItemClickListener listener;
 
+    private static final int TYPE_TEMP_OUTSIDE = 0;
+    private static final int TYPE_HUMI_INSIDE = 1;
+    private static final int TYPE_CELL_INSIDE = 2;
+
     public RecyclerMonitorAdapter(List<MinSensorFullObj> dataSet) {
         this.dataSet = dataSet;
     }
@@ -43,10 +46,15 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return TYPE_CELL_INSIDE;
+    }
+
+    @Override
     public DeviceHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_device, parent, false);
-        return new DeviceHolder(view);
+        View viewCell = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_device, parent, false);
+        return new DeviceHolder(viewCell, TYPE_CELL_INSIDE);
     }
 
     @Override
@@ -160,7 +168,7 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
 
         View rootView;
 
-        public DeviceHolder(View view) {
+        public DeviceHolder(View view, int viewType) {
             super(view);
             rootView = view;
             ButterKnife.bind(this, view);
