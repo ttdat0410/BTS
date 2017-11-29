@@ -167,7 +167,7 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
      */
     private RecyclerMonitorAdapter recyclerMonitorAdapter;
     private void setupRecyclerViewAdapter(final List<MinSensorFullObj> listSensorObj) {
-        mRecyclerViewOutside.addItemDecoration(new MaterialViewPagerHeaderDecorator());
+//        mRecyclerViewOutside.addItemDecoration(new MaterialViewPagerHeaderDecorator());
         recyclerMonitorAdapter = new RecyclerMonitorAdapter(listSensorObj, TypeCell.OUTSIDE);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -188,7 +188,6 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
         runnableCode = new Runnable() {
             @Override
             public void run() {
-                Log.i("0x00", "running... ");
                 handler.postDelayed(runnableCode, intervalMS);
                 recyclerMonitorPresenter.getData(stationId, new RecyclerMonitorPresenterImpl.MonitorCallback() {
                     @Override
@@ -232,6 +231,8 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
         listAllStation = null;
         presenter.unsubscribeToToptic(Utils.defaultTopic);
         stopBackground();
+        hideLoading();
+        finish();
     }
 
     @Override
@@ -260,12 +261,13 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
 
     @Override
     public void hideLoading() {
-        if (dialog.isShowing()) {
+        if (dialog.isShowing() || dialog != null) {
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     dialog.hide();
+                    dialog.dismiss();
                 }
             }, 500);
         }

@@ -85,7 +85,6 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
             } else {
                 holder.cardView.setVisibility(View.VISIBLE);
             }
-
             holder.txtSensorName.setText(dataSet.get(position).getSensorInfo().getSensorName().toUpperCase());
             holder.txtSensorValue.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForSensorValue(statusId)));
             holder.imgSensorIcon.setImageResource(Utils.setSensorIconImageView(statusId, sensorTypeId));
@@ -95,9 +94,7 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
             holder.imgBatteryIcon.setImageResource(Utils.setBatteryImageView(batteryValue));
             holder.imgSensorIcon.setImageResource(Utils.setSensorIconImageView(statusId, sensorTypeId));
             holder.txtUpdateTime.setText(splitTimeStamp(updateTime.toString()));
-
             holder.txtUpdateTime.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForUpdateTime(statusId)));
-
             if (measurement == null) {
                 holder.txtMeasurementUnit.setText("");
             } else {
@@ -109,7 +106,6 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
                 holder.txtMeasurementUnit.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), R.color.sl_grey));
             }
             splitTimeStamp(updateTime.toString() + "");
-
 
         } else if (typeCell == TypeCell.OUTSIDE){
 
@@ -124,9 +120,7 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
                 holder.imgBatteryIcon.setImageResource(Utils.setBatteryImageView(batteryValue));
                 holder.imgSensorIcon.setImageResource(Utils.setSensorIconImageView(statusId, sensorTypeId));
                 holder.txtUpdateTime.setText(splitTimeStamp(updateTime.toString()));
-
                 holder.txtUpdateTime.setTextColor(ContextCompat.getColor(holder.rootView.getContext(), Utils.setColorForUpdateTime(statusId)));
-
                 if (measurement == null) {
                     holder.txtMeasurementUnit.setText("");
                 } else {

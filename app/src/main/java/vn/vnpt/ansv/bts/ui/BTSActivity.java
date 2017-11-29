@@ -22,8 +22,8 @@ import vn.vnpt.ansv.bts.R;
 public class BTSActivity extends AppCompatActivity {
 
     private static final String TAG = BTSActivity.class.getSimpleName();
-    private DrawerLayout mDrawer;
-    private ActionBarDrawerToggle mDrawerToggle;
+    /*private DrawerLayout mDrawer;
+    private ActionBarDrawerToggle mDrawerToggle;*/
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +41,7 @@ public class BTSActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        /*mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, 0, 0);
         mDrawer.setDrawerListener(mDrawerToggle);
         final ActionBar actionBar = getSupportActionBar();
@@ -51,17 +51,17 @@ public class BTSActivity extends AppCompatActivity {
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayUseLogoEnabled(false);
             actionBar.setHomeButtonEnabled(true);
-        }
+        }*/
     }
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
+//        mDrawerToggle.syncState();
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return mDrawerToggle.onOptionsItemSelected(item) ||
-                super.onOptionsItemSelected(item);
+//        return mDrawerToggle.onOptionsItemSelected(item) ||
+        return super.onOptionsItemSelected(item);
     }
     @TargetApi(21)
     protected void changeStatusBarColor(int color) {

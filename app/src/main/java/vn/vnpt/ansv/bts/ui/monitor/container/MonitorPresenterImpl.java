@@ -120,11 +120,11 @@ public class MonitorPresenterImpl implements MonitorPresenter {
         switch (page) {
             case 0:
                 return HeaderDesign.fromColorResAndUrl(
-                        R.color.sl_terbium_green,
+                        R.color.dark_gray,
                         "http://buudienhospital.vn/wp-content/uploads/2017/04/3-1237x386.jpg");
             case 1:
                 return HeaderDesign.fromColorResAndUrl(
-                        R.color.sl_red_orange,
+                        R.color.dark_gray,
                         "http://buudienhospital.vn/wp-content/uploads/2017/04/tgd_vnpt.jpg");
 //                                "http://www.hdiphonewallpapers.us/phone-wallpapers/540x960-1/540x960-mobile-wallpapers-hd-2218x5ox3.jpg");
             case 2:
