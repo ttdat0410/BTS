@@ -89,8 +89,7 @@
                     android:layout_above="@id/port_edit_text"
                     android:layout_alignParentLeft="true"
                     android:layout_marginBottom="10dp"
-                    android:text="@string/title_port"
-                    />
+                    android:text="@string/title_port" />
 
                 <View
                     android:id="@+id/v"

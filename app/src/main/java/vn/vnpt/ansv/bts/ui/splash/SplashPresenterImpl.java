@@ -22,7 +22,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import vn.vnpt.ansv.bts.common.app.BTSApplication;
 import vn.vnpt.ansv.bts.common.injection.scope.ActivityScope;
-import vn.vnpt.ansv.bts.objects.MinSensorFullObj;
 import vn.vnpt.ansv.bts.objects.MinStationFullListObj;
 import vn.vnpt.ansv.bts.objects.MinStationFullObj;
 import vn.vnpt.ansv.bts.ui.BTSPreferences;
