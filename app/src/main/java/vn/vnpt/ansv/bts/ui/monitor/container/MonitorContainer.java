@@ -110,16 +110,18 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
         // -----------------------
         setLayoutManager();
         // get item
-        stationId = listAllStation.get(0).getStationInfo().getStationId();
-        recyclerMonitorPresenter.getData(stationId, new RecyclerMonitorPresenterImpl.MonitorCallback() {
-            @Override
-            public void callback(EStatus eStatus, List<MinSensorFullObj> listSensorObj, String gatewaySerial) {
-                if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS && gatewaySerial.length() > 0) {
-                    setupRecyclerViewAdapter(listSensorObj);
-                } else if (eStatus == EStatus.NETWORK_FAILURE) {
+        if (listAllStation.size() > 0) {
+            stationId = listAllStation.get(0).getStationInfo().getStationId();
+            recyclerMonitorPresenter.getData(stationId, new RecyclerMonitorPresenterImpl.MonitorCallback() {
+                @Override
+                public void callback(EStatus eStatus, List<MinSensorFullObj> listSensorObj, String gatewaySerial) {
+                    if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS && gatewaySerial.length() > 0) {
+                        setupRecyclerViewAdapter(listSensorObj);
+                    } else if (eStatus == EStatus.NETWORK_FAILURE) {
+                    }
                 }
-            }
-        });
+            });
+        }
 
         new Thread(new Runnable() {
             public void run() {

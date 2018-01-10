@@ -284,6 +284,7 @@ public class SplashPresenterImpl implements SplashPresenter {
                         try {
                             JSONObject object = new JSONObject(response);
                             JSONObject data = object.getJSONObject("data");
+                            Log.e("0x00", data.toString() );
                             BTSPreferences prefs = preferenceManager.getPreferences();
                             if (data.has("roleId") && data.has("role")) {
                                 Log.i("0x00", data.getString("roleId"));

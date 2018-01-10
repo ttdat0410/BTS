@@ -106,15 +106,21 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
                     @Override
                     public void callback(EStatus eStatus, final List<MinSensorFullObj> listSensorObj, String gatewaySerial) {
                         if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS) {
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Collections.sort(listSensorObj, Utils.comparatorWithSensorTypeId);
-                                    Collections.sort(listSensorObj, Utils.comparatorWithSensorName);
-                                    recyclerMonitorAdapter.updateDataSet(listSensorObj);
-                                }
-                            }, 200);
-                            callback.callback(EStatus.GET_SENSOR_OBJ_SUCCESS);
+
+                            if (recyclerMonitorAdapter != null) {
+
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Collections.sort(listSensorObj, Utils.comparatorWithSensorTypeId);
+                                        Collections.sort(listSensorObj, Utils.comparatorWithSensorName);
+                                        recyclerMonitorAdapter.updateDataSet(listSensorObj);
+                                    }
+                                }, 200);
+                                callback.callback(EStatus.GET_SENSOR_OBJ_SUCCESS);
+                            } else {
+
+                            }
 
                         } else if (eStatus == EStatus.NETWORK_FAILURE) {
                             callback.callback(EStatus.NETWORK_FAILURE);

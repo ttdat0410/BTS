@@ -12,6 +12,20 @@ import vn.vnpt.ansv.bts.common.injection.module.AppModule;
 
 public class BTSApplication extends Application {
 
+    /*private AppComponent appComponent;
+    public  AppComponent getAppComponent() {
+        return appComponent;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        appComponent = initDagger(this);
+    }
+
+    protected AppComponent initDagger(BTSApplication application) {
+        return DaggerAppComponent.builder().appModule(new AppModule(application)).build();
+    }*/
     private AppComponent appComponent;
     public  AppComponent getAppComponent() {
         return appComponent;

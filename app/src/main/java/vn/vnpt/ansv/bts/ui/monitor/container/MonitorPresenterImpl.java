@@ -151,7 +151,7 @@ public class MonitorPresenterImpl implements MonitorPresenter {
         String broker = Utils.getBroker(context);
         BTSPreferences prefs = preferenceManager.getPreferences();
         String roleId = prefs.roleId;
-        if(roleId.length() > 0 && roleId.equalsIgnoreCase(Role.Admin.getValue())) {
+        if(roleId.length() > 0 && roleId.equalsIgnoreCase(Role.Other.getValue())) {
             try {
                 vnptClient = new VNPTClient(Utils.createdRandomString(7), broker);
                 vnptClient.connect(null, null, null, null);
@@ -216,6 +216,7 @@ public class MonitorPresenterImpl implements MonitorPresenter {
     public void showNotification(String message) {
         try {
             JSONObject jsonObject = new JSONObject(message);
+            Log.e("0x00", "RESS: " + jsonObject.toString());
             String urlCam = "";
             if (jsonObject.has("urlCam")) {
                 BTSPreferences prefs = preferenceManager.getPreferences();
