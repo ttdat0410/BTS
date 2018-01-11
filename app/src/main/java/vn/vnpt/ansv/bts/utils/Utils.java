@@ -65,7 +65,7 @@ public class Utils {
             return "tcp://10.4.1.210:1883";
         }*/
     }
-    public static String defaultTopic = "user2";
+    public static String defaultTopic = "user1";
     public static String getTopic() {
         return "/SCPCloud/DEVICE/";
     }

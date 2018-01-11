@@ -189,7 +189,7 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
     private void setLayoutManager() {
         mRecyclerViewOutside.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
         mRecyclerViewOutside.setHasFixedSize(true);
-        startBackground(15000);
+        startBackground(10000);
     }
 
     /**
@@ -413,7 +413,7 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
                             .position(com.nispok.snackbar.Snackbar.SnackbarPosition.BOTTOM)
                             .text("Mất kết nối server...")
                             .textColor(Color.parseColor("#AFFFFFFF"))
-                            .color(Color.parseColor("#333333"))
+                            .color(Color.parseColor("#ff002129"))
                             .duration(com.nispok.snackbar.Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
                             .actionLabel("KIỂM TRA MẠNG")
                             .actionColor(Color.parseColor("#ffe65100"))

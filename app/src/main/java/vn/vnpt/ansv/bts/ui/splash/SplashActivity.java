@@ -105,6 +105,14 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
         titleVNPT.setOnClickListener(onSplashClick);
     }
 
+    @Override
+    protected void onResume() {
+        if (loginButton != null) {
+            loginButton.setEnabled(true);
+        }
+        super.onResume();
+    }
+
     private int countOfClicked = 0;
     private View.OnClickListener onSplashClick = new View.OnClickListener() {
         @Override
@@ -118,7 +126,6 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
                                 @Override
                                 public void callback(EStatus eStatus, String apiKey, String userId) {
                                     updateStatusView(eStatus, apiKey, userId);
-                                    loginButton.setEnabled(true);
                                 }
                             });
                     break;
@@ -362,8 +369,9 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
                 showUpdate(false);
                 MonitorContainer.launch(SplashActivity.this, listStation);
                 NotificationUtils.clearNotifications(getApplicationContext());
+//                loginButton.setEnabled(true);
             }
-        }, 500);
+        }, 200);
     }
 
     /**
@@ -468,6 +476,8 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
     }
 
     private void showToast(String content, int color) {
+        showUpdate(false);
         new BTSToast(this).showToast(content, color);
+        loginButton.setEnabled(true);
     }
 }

@@ -230,13 +230,13 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
 
     @Override
     public void showConnectedServer(boolean isConnect) {
-        /*if (!isConnect) {
+        if (!isConnect) {
             SnackbarManager.show(
                     com.nispok.snackbar.Snackbar.with(getActivity())
                             .position(com.nispok.snackbar.Snackbar.SnackbarPosition.BOTTOM)
                             .text("Mất kết nối server...")
                             .textColor(Color.parseColor("#AFFFFFFF"))
-                            .color(Color.parseColor("#333333"))
+                            .color(Color.parseColor("#ff002129"))
                             .duration(com.nispok.snackbar.Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
                             .actionLabel("KIỂM TRA MẠNG")
                             .actionColor(Color.parseColor("#ffe65100"))
@@ -251,7 +251,7 @@ public class RecyclerMonitorFragment  extends Fragment implements RecyclerMonito
 
         } else {
             SnackbarManager.dismiss();
-        }*/
+        }
     }
 }
 
