@@ -55,7 +55,9 @@ public class Utils {
         PreferenceManager preferenceManager = new PreferenceManager(context);
         BTSPreferences prefs = preferenceManager.getPreferences();
         String ip = prefs.ip;
-        return "tcp://113.161.61.89:41883";
+        return "tcp://123.20.207.35:1883";
+
+//        return "tcp://113.161.61.89:41883";
 
         /*if (ip.equalsIgnoreCase("113.161.61.89")) {
             return "tcp://" + ip + ":41883";
@@ -63,7 +65,7 @@ public class Utils {
             return "tcp://10.4.1.210:1883";
         }*/
     }
-    public static String defaultTopic = "user1";
+    public static String defaultTopic = "user2";
     public static String getTopic() {
         return "/SCPCloud/DEVICE/";
     }

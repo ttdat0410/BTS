@@ -54,4 +54,6 @@
     <color name="sl_blue">#ff00aeff</color>
     <color name="sl_light_blue">#ff78d6ff</color>
 
+    <color name="bg_m">#ff002b36</color>
+
 </resources>
