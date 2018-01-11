@@ -1,6 +1,7 @@
 package vn.vnpt.ansv.bts.ui.monitor;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -58,7 +59,6 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
         BTSPreferences prefs = preferenceManager.getPreferences();
         String userId = prefs.userId;
         final String apiKey = prefs.apiKey;
-
         if (apiKey.trim().length() < 1) {
             callback.callback(EStatus.APIKEY_INVAILABLE, null, null);
 
@@ -103,16 +103,19 @@ public class RecyclerMonitorPresenterImpl implements RecyclerMonitorPresenter {
                                     }
 
                                     callback.callback(EStatus.GET_SENSOR_OBJ_SUCCESS, listSensorObj, gatewaySerial);
-
                                 }
+                                view.showConnectedServer(true);
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                view.showConnectedServer(false);
                             }
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     callback.callback(EStatus.NETWORK_FAILURE, null, null);
+                    view.showConnectedServer(false);
                 }
             }) {
                 @Override

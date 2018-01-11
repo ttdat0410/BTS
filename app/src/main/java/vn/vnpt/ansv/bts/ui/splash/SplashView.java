@@ -9,8 +9,9 @@ import vn.vnpt.ansv.bts.objects.MinStationFullObj;
  */
 
 public interface SplashView {
-    void showLoading();
-    void hideLoading();
+//    void showLoading();
+//    void hideLoading();
+    void showUpdate(boolean isUpdate);
     void showBottomView();
     void launchMonitor(List<MinStationFullObj> listStation);
 }

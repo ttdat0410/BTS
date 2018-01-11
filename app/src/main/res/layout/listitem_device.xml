@@ -40,10 +40,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
+                    android:fontFamily="sans-serif-medium"
                     android:maxLines="1"
-                    android:text="--"
-                    android:fontFamily="sans-serif-bold"
-                    android:textAllCaps="true"/>
+                    android:lines="1"
+                    android:text="N/A"
+                    android:textAllCaps="true" />
 
                 <View
                     android:id="@+id/line"
@@ -72,31 +73,30 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_centerHorizontal="true"
-                            android:src="@mipmap/ic_temp_inactive"
+                            android:src="@mipmap/ic_tint_background"
                             android:layout_gravity="center"/>
 
                         <TextView
                             android:id="@+id/txtSensorValue"
+                            style="@style/mm_terbium_green"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            style="@style/mm_terbium_green"
                             android:layout_below="@+id/imgSensorIcon"
+                            android:layout_gravity="center"
                             android:layout_marginLeft="@dimen/space_XS"
-                            android:text="--"
-                            android:textAllCaps="true"
-                            android:fontFamily="sans-serif-bold"
-                            android:layout_gravity="center"/>
+                            android:fontFamily="sans-serif-medium"
+                            android:text="N/A"
+                            android:textAllCaps="true" />
 
                         <TextView
                             android:id="@+id/txtMeasurementUnit"
+                            style="@style/sm_footer_grey"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            style="@style/sm_footer_grey"
                             android:layout_below="@+id/imgSensorIcon"
+                            android:layout_gravity="center"
                             android:layout_marginLeft="@dimen/space_XS"
-                            android:text="(--)"
-                            android:fontFamily="sans-serif-light"
-                            android:layout_gravity="center"/>
+                            android:fontFamily="sans-serif-light" />
 
                     </LinearLayout>
 
@@ -114,11 +114,11 @@
                             style="@style/s_silicon_grey"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="--%"
                             android:layout_gravity="center"
                             android:layout_marginRight="@dimen/space_XXS"
                             android:fontFamily="sans-serif-light"
-                            android:textAllCaps="true"/>
+                            android:text="#"
+                            android:textAllCaps="true" />
 
                         <ImageView
                             android:id="@+id/imgBatteryIcon"
@@ -142,10 +142,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/lineUpdateTime"
-                        android:text="--"
+                        android:text="###"
                         android:layout_marginRight="@dimen/space_XXXS"
                         android:textAlignment="textEnd"
-                        android:fontFamily="sans-serif-bold" />
+                        android:fontFamily="sans-serif-medium" />
 
                 </RelativeLayout>
 

@@ -3,7 +3,6 @@ package vn.vnpt.ansv.bts.ui.monitor;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +37,8 @@ public class RecyclerMonitorAdapter extends RecyclerView.Adapter<RecyclerMonitor
     public int getItemCount() {
         if (typeCell == TypeCell.INSIDE) {
             if (dataSet == null) {
+                return 0;
+            } else if (dataSet.size() < 1){
                 return 0;
             } else {
                 return dataSet.size();

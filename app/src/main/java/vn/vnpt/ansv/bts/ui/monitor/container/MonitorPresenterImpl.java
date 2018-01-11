@@ -31,6 +31,8 @@ import vn.vnpt.technology.mqtt.VNPTClientEventHandle;
 
 public class MonitorPresenterImpl implements MonitorPresenter {
 
+    private static final String TAG = MonitorPresenterImpl.class.getSimpleName();
+
     public interface MQTTCallback {
         void detectNoise(String message);
     }
@@ -46,7 +48,7 @@ public class MonitorPresenterImpl implements MonitorPresenter {
         }
     }
 
-    public static boolean isShowAlert = true;
+//    public static boolean isShowAlert = true;
     private MonitorView view;
     private Context context;
 
@@ -69,16 +71,18 @@ public class MonitorPresenterImpl implements MonitorPresenter {
             if (i == position % listAllStation.size()) {
                 int stationId = listAllStation.get(i).getStationInfo().getStationId();
                 if (i == 0) {
-                    view.showLoading();
+                    view.showUpdate(true);
+//                    view.showLoading();
                     return RecyclerMonitorFragment.newInstance(stationId, new SplashPresenterImpl.GetStationCallback() {
                         @Override
                         public void callback(EStatus eStatus) {
-                            view.hideLoading();
+//                            view.hideLoading();
+                            view.showUpdate(false);
                             if (eStatus == EStatus.NETWORK_FAILURE) {
-                                if (isShowAlert) {
-                                    view.showAlert().show();
-                                }
-                                isShowAlert = false;
+//                                if (isShowAlert) {
+//                                    view.showAlert().show();
+//                                }
+//                                isShowAlert = false;
                             } else if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS) {
                             }
                         }
@@ -151,11 +155,12 @@ public class MonitorPresenterImpl implements MonitorPresenter {
         String broker = Utils.getBroker(context);
         BTSPreferences prefs = preferenceManager.getPreferences();
         String roleId = prefs.roleId;
+        // check permission with OPERATOR USER
         if(roleId.length() > 0 && roleId.equalsIgnoreCase(Role.Other.getValue())) {
             try {
                 vnptClient = new VNPTClient(Utils.createdRandomString(7), broker);
                 vnptClient.connect(null, null, null, null);
-                Log.i("0x00", "Establish MQTT conection");
+                Log.i(TAG, "Establish MQTT conection");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -166,10 +171,10 @@ public class MonitorPresenterImpl implements MonitorPresenter {
 
     @Override
     public void subscribeToTopic(String topic, final MQTTCallback callback) {
-        Log.i("0x00", "Subscribe to " + topic);
+        Log.i(TAG, "Subscribe to " + topic);
         try {
             if (vnptClient != null) {
-                Log.i("0x00", "subscribe to " + topic + " success");
+                Log.i(TAG, "subscribe to " + topic + " success");
                 vnptClient.subscribe(Utils.getTopic() + topic, new VNPTClientEventHandle() {
                     @Override
                     public void onMessageArrived(String topic, String message) {
@@ -177,7 +182,7 @@ public class MonitorPresenterImpl implements MonitorPresenter {
                     }
                 });
             } else {
-                Log.i("0x00", "subscribe to " + topic + " fail");
+                Log.i(TAG, "subscribe to " + topic + " fail");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -186,19 +191,23 @@ public class MonitorPresenterImpl implements MonitorPresenter {
 
     @Override
     public void unsubscribeToToptic(String topic) {
-        Log.i("0x00", "Unsubscribe to " + topic);
-        try {
-            if (vnptClient != null) {
-                vnptClient.unsubscribe(Utils.getTopic() + topic);
-                vnptClient.disconnect();
-                vnptClient = null;
-                Log.i("0x00", "unsubscribe to " + topic + " success");
-            } else {
-                Log.i("0x00", "unsubscribe to " + topic + " fail");
+        Log.i(TAG, "Unsubscribe to " + topic);
+        BTSPreferences prefs = preferenceManager.getPreferences();
+        String roleId = prefs.roleId;
+        if(roleId.length() > 0 && roleId.equalsIgnoreCase(Role.Other.getValue())) {
+            try {
+                if (vnptClient != null) {
+                    vnptClient.unsubscribe(Utils.getTopic() + topic);
+                    vnptClient.disconnect();
+                    vnptClient = null;
+                    Log.i(TAG, "unsubscribe to " + topic + " success");
+                } else {
+                    Log.i(TAG, "unsubscribe to " + topic + " fail");
 
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -216,13 +225,13 @@ public class MonitorPresenterImpl implements MonitorPresenter {
     public void showNotification(String message) {
         try {
             JSONObject jsonObject = new JSONObject(message);
-            Log.e("0x00", "RESS: " + jsonObject.toString());
             String urlCam = "";
             if (jsonObject.has("urlCam")) {
                 BTSPreferences prefs = preferenceManager.getPreferences();
                 urlCam = jsonObject.getString("urlCam");
                 String roleId = prefs.roleId;
-                if (roleId.equalsIgnoreCase(Role.Admin.getValue())) {
+                if (roleId.equalsIgnoreCase(Role.Other.getValue())) {
+                    Log.e("0x00", "IMP: " + urlCam);
                     ShowCamActivity.urlCam = urlCam;
                     Intent resultIntent = new Intent(context, ShowCamActivity.class);
                     resultIntent.putExtra("message", urlCam);
@@ -242,9 +251,9 @@ public class MonitorPresenterImpl implements MonitorPresenter {
             }
 
         } catch (JSONException e) {
-            Log.e("0x00", "Json Exception: " + e.getMessage());
+            Log.e(TAG, "Json Exception: " + e.getMessage());
         } catch (Exception e) {
-            Log.e("0x00", "Exception: " + e.getMessage());
+            Log.e(TAG, "Exception: " + e.getMessage());
         }
     }
 
@@ -255,7 +264,7 @@ public class MonitorPresenterImpl implements MonitorPresenter {
     private void showNotificationMessage(int id, Context context, String title, String message, String timeStamp, Intent intent) {
         BTSPreferences prefs = preferenceManager.getPreferences();
         String roleId = prefs.roleId;
-        if (roleId.equalsIgnoreCase(Role.Admin.getValue())) {
+        if (roleId.equalsIgnoreCase(Role.Other.getValue())) {
             notificationUtils = new NotificationUtils(context);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             notificationUtils.showNotificationMessage(id, title, message, timeStamp, intent);
@@ -269,7 +278,7 @@ public class MonitorPresenterImpl implements MonitorPresenter {
 
         BTSPreferences prefs = preferenceManager.getPreferences();
         String roleId = prefs.roleId;
-        if (roleId.equalsIgnoreCase(Role.Admin.getValue())) {
+        if (roleId.equalsIgnoreCase(Role.Other.getValue())) {
             Intent pushNotification = new Intent(Utils.PUSH_NOTIFICATION);
             pushNotification.putExtra("message", "CẢNH BÁO ÂM THANH");
             LocalBroadcastManager.getInstance(context).sendBroadcast(pushNotification);

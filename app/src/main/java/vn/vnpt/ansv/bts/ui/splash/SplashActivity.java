@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -16,6 +17,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
@@ -25,6 +27,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.androidadvance.topsnackbar.TSnackbar;
 import com.github.johnpersano.supertoasts.SuperToast;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +112,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
             switch (v.getId()) {
                 case R.id.loginButton:
                     loginButton.setEnabled(false);
+                    showUpdate(true);
                     presenter.getUser(nameEditText.getText().toString().trim(),
                             passwordEditText.getText().toString().trim(), new SplashPresenterImpl.Callback() {
                                 @Override
@@ -208,7 +213,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
             case LOGIN:
                 break;
             case LOGIN_SUCCESS:
-                showToast(getResources().getString(R.string.verify_login_success), SuperToast.Background.GREEN);
+//                showToast(getResources().getString(R.string.verify_login_success), SuperToast.Background.GREEN);
                 saveAccount(nameEditText.getText().toString(), passwordEditText.getText().toString(), apiKey, userId);
                 hideKeyboard(passwordEditText);
                 presenter.getRoleId();
@@ -252,19 +257,56 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
             @Override
             public void callback(EStatus eStatus) {
                 updateStatusView(eStatus, "", "");
-                if (dialog.isShowing()) {
-                    hideLoading();
-                }
+//                if (dialog.isShowing()) {
+//                    hideLoading();
+//                }
             }
         });
     }
 
-    private ProgressDialog dialog;
+    private TSnackbar mSnackbarUpdate;
+    @Override
+    public void showUpdate(boolean isUpdate) {
+        if (isUpdate) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mSnackbarUpdate = TSnackbar.make(findViewById(android.R.id.content), "...", TSnackbar.LENGTH_INDEFINITE);
+                    mSnackbarUpdate.setActionTextColor(Color.WHITE);
+                    mSnackbarUpdate.setText(getResources().getString(R.string.verify_login)+"...");
+                    View snackbarView = mSnackbarUpdate.getView();
+                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                            FrameLayout.LayoutParams.WRAP_CONTENT,
+                            FrameLayout.LayoutParams.WRAP_CONTENT);
+                    params.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+                    params.setMargins(params.leftMargin,
+                            56+16,
+                            params.rightMargin,
+                            params.bottomMargin);
+                    snackbarView.setLayoutParams(params);
+                    snackbarView.setBackground(getResources().getDrawable(R.drawable.snackbar_bg));
+                    mSnackbarUpdate.show();
+                }
+            });
+
+        } else {
+            if (mSnackbarUpdate != null && mSnackbarUpdate.isShown()) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSnackbarUpdate.dismiss();
+                    }
+                });
+            }
+        }
+    }
+
+    //    private ProgressDialog dialog;
     /**
      * Hàm implement từ view
      * @see SplashView
      * */
-    @Override
+    /*@Override
     public void showLoading() {
         dialog = new ProgressDialog(SplashActivity.this);
         dialog.setCancelable(false);
@@ -273,13 +315,13 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
         dialog.setTitle("Đăng nhập");
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.show();
-    }
+    }*/
 
     /**
      * Hàm implement từ view
      * @see SplashView
      * */
-    @Override
+    /*@Override
     public void hideLoading() {
         if (dialog.isShowing()) {
             final Handler handler = new Handler();
@@ -290,7 +332,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
                 }
             }, 500);
         }
-    }
+    }*/
 
     /**
      * Hàm implement từ view
@@ -317,6 +359,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView{
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                showUpdate(false);
                 MonitorContainer.launch(SplashActivity.this, listStation);
                 NotificationUtils.clearNotifications(getApplicationContext());
             }

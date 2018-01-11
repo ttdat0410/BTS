@@ -122,7 +122,7 @@ public class SplashPresenterImpl implements SplashPresenter {
              * Cho phép view gọi showLoading khi user và pass đều có nội dung
              * @see SplashView
              * */
-            splashView.showLoading();
+//            splashView.showLoading();
             String url = null;
             RequestQueue queue = Volley.newRequestQueue(context);
             try {
@@ -146,7 +146,7 @@ public class SplashPresenterImpl implements SplashPresenter {
 
                                     } else if (statusServerCode == StatusServer.UsernameOrPasswordIsIncorrect.getValue()) {
                                         callback.callback(EStatus.USERNAME_INCORRECT, "", "");
-                                        splashView.hideLoading();
+//                                        splashView.hideLoading();
                                     }
 
                                 } catch (JSONException e) {
@@ -160,7 +160,7 @@ public class SplashPresenterImpl implements SplashPresenter {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         callback.callback(EStatus.NETWORK_FAILURE, "", "");
-                        splashView.hideLoading();
+//                        splashView.hideLoading();
                     }
                 });
                 queue.add(stringRequest);
@@ -210,44 +210,7 @@ public class SplashPresenterImpl implements SplashPresenter {
                                 List<MinStationFullObj> listStation = minStationFullListObj.getList();
                                 callback.callback(EStatus.GET_STATIONS_SUCCESS);
                                 splashView.launchMonitor(listStation);
-                                splashView.hideLoading();
-                                /*CardviewObject itemCardView;
-                                Log.i("0x00", "COUNT: " + listStation.size());
-                                for (int i = 0; i < listStation.size(); i++) {
-
-                                    id = listStation.get(i).getStationInfo().getStationId();
-                                    tenTram = listStation.get(i).getStationInfo().getStationName();
-                                    List<MinSensorFullObj> listSensorObj = listStation.get(i).getStationData().getSensorList().getList();
-                                    itemCardView = new CardviewObject();
-                                    itemCardView.setId(id);
-                                    itemCardView.setTenTram(tenTram);
-                                    for (int z = 0; z < listSensorObj.size(); z++) {
-                                        Integer sensorId = listSensorObj.get(z).getSensorInfo().getSensorTypeId();
-                                        List<SensorDataObj> sensorData = listSensorObj.get(z).getSensorData().getList();                                     String sensorValue = String.valueOf(sensorData.get(0).getValue());
-                                        switch (sensorId) {
-                                            case 6:
-                                                itemCardView.setNhietdo(sensorValue);
-                                                break;
-                                            case 7:
-                                                itemCardView.setDoam(sensorValue);
-                                                break;
-                                            case 20:
-                                                itemCardView.setCua(sensorValue);
-                                                break;
-                                            case 21:
-                                                itemCardView.setKhoi(sensorValue);
-                                                break;
-                                            case 22:
-                                                itemCardView.setBaochay(sensorValue);
-                                                break;
-                                            case 23:
-                                                itemCardView.setMucnuoc(sensorValue);
-                                                break;
-                                        }
-                                    }
-//                                listItem.add(itemCardView);
-//                                adapter.notifyDataSetChanged();
-                                }*/
+//                                splashView.hideLoading();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -256,7 +219,7 @@ public class SplashPresenterImpl implements SplashPresenter {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     callback.callback(EStatus.NETWORK_FAILURE);
-                    splashView.hideLoading();
+//                    splashView.hideLoading();
                 }
             }) {
                 @Override
@@ -284,7 +247,6 @@ public class SplashPresenterImpl implements SplashPresenter {
                         try {
                             JSONObject object = new JSONObject(response);
                             JSONObject data = object.getJSONObject("data");
-                            Log.e("0x00", data.toString() );
                             BTSPreferences prefs = preferenceManager.getPreferences();
                             if (data.has("roleId") && data.has("role")) {
                                 Log.i("0x00", data.getString("roleId"));

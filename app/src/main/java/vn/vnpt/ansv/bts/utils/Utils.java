@@ -55,12 +55,13 @@ public class Utils {
         PreferenceManager preferenceManager = new PreferenceManager(context);
         BTSPreferences prefs = preferenceManager.getPreferences();
         String ip = prefs.ip;
+        return "tcp://113.161.61.89:41883";
 
-        if (ip.equalsIgnoreCase("113.161.61.89")) {
+        /*if (ip.equalsIgnoreCase("113.161.61.89")) {
             return "tcp://" + ip + ":41883";
         } else {
             return "tcp://10.4.1.210:1883";
-        }
+        }*/
     }
     public static String defaultTopic = "user1";
     public static String getTopic() {

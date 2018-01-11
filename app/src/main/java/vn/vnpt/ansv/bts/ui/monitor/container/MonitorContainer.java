@@ -1,12 +1,13 @@
 package vn.vnpt.ansv.bts.ui.monitor.container;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,13 +19,18 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
 
+import com.androidadvance.topsnackbar.TSnackbar;
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.github.florent37.materialviewpager.header.HeaderDesign;
-import com.github.florent37.materialviewpager.header.MaterialViewPagerHeaderDecorator;
 import com.github.johnpersano.supertoasts.SuperToast;
+import com.nispok.snackbar.SnackbarManager;
+import com.nispok.snackbar.listeners.ActionClickListener;
 
 import java.util.Collections;
 import java.util.Date;
@@ -103,7 +109,7 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(Utils.PUSH_NOTIFICATION)) {
                     String message = intent.getStringExtra("message");
-                    showToast(message, SuperToast.Background.PURPLE);
+//                    showToast(message, SuperToast.Background.PURPLE);
                 }
             }
         };
@@ -111,6 +117,7 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
         setLayoutManager();
         // get item
         if (listAllStation.size() > 0) {
+            showUpdate(true);
             stationId = listAllStation.get(0).getStationInfo().getStationId();
             recyclerMonitorPresenter.getData(stationId, new RecyclerMonitorPresenterImpl.MonitorCallback() {
                 @Override
@@ -118,9 +125,32 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
                     if (eStatus == EStatus.GET_SENSOR_OBJ_SUCCESS && gatewaySerial.length() > 0) {
                         setupRecyclerViewAdapter(listSensorObj);
                     } else if (eStatus == EStatus.NETWORK_FAILURE) {
+
                     }
+                    showUpdate(false);
                 }
             });
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mSnackbarUpdate = TSnackbar.make(findViewById(android.R.id.content), "Đang tải...", TSnackbar.LENGTH_INDEFINITE);
+                    mSnackbarUpdate.setActionTextColor(Color.WHITE);
+                    mSnackbarUpdate.setText("STATION_ID == NULL");
+                    View snackbarView = mSnackbarUpdate.getView();
+                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                            FrameLayout.LayoutParams.WRAP_CONTENT,
+                            FrameLayout.LayoutParams.WRAP_CONTENT);
+                    params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+                    params.setMargins(params.leftMargin,
+                            56+16,
+                            params.rightMargin,
+                            params.bottomMargin);
+                    snackbarView.setLayoutParams(params);
+                    snackbarView.setBackground(getResources().getDrawable(R.drawable.snackbar_bg));
+                    mSnackbarUpdate.show();
+                }
+            });showConnectedServer(true);
         }
 
         new Thread(new Runnable() {
@@ -186,7 +216,6 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
     private Runnable runnableCode = null;
     private Handler handler = new Handler();
     void startDelayed(final int intervalMS, int delayMS) {
-
         runnableCode = new Runnable() {
             @Override
             public void run() {
@@ -208,7 +237,6 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
                         }
                     }
                 });
-
             }
         };
         handler.postDelayed(runnableCode, delayMS);
@@ -224,6 +252,15 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
     @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        SnackbarManager.dismiss();
+        if (mSnackbarUpdate != null && mSnackbarUpdate.isShown()) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mSnackbarUpdate.dismiss();
+                }
+            });
+        }
         super.onPause();
     }
 
@@ -233,7 +270,7 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
         listAllStation = null;
         presenter.unsubscribeToToptic(Utils.defaultTopic);
         stopBackground();
-        hideLoading();
+//        hideLoading();
         finish();
     }
 
@@ -248,7 +285,7 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
         }
     }
 
-    private ProgressDialog dialog;
+    /*private ProgressDialog dialog;
     @Override
     public void showLoading() {
         dialog = new ProgressDialog(MonitorContainer.this);
@@ -273,7 +310,7 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
                 }
             }, 500);
         }
-    }
+    }*/
 
     @Override
     public void startBackground(int intervalMS) {
@@ -286,7 +323,7 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
         Log.i("0x00", "MONITOR ALL STOP BACKGROUND AT: " + (new Date()));
     }
 
-    private AlertDialog.Builder builder = null;
+    /*private AlertDialog.Builder builder = null;
     @Override
     public AlertDialog.Builder showAlert() {
         builder = new AlertDialog.Builder(MonitorContainer.this);
@@ -297,18 +334,100 @@ public class MonitorContainer extends BTSActivity implements MonitorView, Recycl
         builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                showLoading();
+//                showLoading();
                 dialog.dismiss();
-                MonitorPresenterImpl.isShowAlert = true;
+//                MonitorPresenterImpl.isShowAlert = true;
             }
         });
         return builder;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void showToast(String content, int color) {
         if (dialog.isShowing()) {
             new BTSToast(this).showToast(content, color);
+        }
+    }*/
+
+    private TSnackbar mSnackbarUpdate;
+    @Override
+    public void showUpdate(boolean isUpdate) {
+        if (isUpdate) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mSnackbarUpdate = TSnackbar.make(findViewById(android.R.id.content), "Đang tải...", TSnackbar.LENGTH_INDEFINITE);
+                    mSnackbarUpdate.setActionTextColor(Color.WHITE);
+                    mSnackbarUpdate.setText("đang cập nhật..");
+                    View snackbarView = mSnackbarUpdate.getView();
+                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                            FrameLayout.LayoutParams.WRAP_CONTENT,
+                            FrameLayout.LayoutParams.WRAP_CONTENT);
+                    params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+                    params.setMargins(params.leftMargin,
+                            56+16,
+                            params.rightMargin,
+                            params.bottomMargin);
+                    snackbarView.setLayoutParams(params);
+                    snackbarView.setBackground(getResources().getDrawable(R.drawable.snackbar_bg));
+                    mSnackbarUpdate.show();
+                }
+            });
+
+        } else {
+            if (mSnackbarUpdate != null && mSnackbarUpdate.isShown()) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSnackbarUpdate.dismiss();
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    public void showSnackBar(EStatus msServerState, String status) {
+        Snackbar snackbar = Snackbar
+                .make(mViewPager, status, Snackbar.LENGTH_LONG);
+        View snackbarView = snackbar.getView();
+        if (msServerState == EStatus.GET_STATIONS_SUCCESS) {
+            snackbarView.setBackgroundColor(getResources().getColor(R.color.sl_terbium_green));
+            this.runOnUiThread(new Runnable(){
+                @Override
+                public void run(){
+//                    updateRecycleView();
+                }
+            });
+        } else {
+            snackbarView.setBackgroundColor(getResources().getColor(R.color.sl_red_orange));
+        }
+        snackbar.show();
+    }
+
+    @Override
+    public void showConnectedServer(boolean isConnect) {
+        if (!isConnect) {
+            SnackbarManager.show(
+                    com.nispok.snackbar.Snackbar.with(MonitorContainer.this)
+                            .position(com.nispok.snackbar.Snackbar.SnackbarPosition.BOTTOM)
+                            .text("Mất kết nối server...")
+                            .textColor(Color.parseColor("#AFFFFFFF"))
+                            .color(Color.parseColor("#333333"))
+                            .duration(com.nispok.snackbar.Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
+                            .actionLabel("KIỂM TRA MẠNG")
+                            .actionColor(Color.parseColor("#ffe65100"))
+                            .actionListener(new ActionClickListener() {
+                                @Override
+                                public void onActionClicked(com.nispok.snackbar.Snackbar snackbar) {
+                                    Intent enableNetwork = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
+                                    MonitorContainer.this.startActivityForResult(enableNetwork, 0);
+                                }
+                            })
+            );
+
+        } else {
+            SnackbarManager.dismiss();
         }
     }
 }
